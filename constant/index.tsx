@@ -75,6 +75,27 @@ export const AFFLIATE_PROGRAMS_LINKS = [
     }
 ]
 
+
+//AFFLIATE PROGRAM LINKS
+export const DASHBOARD_LINKS = [
+    {
+        name: 'Ads listing',
+        link: '/ads-listing',
+    },
+    {
+        name: 'Program listing',
+        link: '/program-listing',
+    },
+    {
+        name: 'Program categories',
+        link: '/program-categories',
+    },
+    {
+        name: 'Logout',
+        link: '/logout',
+    },
+]
+
 //TICKET TYPE DROPDOWN MENU
 export const TICKET_TYPE= [
     {
@@ -181,6 +202,20 @@ export const COMMISSION_TYPE= [
  name: string;
 }[];
 
+//FEATURED AD PLAN DROPDOWN MENU
+export const FEATURED_AD_PLAN= [
+    {
+     name: '1 month - $24'
+    },
+    {
+     name: '2 Month - $36'
+    },
+    {
+     name: '6 Month - $72'
+    },
+] as {
+ name: string;
+}[];
 
 //AFFLIATE PROGRAM LINKS
 export const FEATURED_AD = [

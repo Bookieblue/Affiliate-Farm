@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Form, FormLabel } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,11 +19,15 @@ import { CheckBox } from "../ui/FormField/CheckBox";
 
 
 const SubmitProgramSchema = z.object({
-  email: z
+  publisher_email: z
     .string()
     .min(1, "Email is required")
     .email("Incorrect email address"),
   password: z.string().min(8, "Password is required"),
+  brand_name: z.string().min(8, "Password is required"),
+  payout_fee: z.string().min(8, "Password is required"),
+  cookie_duration:z.string().min(8, "Password is required"),
+  publisher_name:z.string().min(8, "Password is required"),
 });
 
 const SubmitProgramForm = () => {
@@ -32,12 +36,16 @@ const SubmitProgramForm = () => {
   const form = useForm<z.infer<typeof SubmitProgramSchema>>({
     resolver: zodResolver(SubmitProgramSchema),
     defaultValues: {
-      email: "",
+      brand_name: "",
+      payout_fee: "",
+      publisher_email: "",
       password: "",
+      cookie_duration:"",
+      publisher_name:"",
     },
   });
 
-  const onSubmit = () => {};
+
 
   const Affiliates = AFFLIATE_TYPE.map((affiliate) => ({
     label: affiliate.name,
@@ -59,6 +67,13 @@ const SubmitProgramForm = () => {
     value: payment.name,
   }));
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (values: z.infer<typeof SubmitProgramSchema>) => {
+    setIsLoading(true);
+   
+  };
+
   return (
     <div className="bg-gray-40 p-6 h-fit rounded-lg">
       <p className="bold-24 text-cream-50 mb-3">
@@ -69,10 +84,10 @@ const SubmitProgramForm = () => {
       </p>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+         onSubmit={form.handleSubmit(handleSubmit)}
           className="mt-10 space-y-6"
         >
-          <div className="flex gap-10">
+          <div className="flex gap-10 flex-col lg:flex-row">
             <TextInput
               control={form.control}
               name="brand_name"
@@ -88,7 +103,7 @@ const SubmitProgramForm = () => {
               placeholder="Travel affiliate program"
             />
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-10  flex-col lg:flex-row">
             <TextInput
               control={form.control}
               name="brand_name"
@@ -104,7 +119,7 @@ const SubmitProgramForm = () => {
               placeholder="Commission Type"
             />
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-10  flex-col lg:flex-row">
             <TextInput
               control={form.control}
               name="payout_fee"
@@ -124,7 +139,7 @@ const SubmitProgramForm = () => {
             <FormLabel htmlFor="cookie_expired" className="text-cream-50">
               Cookies expried?
             </FormLabel>
-            <div className="flex gap-4 mt-2">
+            <div className="flex gap-4 mt-2  flex-col lg:flex-row">
               <CheckBox
                 control={form.control}
                 name="yes"
@@ -137,7 +152,7 @@ const SubmitProgramForm = () => {
               />
             </div>
           </div>
-          <div className="w-[40%]">
+          <div className="lg:w-[40%]  flex-col lg:flex-row">
             <TextInput
               control={form.control}
               name="cookie_duration"
@@ -146,7 +161,7 @@ const SubmitProgramForm = () => {
               type="text"
             />
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-10  flex-col lg:flex-row">
             <TextInput
               control={form.control}
               name="program_url"
@@ -171,7 +186,7 @@ const SubmitProgramForm = () => {
               className="h-40"
             />
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-10  flex-col lg:flex-row">
             <SelectInput
               name="Affiliates"
               label="Affiliates Type"
@@ -186,7 +201,7 @@ const SubmitProgramForm = () => {
               placeholder="All levels"
             />
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-10  flex-col lg:flex-row">
             <TextInput
               control={form.control}
               name="publisher_name"

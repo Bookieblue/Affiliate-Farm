@@ -43,7 +43,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flexBetween bg-black-60 w-full py-3 fixed  top-0 z-10">
+    <nav className="flexBetween bg-black-60 w-full py-3 fixed border-b border-[#32312C] top-0 z-10">
       <div className="max-container padding-container flexBetween w-full 4xl:px-0">
         <div>
           <Link href="/">

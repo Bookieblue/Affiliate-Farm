@@ -53,10 +53,10 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({ searchQuery }) => {
         <div className="flex justify-center mt-4">
           <button
             onClick={() => loadPrograms()}
-            className="px-4 py-2 bg-[#8D8885] text-[#14181A] font-medium rounded hover:bg-yellow-50 mt-5 flexCenter gap-3"
+            className="px-2 py-2 bg-[#8D8885] text-[#14181A] font-medium text-sm rounded hover:bg-yellow-50 mt-5 flexCenter gap-2"
             disabled={loading}
           >
-            <ArrowDown className='size-5 text-[#14181A]' /> {loading ? 'Loading...' : 'Load More'}
+            <ArrowDown className='size-4 text-[#14181A]' /> {loading ? 'Loading...' : 'Load More'}
           </button>
         </div>
       )}

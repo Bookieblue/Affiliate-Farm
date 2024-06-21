@@ -29,8 +29,8 @@ const MainDialog: React.FC<DialogProps> = ({ title, description, children, isOpe
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-[650px]  max-h-[80vh] overflow-y-auto hide-scrollbar">
           <DialogHeader>
-            <DialogTitle className="text-white bold-24 mb-6">{title}</DialogTitle>
-            {description && <DialogDescription className='text-cream-20 regular-16'>{description}</DialogDescription>}
+            <DialogTitle className="text-white bold-24 mb-6 text-left">{title}</DialogTitle>
+            {description && <DialogDescription className='text-cream-20 regular-16 text-left'>{description}</DialogDescription>}
           </DialogHeader>
           {children}
           <DialogFooter>

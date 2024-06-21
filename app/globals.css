@@ -212,6 +212,36 @@ body {
   }
 
 }
+
+/* Custom checkbox styles */
+.custom-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  border: 2px solid #464543; /* Customize border color */
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+
+}
+
+.custom-checkbox:checked {
+  background-color:transparent; /* Customize background color when checked */
+  border-color: #ffbe0b;
+}
+
+.custom-checkbox:checked::after {
+  content: '✔'; /* Check mark */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffbe0b; /* Customize check mark color */
+  font-size: 12px; /* Customize check mark size */
+}
+
+
 .scrollbar-visible::-webkit-scrollbar {
   width: 10px; 
 }

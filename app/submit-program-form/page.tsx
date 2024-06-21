@@ -4,10 +4,10 @@ import React from "react";
 
 const page = () => {
   return (
-    <section className="max-container padding-container mt-20 flexCenter flex-col w-[60%]">
+    <section className="max-container padding-container mt-20 flexCenter flex-col md:w-[60%]">
       <SubmitProgramForm />
       <div className="mt-10">
-        <p className="text-cream-50 meium-20">Have question?</p>
+        <p className="text-cream-50 medium-20">Have question?</p>
         <p className="mt-5 text-cream-20 regular-16">
           Contact us to ask us any question concerning our sponsor program, or
           feedback for us, You can mail us{" "}

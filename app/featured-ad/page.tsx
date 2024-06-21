@@ -8,6 +8,7 @@ import NestedDialog from "@/components/ui/FormField/NestedDialog";
 import FeaturedAdForm from "@/components/forms/featuredAd";
 import { Button } from "@/components/ui/button";
 
+
 const page = () => {
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
@@ -20,8 +21,8 @@ const page = () => {
     // You can also perform navigation or other actions here
   };
   return (
-    <section className="max-container padding-container flex gap-10 mb-20 w-full mt-28">
-      <div className="w-[65%] padding-container">
+    <section className="max-container padding-container flex flex-col lg:flex-row gap-10 mb-20 w-full mt-28">
+      <div className="w-full lg:w-[65%] lg:padding-container">
         <h4 className="text-cream-50 bold-32">Feature Ad</h4>
         <p className="text-cream-20 regular-16 mt-4">
           Promote your brand affiliate program on Affiliate farm and attract
@@ -59,7 +60,7 @@ const page = () => {
           </p>
         </div>
       </div>
-      <div className="bg-black-30 w-[30%] h-fit py-5 padding-container rounded-xl border border-gray-20">
+      <div className="bg-black-30 w-full lg:w-[30%] h-fit py-5 padding-container rounded-xl border border-gray-20">
         <p className="text-cream-50 bold-24">Featured ad fee</p>
         <p className="text-cream-20 regular-16 mt-4">
           Your brand affiliate program will be displayed throughout our site

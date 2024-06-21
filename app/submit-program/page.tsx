@@ -7,23 +7,23 @@ import { useRouter } from "next/navigation";
 const page = () => {
   const router = useRouter();
   return (
-    <section className="max-container padding-container mt-28 ">
-      <div className="px-5">
+    <section className="max-container padding-container mt-28 w-full mb-10 ">
+      <div className="lg:px-5">
         <div>
           <p className="font-bold text-[34px] text-cream-50 mb-3">
             Submit brand program
           </p>
-          <p className="regular-16 text-cream-20 w-[68%]">
+          <p className="regular-16 text-cream-20 w-full lg:w-[68%]">
             Get your brand affiliate program on Affiliate farm and attract
             attention of bloggers, content creator, and YouTubers shopping for
             new offers to promote and drive significant credibility and traffic
             to your brand product massively.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-10 mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10">
           <div className="bg-gray-40 border rounded-lg border-gray-20 p-6">
             <p className="regular-16 text-cream-20 mb-3">FREE PLAN</p>
-            <div className="flexBetween gap-y-36 flex-col">
+            <div className="flexBetween md:gap-y-36 flex-col">
               <ul className="text-cream-20 regular-16 mb-5">
                 <li className="list-disc">List your brand program for free</li>
                 <li className="list-disc">Get exposure to content creators</li>

@@ -4,7 +4,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <section className="padding-container mt-28 w-[65%]">
+    <section className="padding-container mt-28 lg:w-[65%]">
         <h1 className="bold-40 lg:bold-54 text-cream-50 ">
         200+ Best Affiliate programs as at Jan, 2024 
         </h1>

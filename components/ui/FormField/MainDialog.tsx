@@ -14,9 +14,9 @@ import {
 interface DialogProps {
   isOpen: boolean;
   onOpenChange: () => void;
-  onClick: () => void;
+  onClick?: () => void;
   title: string;
-  buttonName: React.ReactNode;
+  buttonName?: React.ReactNode;
   description?: string;
   children?: React.ReactNode;
 }

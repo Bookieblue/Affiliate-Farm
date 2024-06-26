@@ -3,7 +3,7 @@ import React from 'react'
 
 const Faq = () => {
   return (
-    <section className='padding-container mt-20 w-[80%]'>
+    <section className='padding-container mt-20 lg:w-[80%]'>
         <div>
           <h3 className='font-[600px] text-[34px] text-cream-50'>Frequently asked questions about Travel Affiliate programs</h3>
           <div>

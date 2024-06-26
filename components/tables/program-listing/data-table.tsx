@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ColumnDef,
   flexRender,
@@ -17,17 +17,28 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends { [key: string]: any }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchQuery: string;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { [key: string]: any }, TValue>({
   columns,
   data,
+  searchQuery,
 }: DataTableProps<TData, TValue>) {
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return data;
+    return data.filter(item =>
+      Object.values(item).some(value =>
+        String(value).toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [data, searchQuery]);
+
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -40,26 +51,25 @@ export function DataTable<TData, TValue>({
 
     for (let i = 0; i < pageCount; i++) {
       if (
-        i === 0 || 
-        i === pageCount - 1 || 
+        i === 0 ||
+        i === pageCount - 1 ||
         (i >= currentPage - 1 && i <= currentPage + 1)
       ) {
         pageButtons.push(
           <button
             key={i}
             className={`px-3 py-1 border rounded ${
-              currentPage === i ? 'bg-yellow-50 border border-yellow-50 text-black' : 'bg-transparent border border-gray-10 text-gray-10'
+              currentPage === i
+                ? 'bg-yellow-50 border border-yellow-50 text-black'
+                : 'bg-transparent border border-gray-10 text-gray-10'
             }`}
             onClick={() => table.setPageIndex(i)}
           >
             {i + 1}
           </button>
         );
-      } else if (
-        i === currentPage - 2 || 
-        i === currentPage + 2
-      ) {
-        pageButtons.push(<span key={i} className='border rounded px-2 py-2'>...</span>);
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        pageButtons.push(<span key={i} className="border rounded px-2 py-2">...</span>);
       }
     }
 
@@ -90,10 +100,10 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                className={row.getIsSelected() ? 'bg-yellow-50' : ''}
-              >
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className={row.getIsSelected() ? 'bg-yellow-50' : ''}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

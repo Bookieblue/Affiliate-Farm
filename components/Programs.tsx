@@ -3,50 +3,128 @@ import Link from "next/link";
 import React from "react";
 import { ToolTip } from "./ui/FormField/ToolTip";
 
-const Programs = () => {
+interface ProgramsProps {
+  src: string;
+  commission: string;
+  name: string;
+  productDescription: string;
+  payout: string;
+  cookie: string;
+  programDescription: string;
+  url: string;
+  programID: string;
+  promoted?: boolean;
+  adsOn?: boolean;
+  verifiedIconSrc : string;
+  programIDIcon?: boolean;
+  linkName: string;
+  verified: boolean;
+}
+
+const Programs: React.FC<ProgramsProps> = ({
+  src,
+  commission,
+  name,
+  productDescription,
+  payout,
+  cookie,
+  programDescription,
+  url,
+  programID,
+  promoted = false,
+  adsOn = false,
+  verifiedIconSrc,
+  programIDIcon = true,
+  linkName,
+  verified =false,
+}) => {
   return (
-    <div className="w-fit h-fit p-4 bg-transparent rounded-xl border border-zinc-800 flex-col gap-4 inline-flex">
-      <div className="self-stretch flexBetween">
-        <div className="size-[60px] rounded-lg flexCenter">
-          <Image src="./jasper.svg" width={60} height={20} alt="icon" />
+    <div className="flex flex-col w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20 ">
+      <div className="flexBetween relative self-stretch w-full flex-[0_0_auto]">
+        <div className="relative w-[60px] h-[60px] rounded-[7.2px]">
+          <Image
+            src={src}
+            width={60}
+            height={60}
+            alt="icon"
+            className="rounded-[7.2px]"
+          />
         </div>
-        <div className="flexCenter gap-[7px]">
-          <div className="w-[70px] p-2 bg-yellow-50 rounded-lg flexCenter gap-2.5 ">
-            <p className="text-black-50 bold-14">$400.00</p>
+        <div className="flexCenter gap-[7px] relative flex-[0_0_auto]">
+          <div className="flexCenter h-[30px]  gap-2.5 p-2 relative flex-[0_0_auto] bg-gray-20 rounded-lg">
+            <p className="relative w-fit  text-yellow-50 bold-14">
+              {commission}
+            </p>
           </div>
-          <p className="w-[100px] text-cream-20 regular-14">
+          <p className="relative w-[100px] mt-[-1.00px] regular-14 text-gray-10">
             One-time sale commission
           </p>
         </div>
       </div>
-      <div className="flex gap-2 ">
-        <div className="text-cream-50 bold-24 ">Jasper AI</div>
-        <div className="size-[18px] relative rounded-[100px] bg-yellow-50" />
-      </div>
-      <p className="self-stretch text-gray-10 regular-14">
-        Content writing tool
-      </p>
-
-      <div className="self-stretch flexStart gap-3 w-full">
-        <div className="gap-1 flexStart w-full">
-          <Image src="./payout.svg" width={20} height={5} alt="icon" />
-          <p className="text-gray-10 regular-14">$100 Payout</p>
+      <div className="flex flex-col items-start gap-4 relative self-stretch w-full flex-[0_0_auto] mb-[-11.00px]">
+        <div className="inline-flex justify-start flex-col gap-1 relative self-stretch w-full flex-[0_0_auto]">
+          <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+            <p className="relative w-fit text-cream-50 bold-24">{name}</p>
+            <div className="inline-flex items-center relative flex-[0_0_auto]">
+              <div className="inline-flex items-center gap-2.5 relative flex-[0_0_auto]">
+                {promoted && (
+                  <p className="relative w-fit regular-14 text-gray-10">
+                    Promoted
+                  </p>
+                )}
+                {verified && (
+                  <Image
+                    className="relative w-6 h-6 object-cover"
+                    alt="Verified Icon"
+                    src={verifiedIconSrc}
+                    width={24}
+                    height={24}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+          <p className="relative self-stretch regular-14 text-gray-10">
+            {productDescription}
+          </p>
         </div>
-        <div className="gap-1 flexStart w-full">
-          <Image src="./time.svg" width={20} height={5} alt="icon" />
-          <p className="text-gray-10 regular-14">60 days Cookie</p>
+        <div className="flex items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
+          <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
+            <Image src="./payout.svg" width={20} height={5} alt="icon" />
+            <p className="relative w-fit mt-[-1.00px]  regular-16 text-gray-10">
+              {payout}
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
+            <Image src="./time.svg" width={20} height={5} alt="icon" />
+            <p className="relative w-fit regular-14 text-gray-10">{cookie}</p>
+          </div>
         </div>
-      </div>
-      <p className="grow shrink basis-0 text-gray-10 regular-16">
-        <span className="text-cream-20 medium-14">Program:</span> With jasper
-        user can start creating massive blog, ebook, music , etc contents with
-        AI.
-      </p>
-      <div className="self-stretch py-2.5 flexBetween">
-        <ToolTip  content="Program ID: 00480"/>
-        <Link href="/" className="text-yellow-50 medium-16 underline">
-          Join Program
-        </Link>
+        <div className="flex flex-col items-start gap-0.5 relative self-stretch w-full flex-[0_0_auto]">
+          <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+            <p className="grow shrink basis-0 text-gray-10 regular-16">
+              <span className="text-cream-20 medium-14">Program:</span>{" "}
+              {programDescription}
+            </p>
+          </div>
+        </div>
+        <div className="flexBetween px-0 py-2.5 relative self-stretch w-full flex-[0_0_auto]">
+          <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
+            {programIDIcon && <ToolTip content={programID} key={programID} />}
+            {adsOn && (
+              <p className="relative w-fit regular-14 text-gray-10">Ads On</p>
+            )}
+          </div>
+          <div>
+            <Link
+              href={url}
+              className="text-yellow-50 medium-16 underline flex gap-1"
+            >
+              {linkName}
+              <Image src="/arrow-right.svg" width={5} height={5} alt="icon" />
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -6,8 +6,8 @@ import { ChevronRight } from "lucide-react";
 
 const OtherAffliate = () => {
   return (
-    <section className="max-container padding-container flexBetween mt-32 w-full">
-      <div className="w-[50%]">
+    <section className="max-container padding-container flexBetween flex-col lg:flex-row mt-32 w-full">
+      <div className="lg:w-[50%]">
         <p className="font-[600px] text-cream-50 text-[34px]">
           Discover other affiliate programs
         </p>
@@ -23,7 +23,7 @@ const OtherAffliate = () => {
           ))}
         </div>
       </div>
-      <div className="bg-yellow-50 px-6 py-12 rounded-xl border w-[50%] border-cream-20">
+      <div className="bg-yellow-50 px-6 py-12 rounded-xl border mt-10 lg:mt-0 lg:w-[50%] border-cream-20">
         <Image src="/broadcast.svg" alt="logo" width={70} height={29} />
         <p className="bold-24 text-black-50">
           Submit your brand affiliate program & get massive traffic daily.

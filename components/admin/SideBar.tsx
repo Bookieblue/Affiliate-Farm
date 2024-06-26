@@ -22,7 +22,7 @@ const SideBar = () => {
   };
 
   return (
-    <section className="gap-10 w-[18%] pl-8 z-20 fixed bg-black-30 h-full">
+    <section className="gap-10 w-[18%] pl-8 z-20 fixed bg-black-30 h-full hidden lg:block">
       <div className="pt-5">
         <Link href="/">
           <Image src="/logo.svg" alt="logo" width={150} height={29} />

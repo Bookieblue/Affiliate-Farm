@@ -1,27 +1,73 @@
-import {  Category, columns } from "./columns"
-import { DataTable } from "./data-table"
+'use client'
+import { useState, useEffect } from "react";
+import { Category, columns } from "./columns";
+import { DataTable } from "./data-table";
+import { Button } from "@/components/ui/button";
+import MainDialog from "@/components/ui/FormField/MainDialog";
+import CategoryForm from "@/components/forms/CategoryForm";
+import { useToast } from "@/components/ui/use-toast";
 
-async function getData(): Promise<Category[]> {
-  // Fetch data from your API here.
+// Mock function to fetch data (replace with real API call)
+async function fetchCategories(): Promise<Category[]> {
   return [
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
-    { no: '1', category: 'Travel affiliate program', programNo: '124 programs',  publishedDate: 'Aug 4, 2024'},
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
+    { no: '1', category: 'Travel affiliate program', programNo: '124 programs', publishedDate: 'Aug 4, 2024' },
 
-  ]
+  ];
 }
 
-export default async function Categories() {
-  const data = await getData()
+const Categories = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isFormOpen, setFormOpen] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Fetch data on component mount
+    const getData = async () => {
+      const data = await fetchCategories();
+      setCategories(data);
+    };
+
+    getData();
+  }, []);
+
+  const addCategory = (category: Category) => {
+    setCategories([...categories, category]);
+    setFormOpen(false);
+    toast({
+      title: "Program added",
+      description: "The new category has been added successfully.",
+    });
+  };
+
 
   return (
     <div className="mt-10 mb-20">
-      <DataTable columns={columns} data={data} />
+       <div className='flexBetween mb-10 '>
+          <p className=' text-cream-50 bold-20'>Program category</p>
+          <Button variant='transparent' onClick={() => setFormOpen(true)}>Add New Category</Button>
+        </div>
+      
+      {isFormOpen && (
+        <MainDialog
+          isOpen={isFormOpen}
+          onOpenChange={() => setFormOpen(false)}
+          title="Add New Category"
+          description="Add new affiliate program category to site"
+        >
+          <div>
+            <CategoryForm onAddCategory={addCategory} />
+          </div>
+        </MainDialog>
+      )}
+      <DataTable columns={columns} data={categories} />
     </div>
-  )
-}
+  );
+};
+
+export default Categories;

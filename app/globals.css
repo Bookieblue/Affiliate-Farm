@@ -241,6 +241,38 @@ body {
   font-size: 12px; /* Customize check mark size */
 }
 
+.quill-editor {
+  border: 2px solid #32312C; /* Default border color */
+  border-radius: 0.375rem; /* Rounded corners similar to Tailwind's rounded-md */
+}
+
+.quill-editor:hover {
+  border-color: none; /* Tailwind's yellow-500 color */
+  color: yellow;
+}
+
+/* Optional: Style the toolbar */
+.ql-toolbar {
+  border-bottom: 2px solid #000; /* Match the editor border */
+}
+
+.quill-editor .ql-container.ql-snow {
+  border: none; /* Remove the default Quill borders */
+}
+
+/* Customize Quill toolbar button hover effect */
+.ql-toolbar .ql-formats button:hover,
+.ql-toolbar .ql-formats button.ql-active {
+  color: #f59e0b !important; /* Change icon color on hover */
+}
+
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar .ql-picker-label.ql-active,
+.ql-toolbar .ql-picker-item:hover,
+.ql-toolbar .ql-picker-item.ql-selected {
+  color: #f59e0b !important; /* Change dropdown item color on hover */
+}
+
 
 .scrollbar-visible::-webkit-scrollbar {
   width: 10px; 

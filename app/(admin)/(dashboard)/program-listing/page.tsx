@@ -9,9 +9,6 @@ import React from 'react'
 const page = () => {
   return (
     <section  className='mt-32 padding-container'>
-        <div className='flexBetween '>
-          <p className=' text-cream-50 bold-20'>Program listing</p>
-        </div>
         <AdsPage />
     </section>
   )

@@ -1,9 +1,10 @@
 'use client'
-// components/LoadMorePrograms.tsx
+
 import React, { useState, useEffect } from 'react';
-import Program from '../components/Program';
+import Programs from '../components/Programs';
 import { fetchPrograms, programData } from '../lib/data';
 import { ArrowDown } from 'lucide-react';
+import Image from "next/image";
 
 interface LoadMoreProgramsProps {
   searchQuery: string;
@@ -30,23 +31,20 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({ searchQuery }) => {
     loadPrograms(true); // Load initial programs
   }, [searchQuery]);
 
+  if (programs.length === 0) {
+    return (
+      <div className="flexCenter mt-20 flex-col  h-full w-full">
+        <Image src="/empty-state.svg" alt="No Programs" width={200} height={200} />
+        <p className="text-gray-600 mt-4">No affiliate program added yet</p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <div className="grid grid-cols-3 gap-5 mt-7">
-        {programs.map(program => (
-          <Program
-            key={program.id}
-            id={program.id}
-            src={program.src}
-            commission={program.commission}
-            name={program.name}
-            product_description={program.product_description}
-            payout={program.payout}
-            cookie={program.cookie}
-            program_description={program.program_description}
-            url={program.url}
-            program_ID={program.program_ID}
-          />
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 mt-7">
+        {programs.map((program, index) => (
+          <Programs key={index} {...program} />
         ))}
       </div>
       {hasMore && (

@@ -1,19 +1,11 @@
 "use client";
-import { ADMIN_NAV_LINKS, NAV_LINKS} from "../../constant";
+import { ADMIN_NAV_LINKS, NAV_LINKS } from "../../constant";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../../components/ui/button";
 import { Key, useState } from "react";
-import { ChevronRight, Mic2, MicVocal } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { usePathname, useSearchParams } from "next/navigation";
-import MoreResources from "./../MoreResources";
-import MainDialog from "./../ui/FormField/MainDialog";
-import FeaturedAdForm from "./../forms/featuredAd";
+import { ChevronRight} from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 
 const Navbar = () => {
@@ -26,16 +18,7 @@ const Navbar = () => {
     setActiveLink(href);
   };
 
-  const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
-
-
-
-  const handleFormSubmit = (values: any) => {
-    console.log('Form Submitted:', values);
-    // Close main dialog and open success dialog
-    setIsMainDialogOpen(false);
-    // You can also perform navigation or other actions here
-  };
+  const router = useRouter();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const showNav = () => {
@@ -60,38 +43,34 @@ const Navbar = () => {
                   alt={link.label}
                   width={link.iconWidth || 20}
                   height={link.iconHeight || 20}
-                  className={`mb-2 ${activeLink === link.href ? 'text-blue-500' : 'fill-yellow-50'}`}
+                  className={`mb-2 ${
+                    activeLink === link.href
+                      ? "text-blue-500"
+                      : "fill-yellow-50"
+                  }`}
                 />
-                  <Link href={link.href}>
-                    <span
-                      className={`regular-16 text-gray-10 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold ${
-                        activeLink === link.href
-                          ? "font-bold text-yellow-50 "
-                          : ""
-                      }`}
-                      onClick={() => handleLinkClick(link.href)}
-                    >
-                      {link.label}
-                    </span>
-                  </Link>
+                <Link href={link.href}>
+                  <span
+                    className={`regular-16 text-gray-10 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold ${
+                      activeLink === link.href
+                        ? "font-bold text-yellow-50 "
+                        : ""
+                    }`}
+                    onClick={() => handleLinkClick(link.href)}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
               </div>
             ))}
           </ul>
           <div className="">
-            <MainDialog
-            title="Submit brand affiliate program"
-            description=""
-            isOpen={isMainDialogOpen}
-            onOpenChange={() => setIsMainDialogOpen(false)}
-            onClick={() => setIsMainDialogOpen(true)}
-            buttonName={(
-              <>
-                Upload Program <ChevronRight size={18} bg-black-50 />{" "}
-              </>
-            )}
-          >
-            <FeaturedAdForm onClick={handleFormSubmit}/>
-          </MainDialog>
+            <Button
+              onClick={() => {router.push("/upload-program");
+              }}
+            >
+              Upload Program <ChevronRight size={18} bg-black-50 />
+            </Button>
           </div>
         </div>
         <Image

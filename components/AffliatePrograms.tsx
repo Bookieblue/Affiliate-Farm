@@ -72,14 +72,14 @@ const AffliatePrograms = () => {
           placeholder="Search Program"
           value={searchQuery}
           onChange={handleInputChange}
-          className="w-full xs:w-32 lg:px-4 py-2 pl-10  mb-10 lg:pl-10 border placeholder:regular-16 border-gray-20 xl:w-[60%] text-gray-10 bg-transparent placeholder:text-gray-10 rounded-3xl"
+          className="w-full xs:w-full lg:px-4 py-2 pl-10  mb-10 lg:pl-10 border placeholder:regular-16 border-gray-20 xl:w-[60%] text-gray-10 bg-transparent placeholder:text-gray-10 rounded-3xl"
         />
         <Image
           src="/search.svg"
           alt="search"
           width={17}
           height={17}
-          className="absolute left-4 top-2 lg:top-[0.8px] lg:left-3 mt-3"
+          className="absolute left-4 top-0 lg:top-[0.8px] lg:left-3 mt-3"
         />
       </div>
       <div className="">

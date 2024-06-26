@@ -32,7 +32,7 @@ const PreviewSubmission = () => {
       </p>
       <div className="flexCenter w-full">
         <div className="lg:w-[70%] bg-black-60 rounded-xl h-fit mt-7">
-        <Programs />
+        {/* <Programs /> */}
         </div>
       </div>
       <div className="regular-14 break-words lg:regular-16 grid grid-cols-2 lg:grid-cols-3 mt-10 gap-5">

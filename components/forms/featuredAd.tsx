@@ -10,8 +10,10 @@ import Link from "next/link";
 import TextareaInput from "../ui/FormField/TextareaInput";
 import { FEATURED_AD_PLAN } from "@/constant";
 import SelectInput from "../ui/FormField/SelectInput";
+import NestedDialog from "../ui/FormField/NestedDialog";
+import { useRouter } from "next/navigation";
 
-const Plans =  FEATURED_AD_PLAN.map((plan) => ({
+const Plans = FEATURED_AD_PLAN.map((plan) => ({
   label: plan.name,
   value: plan.name,
 }));
@@ -19,7 +21,7 @@ const Plans =  FEATURED_AD_PLAN.map((plan) => ({
 // Startup Onboarding Schema
 export const OnboardSchema = z.object({
   name: z.string().min(1, "Your name is required"),
-  plan: z.string().min(1, "Select a plan"),
+  plan: z.string().min(0, "Select a plan"),
   email: z
     .string()
     .min(1, "Email is required")
@@ -40,11 +42,12 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const handleSubmit = (values: z.infer<typeof OnboardSchema>) => {
-    setIsLoading(true);
     onSubmit(values);
+    setIsSuccessDialogOpen(true);
   };
 
   return (
@@ -103,6 +106,20 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
             <Button type="submit" title="Save & proceed" className="w-full">
               Subscribe for 1 Month
             </Button>
+            <NestedDialog
+              isOpen={isSuccessDialogOpen}
+              onClose={() => setIsSuccessDialogOpen(false)}
+              title="Brand Affiliate program on Campaign now"
+              description="Your brand will start benefitting from massive exposure and a quickly affiliate program spread though our targeted outreach to content creators."
+            >
+              <Button
+                className="w-full mt-3"
+                onClick={() => router.push("/")}
+              >
+                Go back now
+              </Button>
+              <p className="text-center text-cream-50 regular-16">Feature ad activated now.</p>
+            </NestedDialog>
           </div>
           <p className="mt-10 text-cream-50 text-center">
             All plans are activated immediate after payment is made.

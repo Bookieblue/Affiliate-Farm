@@ -1,8 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +14,6 @@ import { Button } from "@/components/ui/button";
 import { DeleteIcon, Edit2Icon, EyeIcon, MoreHorizontal } from "lucide-react";
 import MainDialog from "../../../components/ui/FormField/MainDialog";
 
- 
-
 export interface Ad {
   program: string;
   commission: string;
@@ -26,11 +23,17 @@ export interface Ad {
   publisherEmail: string;
 }
 
+interface ColumnsProps {
+  onDeleteRow: (row: Ad) => void;
+  onEditCategory: (row: Ad, newCategory: string) => void;
+}
 
-export
-const columns: ColumnDef<Ad>[] = [
+export const createColumns = ({
+  onDeleteRow,
+  onEditCategory,
+}: ColumnsProps): ColumnDef<Ad>[] => [
   {
-    id: 'select',
+    id: "select",
     header: ({ table }) => (
       <input
         type="checkbox"
@@ -49,28 +52,30 @@ const columns: ColumnDef<Ad>[] = [
     ),
   },
   {
-    accessorKey: 'program',
-    header: 'PROGRAM',
+    accessorKey: "program",
+    header: "PROGRAM",
   },
   {
-    accessorKey: 'commission',
-    header: 'COMMISSION',
+    accessorKey: "commission",
+    header: "COMMISSION",
   },
   {
-    accessorKey: 'category',
-    header: 'CATEGORY',
+    accessorKey: "category",
+    header: "CATEGORY",
   },
   {
-    accessorKey: 'publishedDate',
-    header: 'PUBLISHED DATE',
+    accessorKey: "publishedDate",
+    header: "PUBLISHED DATE",
   },
   {
-    accessorKey: 'publisher',
-    header: 'PUBLISHER',
+    accessorKey: "publisher",
+    header: "PUBLISHER",
     cell: ({ getValue, row }) => (
       <div>
         <div>{getValue<string>()}</div>
-        <div className="text-xs text-cream-20">{row.original.publisherEmail}</div>
+        <div className="text-xs text-cream-20">
+          {row.original.publisherEmail}
+        </div>
       </div>
     ),
   },
@@ -79,10 +84,40 @@ const columns: ColumnDef<Ad>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const [isModalOpen, setModalOpen] = useState(false);
+      const [modalAction, setModalAction] = useState(""); // State to track which action triggered the modal
       const details = row.original;
+      const [selectedRow, setSelectedRow] = useState<Ad | null>(null); // Track the selected row
+      const [newCategory, setNewCategory] = useState(details.category); // Track the new category
 
-      const handleViewDetails = () => {
+      const handleViewDetails = (action: string) => {
         setModalOpen(true);
+        setModalAction(action);
+        setSelectedRow(details); // Set the selected row for editing
+      };
+
+      const handleCloseModal = () => {
+        setModalOpen(false);
+        setModalAction("");
+        setSelectedRow(null);
+      };
+
+      const handleEditCategory = () => {
+        if (selectedRow) {
+          onEditCategory(selectedRow, newCategory);
+        }
+        handleCloseModal();
+      };
+
+      const handleEditProgram = () => {
+        // Logic for editing program
+        handleCloseModal();
+      };
+
+      const handleDeleteProgram = () => {
+        if (selectedRow) {
+          onDeleteRow(selectedRow);
+        }
+        handleCloseModal();
       };
 
       return (
@@ -97,13 +132,19 @@ const columns: ColumnDef<Ad>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleViewDetails}>
+              <DropdownMenuItem
+                onClick={() => handleViewDetails("editCategory")}
+              >
                 <EyeIcon className="size-4 mr-2" /> Edit Category
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleViewDetails}>
+              <DropdownMenuItem
+                onClick={() => handleViewDetails("editProgram")}
+              >
                 <Edit2Icon className="size-4 mr-2" /> Edit Program
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleViewDetails}>
+              <DropdownMenuItem
+                onClick={() => handleViewDetails("deleteProgram")}
+              >
                 <DeleteIcon className="size-4 mr-2" /> Delete Program
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -111,13 +152,53 @@ const columns: ColumnDef<Ad>[] = [
           {isModalOpen && (
             <MainDialog
               isOpen={isModalOpen}
-              onOpenChange={() => setModalOpen(false)}
-              title="Affliate Program"
-              description=""
+              onOpenChange={handleCloseModal}
+              title={
+                modalAction === "editCategory"
+                  ? "Edit Program Category"
+                  : modalAction === "editProgram"
+                  ? "Edit Program"
+                  : "Delete Program"
+              }
+              description={
+                modalAction === "editCategory"
+                  ? "Set a new category for the selected program."
+                  : modalAction === "editProgram"
+                  ? "Edit program details here."
+                  : "Are you sure you want to delete the selected program? This action cannot be undone."
+              }
             >
-              <div>
-                
-              </div>
+              {modalAction === "editCategory" && (
+                <div>
+                  <select
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    className="py-2 px-4 text-sm w-full bg-transparent text-gray-10 border border-[#32312C] rounded-md"
+                  >
+                    <option value="Travel Affiliate Program">Travel Affiliate Program</option>
+                    <option value="Business Affiliate Program">Business Affiliate Program</option>
+                    {/* Add more categories as needed */}
+                  </select>
+                  <Button onClick={handleEditCategory} className="w-full mt-4">
+                    Update Category
+                  </Button>
+                </div>
+              )}
+              {modalAction === "editProgram" && (
+                <div>
+                  {/* Edit program form or content */}
+                  <Button onClick={handleEditProgram} className="w-full">
+                    Save Changes
+                  </Button>
+                </div>
+              )}
+              {modalAction === "deleteProgram" && (
+                <div>
+                  <Button onClick={handleDeleteProgram} className="w-full">
+                    Yes, delete program
+                  </Button>
+                </div>
+              )}
             </MainDialog>
           )}
         </>
@@ -125,4 +206,3 @@ const columns: ColumnDef<Ad>[] = [
     },
   },
 ];
-

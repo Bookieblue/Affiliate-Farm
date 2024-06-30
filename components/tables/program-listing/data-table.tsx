@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ColumnDef,
   flexRender,
@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Ad, createColumns } from './columns';
 
 interface DataTableProps<TData extends { [key: string]: any }, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -121,7 +122,7 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-start mt-4">
+      <div className="flex justify-end mt-4">
         <ul className="flex space-x-2">
           {renderPageButtons()}
         </ul>

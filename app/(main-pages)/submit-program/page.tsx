@@ -23,7 +23,7 @@ const page = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10">
           <div className="bg-gray-40 border rounded-lg border-gray-20 p-6">
             <p className="regular-16 text-cream-20 mb-3">FREE PLAN</p>
-            <div className="flexBetween md:gap-y-36 flex-col">
+            <div className="">
               <ul className="text-cream-20 regular-16 mb-5">
                 <li className="list-disc">List your brand program for free</li>
                 <li className="list-disc">Get exposure to content creators</li>
@@ -39,7 +39,7 @@ const page = () => {
           </div>
           <div className="bg-gray-40 border rounded-lg border-gray-20 p-6">
             <p className="regular-16 text-cream-20 mb-3">PREMIUM PLAN</p>
-            <div className="flexBetween flex-col">
+            <div className="">
               <ul className="text-cream-20 list-disc ml-6 regular-16 mb-5">
                 <li className="list-disc">
                   List your brand program & get exposure to massive content

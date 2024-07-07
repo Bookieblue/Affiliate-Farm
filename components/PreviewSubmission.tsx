@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronLeft } from "lucide-react";
-import Programs from "./Programs";
+import Programs from "./Program";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import NestedDialog from "./ui/FormField/NestedDialog";

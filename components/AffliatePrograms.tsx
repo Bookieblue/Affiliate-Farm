@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import SelectInput from "./ui/FormField/SelectInput";
 import {
   AFFLIATE_TYPE,
@@ -9,70 +9,64 @@ import {
   TICKET_TYPE,
 } from "../constant/index";
 import Image from "next/image";
-import { Form } from "../components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import LoadMoreComponent from "./LoadMoreComponent";
 
-const Tickets = TICKET_TYPE.map((ticket) => ({
+interface Option {
+  label: string;
+  value: string;
+}
+
+const Tickets: Option[] = TICKET_TYPE.map((ticket) => ({
   label: ticket.name,
   value: ticket.name,
 }));
 
-const Levels = ALL_LEVELS.map((level) => ({
+const Levels: Option[] = ALL_LEVELS.map((level) => ({
   label: level.name,
   value: level.name,
 }));
 
-const Payments = PAYMENT_METHOD.map((payment) => ({
+const Payments: Option[] = PAYMENT_METHOD.map((payment) => ({
   label: payment.name,
   value: payment.name,
 }));
 
-const Affiliates = AFFLIATE_TYPE.map((affiliate) => ({
+const Affiliates: Option[] = AFFLIATE_TYPE.map((affiliate) => ({
   label: affiliate.name,
   value: affiliate.name,
 }));
 
-const Commissions = COMMISSION_TYPE.map((commission) => ({
+const Commissions: Option[] = COMMISSION_TYPE.map((commission) => ({
   label: commission.name,
   value: commission.name,
 }));
 
-const SubmitProgramSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Incorrect email address"),
-  password: z.string().min(8, "Password is required"),
-});
+const AffliatePrograms: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedAffiliate, setSelectedAffiliate] = useState<string>("");
+  const [selectedCommission, setSelectedCommission] = useState<string>("");
+  const [selectedLevel, setSelectedLevel] = useState<string>("");
+  const [selectedTicket, setSelectedTicket] = useState<string>("");
+  const [selectedPayment, setSelectedPayment] = useState<string>("");
 
-const AffliatePrograms = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const form = useForm<z.infer<typeof SubmitProgramSchema>>({
-    resolver: zodResolver(SubmitProgramSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // handle submit logic
+  };
 
-  const onSubmit = () => {};
   return (
-    <section className="max-container padding-container mt-10 w-full">
+    <section className="max-container padding-container mt-10  w-full">
       <div className="relative w-full">
         <input
           type="text"
           placeholder="Search Program"
           value={searchQuery}
           onChange={handleInputChange}
-          className="w-full xs:w-full lg:px-4 py-2 pl-10  mb-10 lg:pl-10 border placeholder:regular-16 border-gray-20 xl:w-[60%] text-gray-10 bg-transparent placeholder:text-gray-10 rounded-3xl"
+          className="w-full xs:w-full lg:px-4 py-2 pl-10 mb-10 lg:pl-10 border placeholder:regular-16 border-gray-20 xl:w-[60%] text-gray-10 bg-transparent placeholder:text-gray-10 rounded-3xl"
         />
         <Image
           src="/search.svg"
@@ -82,49 +76,49 @@ const AffliatePrograms = () => {
           className="absolute left-4 top-0 lg:top-[0.8px] lg:left-3 mt-3"
         />
       </div>
-      <div className="">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="mt-5 flexBetween gap-4 "
-          >
-            <SelectInput
-              control={form.control}
-              name="Affiliates"
-              label=""
-              options={Affiliates}
-              placeholder="All Affiliates Type"
-            />
-            <SelectInput
-              control={form.control}
-              name="commissions"
-              label=""
-              options={Commissions}
-              placeholder="Commission Type"
-            />
-            <SelectInput
-              control={form.control}
-              name="levels"
-              label=""
-              options={Levels}
-              placeholder="All levels"
-            />
-            <SelectInput
-              control={form.control}
-              name="Tickets"
-              label=""
-              options={Tickets}
-              placeholder="Ticket Type"
-            />
-            <SelectInput
-              control={form.control}
-              name="Payments"
-              label=""
-              options={Payments}
-              placeholder="Payment Method"
-            />
-          </form>
-        </Form>
+      <div className="hidden lg:block">
+        <form onSubmit={onSubmit} className="mt-5 flexBetween gap-4 min-w-fit">
+          <SelectInput
+            name="Affiliates"
+            label=""
+            options={Affiliates}
+            placeholder="All Affiliates Type"
+            value={selectedAffiliate}
+            onChange={setSelectedAffiliate}
+          />
+          <SelectInput
+            name="commissions"
+            label=""
+            options={Commissions}
+            placeholder="Commission Type"
+            value={selectedCommission}
+            onChange={setSelectedCommission}
+          />
+          <SelectInput
+            name="levels"
+            label=""
+            options={Levels}
+            placeholder="All levels"
+            value={selectedLevel}
+            onChange={setSelectedLevel}
+          />
+          <SelectInput
+            name="Tickets"
+            label=""
+            options={Tickets}
+            placeholder="Ticket Type"
+            value={selectedTicket}
+            onChange={setSelectedTicket}
+          />
+          <SelectInput
+            name="Payments"
+            label=""
+            options={Payments}
+            placeholder="Payment Method"
+            value={selectedPayment}
+            onChange={setSelectedPayment}
+          />
+        </form>
       </div>
       <div className="">
         <LoadMoreComponent searchQuery={searchQuery} />

@@ -1,47 +1,40 @@
 import React, { FC } from 'react';
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Control } from 'react-hook-form';
-import { Textarea } from '../../textarea';
 
-interface TextInputProps {
-  control: Control<any>;
+interface TextareaInputProps {
   name: string;
   label: string;
   placeholder: string;
-  error?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   id?: string;
   className?: string;
 }
 
-const TextInput: FC<TextInputProps> = ({
-  control,
+const TextareaInput: FC<TextareaInputProps> = ({
   name,
   label,
   placeholder,
+  value,
+  onChange,
   id,
   className,
 }) => {
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className="w-full">
-          <FormLabel htmlFor={id || name} className='text-cream-50'>{label}</FormLabel>
-          <FormControl>
-          <Textarea placeholder={placeholder} {...field} className={className} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="w-full">
+      <label htmlFor={id || name} className="text-cream-50 regular-16">
+        {label}
+      </label>
+      <textarea
+        id={id || name}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className={`w-full px-3 py-2 bg-transparent border border-gray-20 rounded-md text-cream-50 placeholder-gray-10 outline-none ${className}`}
+        aria-label={label}
+      />
+    </div>
   );
 };
 
-export default TextInput;
+export default TextareaInput;

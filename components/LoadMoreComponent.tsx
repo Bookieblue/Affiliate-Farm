@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import Programs from '../components/Programs';
+import Programs from './Program';
 import { fetchPrograms, programData } from '../lib/data';
 import { ArrowDown } from 'lucide-react';
 import Image from "next/image";
@@ -42,7 +42,7 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({ searchQuery }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 mt-7">
+      <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-3 gap-5 mt-7">
         {programs.map((program, index) => (
           <Programs key={index} {...program} />
         ))}

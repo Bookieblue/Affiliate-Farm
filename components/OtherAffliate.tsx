@@ -18,7 +18,7 @@ const OtherAffliate = () => {
           {AFFLIATE_PROGRAMS_LINKS.map((link) => (
             <div className="flex" key={link.name}>
               <ChevronRight className="text-gray-10 size-4 mt-1" />
-              <p className="text-gray-10 w-[70%]">{link.name}</p>
+              <p className="text-gray-10 ">{link.name}</p>
             </div>
           ))}
         </div>

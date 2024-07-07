@@ -1,26 +1,35 @@
 // NAVIGATION
+import PayoutIcon from "@/components/assets-nav-icons/payout";
+import MoreResourcesIcon from "@/components/assets-nav-icons/more-resources";
+import FeaturedAdIcon from "@/components/assets-nav-icons/featured-ad";
+import NewsletterIcon from "@/components/assets-nav-icons/newsletter";
+
+import React from 'react';
+
 export interface NavLink {
-    icon: string;
-    href: string;
-    key: string;
-    label: string;
-    iconWidth?: number;
-    iconHeight?: number;
-  }
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  href: string;
+  key: string;
+  label: string;
+  iconWidth?: number;
+  iconHeight?: number;
+}
+
+
 
 export const NAV_LINKS : NavLink[]  = [
-    {href: '/', key: 'affiliates-programs', label: 'Affiliates Programs', icon: '/payout.svg',   iconWidth: 20,
+    {href: '/', key: 'affiliates-programs', label: 'Affiliates Programs', icon: PayoutIcon,   iconWidth: 20,
     iconHeight: 20,},
-    {href: '/newsletters', key: 'newsletters', label: 'Newsletters', icon: '/newsletter-icon.svg',   iconWidth: 15,
+    {href: '/newsletters', key: 'newsletters', label: 'Newsletters', icon: NewsletterIcon,   iconWidth: 15,
     iconHeight: 20,},
-    {href: 'featured-ad', key: 'featured_ad', label: 'Featured Ad', icon: '/featured-icon.svg',   iconWidth: 20,
+    {href: '/featured-ad', key: 'featured_ad', label: 'Featured Ad', icon: FeaturedAdIcon,   iconWidth: 20,
     iconHeight: 20,}, 
-    {href: '/more-resources', key: 'more-resources', label: 'More resources', icon: '/more-resources-icon.svg',   iconWidth: 15,
+    {href: '/more-resources', key: 'more-resources', label: 'More resources',  icon: MoreResourcesIcon,    iconWidth: 15,
     iconHeight: 20,},
   ]
 
   export const ADMIN_NAV_LINKS: NavLink[]  = [
-    {href: '/', key: 'affiliates-programs', label: 'Affiliates Programs', icon: '/payout.svg',   iconWidth: 20,
+    {href: '/', key: 'affiliates-programs', label: 'Affiliates Programs', icon: PayoutIcon,   iconWidth: 20,
     iconHeight: 20,},
   ]
 
@@ -47,7 +56,7 @@ export const AFFLIATE_PROGRAMS_LINKS = [
     },
     {
         name: 'SaaS Affiliate Programs',
-        link: '/saas-affiliate-programs',
+        link: '/affiliate-page',
     },
     {
         name: 'Travel Affiliate Programs',
@@ -220,7 +229,7 @@ export const FEATURED_AD_PLAN= [
 //AFFLIATE PROGRAM LINKS
 export const FEATURED_AD = [
     {
-        name: 'Featured Listing:',
+        name: 'Featured Listing: ',
         description: 'Get your affiliate program featured through our website, putting your brand in front of a highly engaged audiences.'
     },
     {
@@ -232,15 +241,15 @@ export const FEATURED_AD = [
         description: "Tap into our large social media following with featured posts on LinkedIn and Twitter, reaching over 100,000 followers."
     },
     {
-        name: 'Twitter (X) Highlight:',
+        name: 'Twitter (X) Highlight: ',
         description: "Enjoy premium exposure with your program pinned to our Twitter page for a week and permanently showcased in our 'Highlights' tab."
     },
     {
-        name: 'Newsletter Promotion:',
+        name: 'Newsletter Promotion: ',
         description: "We get your brand program across to over 200 bloggers, YouTubers, and content creators on our newsletter list."
     },
     {
-        name: 'Exclusive Partnership Banner:',
+        name: 'Exclusive Partnership Banner: ',
         description: "Stand out with a personalized banner announcing your partnership with Affiliate Farm, adding an air of exclusivity and importance."
     },
 

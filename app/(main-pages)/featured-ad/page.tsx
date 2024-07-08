@@ -7,11 +7,14 @@ import MainDialog from "@/components/ui/FormField/MainDialog";
 import NestedDialog from "@/components/ui/FormField/NestedDialog";
 import FeaturedAdForm from "@/components/forms/featuredAd";
 import { Button } from "@/components/ui/button";
+import { useRouter} from "next/navigation";
 
 
 const page = () => {
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+
+  const router = useRouter();
 
   const handleFormSubmit = (values: any) => {
     console.log('Form Submitted:', values);
@@ -97,7 +100,9 @@ const page = () => {
             title="Brand Affiliate program on Campaign now"
             description="Your brand will start benefitting from massive exposure and a quickly affiliate program spread though our targeted outreach to content creators."
           >
-            <Button className="w-full mt-3">Go back now</Button>
+            <Button className="w-full mt-3"  onClick={() => {
+                router.push("/");
+              }}>Go back now</Button>
             <p className="text-center regular-16 text-cream-50 mt-3">Feature ad activated now.</p>
           </NestedDialog>
         </div>

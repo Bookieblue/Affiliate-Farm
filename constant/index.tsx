@@ -56,7 +56,7 @@ export const AFFLIATE_PROGRAMS_LINKS = [
     },
     {
         name: 'SaaS Affiliate Programs',
-        link: '/affiliate-page',
+        link: '/saas-affiliate-programs',
     },
     {
         name: 'Travel Affiliate Programs',

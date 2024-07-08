@@ -95,14 +95,6 @@ const AffliatePrograms: React.FC = () => {
             onChange={setSelectedCommission}
           />
           <SelectInput
-            name="levels"
-            label=""
-            options={Levels}
-            placeholder="All levels"
-            value={selectedLevel}
-            onChange={setSelectedLevel}
-          />
-          <SelectInput
             name="Tickets"
             label=""
             options={Tickets}

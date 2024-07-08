@@ -1,53 +1,68 @@
-import React, { FC } from 'react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { FormLabel } from '@/components/ui/form';
+"use client"
 
-interface RadioGroupFormProps {
-  name: string;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  id?: string;
-}
+import { Control } from "react-hook-form"
 
-const RadioGroupForm: FC<RadioGroupFormProps> = ({
-  name,
-  label,
-  value,
-  onChange,
-  id,
-}) => {
+
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+
+
+// const FormSchema = z.object({
+//   type: z.enum(["no", "yes"], {
+//     required_error: "You need to select a notification type.",
+//   }),
+// })
+
+interface radioProps{
+    control: Control<any>;
+    name: string;
+    label: string;
+    id?: string;
+  }
+
+export function RadioGroupForm({name, label, control, id} : radioProps) {
+
   return (
-    <div className="space-y-3">
-      <FormLabel className="text-cream-50 regular-16" htmlFor={id || name}>
-        {label}
-      </FormLabel>
-      <RadioGroup
-        onValueChange={onChange}
-        defaultValue={value}
-        className="flex space-y-1"
-      >
-        <div className="flex items-center space-x-3 space-y-0">
-          <RadioGroupItem value="yes" id={`${id || name}-yes`} />
-          <label
-            htmlFor={`${id || name}-yes`}
-            className="font-normal text-cream-50"
-          >
-            Yes
-          </label>
-        </div>
-        <div className="flex items-center space-x-3 space-y-0">
-          <RadioGroupItem value="no" id={`${id || name}-no`} />
-          <label
-            htmlFor={`${id || name}-no`}
-            className="font-normal text-cream-50"
-          >
-            No
-          </label>
-        </div>
-      </RadioGroup>
-    </div>
-  );
-};
-
-export default RadioGroupForm;
+        <FormField
+         control={control}
+         name={name}
+          render={({ field }) => (
+            <FormItem className="space-y-3 ">
+              <FormLabel className="text-cream-50 regular-16">{label}</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex  space-y-1"
+                >
+                 <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="yes" />
+                    </FormControl>
+                    <FormLabel htmlFor={id || name} className="font-normal text-cream-50">
+                     Yes
+                    </FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value='no' />
+                    </FormControl>
+                    <FormLabel htmlFor={id || name} className="font-normal text-cream-50">
+                      No
+                    </FormLabel>
+                  </FormItem>
+                 
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+  )
+}

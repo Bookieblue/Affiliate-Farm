@@ -31,18 +31,17 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({ searchQuery }) => {
     loadPrograms(true); // Load initial programs
   }, [searchQuery]);
 
-  if (programs.length === 0) {
+  if (loading && programs.length === 0) {
     return (
       <div className="flexCenter mt-20 flex-col  h-full w-full">
-        <Image src="/empty-state.svg" alt="No Programs" width={200} height={200} />
-        <p className="text-gray-600 mt-4">No affiliate program added yet</p>
+        <p className="text-gray-10 mt-4">Loading...</p>
       </div>
     );
   }
 
   return (
     <div>
-      <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-3 gap-5 mt-7">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-7">
         {programs.map((program, index) => (
           <Programs key={index} {...program} />
         ))}

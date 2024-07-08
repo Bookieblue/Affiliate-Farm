@@ -1,71 +1,77 @@
 "use client";
 import React, { useState } from "react";
-import { Form, FormLabel } from "../ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
-import TextInput from "../ui/FormField/TextInput/index";
-import {
-  AFFLIATE_TYPE,
-  ALL_LEVELS,
-  COMMISSION_TYPE,
-  PAYMENT_METHOD,
-} from "@/constant";
+import TextInput from "../ui/FormField/TextInput";
+import Dropdown from "../ui/FormField/Dropdown";
 import TextareaInput from "../ui/FormField/TextareaInput";
 import { RadioGroupForm } from "../ui/FormField/RadioButton";
 import Image from "next/image";
-import Dropdown from "../ui/FormField/Dropdown";
-// import Programs from "../Programs";
+import {
+  AFFLIATE_TYPE,
+  COMMISSION_TYPE,
+  PAYMENT_METHOD,
+  ALL_LEVELS,
+  AFFILIATE_CATEGORY,
+} from "@/constant";
+import { useRouter } from "next/navigation";
 
 const SubmitProgramSchema = z.object({
   publisher_email: z
     .string()
     .min(1, "Email is required")
     .email("Incorrect email address"),
-  password: z.string().min(8, "Password is required"),
   brand_name: z.string().min(1, "Brand name is required"),
   payout_fee: z.string().min(1, "Payout fee is required"),
   cookie_duration: z.string().min(1, "Cookie duration is required"),
   publisher_name: z.string().min(1, "Publisher name is required"),
-  Affiliates: z.string().min(1, "Brand niche is required"),
+  affiliates: z.string().min(1, "Affiliate type is required"),
+  category: z.string().min(1, "Brand niche is required"),
   commissions: z.string().min(1, "Commission Type is required"),
   payments: z.string().min(1, "Payment Method is required"),
-  Cookie_expired: z.string().min(1, "Cookie expiration is required"),
+  cookie_expired: z.string().min(1, "Cookie expiration is required"),
   program_url: z.string().url("Invalid URL"),
   description: z.string().min(1, "Product description is required"),
   program_description: z.string().min(1, "Program description is required"),
   levels: z.string().min(1, "Affiliates Levels are required"),
-  commission_rate: z.number(),
+  commission_rate: z.string().nonempty("Commission rate is required"),
   logo: z.string().nonempty("Logo is required"),
 });
 
 const SubmitProgramForm = () => {
-  const form = useForm<z.infer<typeof SubmitProgramSchema>>({
+  const router = useRouter();
+  const methods = useForm({
     resolver: zodResolver(SubmitProgramSchema),
     defaultValues: {
       brand_name: "",
       payout_fee: "",
       publisher_email: "",
-      password: "",
       cookie_duration: "",
       publisher_name: "",
-      Affiliates: "",
+      affiliates: "",
       commissions: "",
       payments: "",
-      Cookie_expired: "",
+      cookie_expired: "",
       program_url: "",
       description: "",
       program_description: "",
       levels: "",
-      commission_rate: 0,
+      commission_rate: "",
       logo: "",
+      category: "",
     },
   });
 
   const Affiliates = AFFLIATE_TYPE.map((affiliate) => ({
     label: affiliate.name,
     value: affiliate.name,
+  }));
+
+  const Category = AFFILIATE_CATEGORY.map((category) => ({
+    label: category.name,
+    value: category.name,
   }));
 
   const Commissions = COMMISSION_TYPE.map((commission) => ({
@@ -84,21 +90,8 @@ const SubmitProgramForm = () => {
   }));
 
   const [rate, setRate] = useState<number | string>("");
+  const [currency, setCurrency] = useState<string>("%"); // Default to %
   const [logo, setLogo] = useState<string | ArrayBuffer | null>(null);
-  const [previewData, setPreviewData] = useState<null | {
-    src: string;
-    commission: number;
-    name: string;
-    productDescription: string;
-    payout: string;
-    cookie: string;
-    programDescription: string;
-    url: string;
-    programID: string;
-    linkName: string;
-    verified: boolean;
-    verifiedIconSrc: string;
-  }>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -106,41 +99,23 @@ const SubmitProgramForm = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogo(reader.result);
-        form.setValue("logo", reader.result as string); // Set the logo value in the form
+        methods.setValue("logo", reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = (values: z.infer<typeof SubmitProgramSchema>) => {
-    console.log("Form Values:", values); // Console log the form values
 
     if (!logo) {
-      form.setError("logo", { type: "manual", message: "Logo is required" });
+      methods.setError("logo", { type: "manual", message: "Logo is required" });
       return;
     }
-
-    if (typeof rate !== "number" || rate <= 0) {
-      form.setError("commission_rate", { type: "manual", message: "Commission rate must be a positive number" });
-      return;
-    }
-
-    setPreviewData({
-      src: logo as string,
-      commission: rate as number,
-      name: values.brand_name,
-      productDescription: values.description,
-      payout: values.payout_fee,
-      cookie: values.cookie_duration,
-      programDescription: values.program_description,
-      url: values.program_url,
-      programID: values.publisher_email, // or any unique ID you prefer
-      linkName: "Learn More",
-      verified: true, // Or any logic to determine if it's verified
-      verifiedIconSrc: "/verified-icon.png", // Replace with your verified icon path
-    });
-
-    console.log("Preview Data:", previewData);
+    
+    const combinedRate =
+      currency === "%" ? `${rate}${currency}` : `${currency}${rate}`;
+    console.log("Form Values:", { ...values, commission_rate: combinedRate });
+    router.push("/preview-submission");
   };
 
   return (
@@ -151,9 +126,9 @@ const SubmitProgramForm = () => {
       <p className="regular-16 text-cream-20">
         Get your brand exposed to massive traffic from Affiliate Farm.
       </p>
-      <Form {...form}>
+      <FormProvider {...methods}>
         <form
-          onSubmit={form.handleSubmit(handleSubmit)}
+          onSubmit={methods.handleSubmit(handleSubmit)}
           className="mt-10 space-y-6"
         >
           <div className="flex flex-col ">
@@ -187,33 +162,38 @@ const SubmitProgramForm = () => {
                 />
               </label>
             </div>
-            {form.formState.errors.logo && (
-              <p className="text-red-500 mt-2 text-sm">{form.formState.errors.logo.message}</p>
+            {methods.formState.errors.logo && (
+              <p className="text-red-500 mt-2 text-sm">
+                {methods.formState.errors.logo.message}
+              </p>
             )}
           </div>
           <div className="flex gap-10 flex-col lg:flex-row">
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="brand_name"
               label="Brand Name"
               placeholder="eg. Jasper AI"
-              type="text"
             />
             <Dropdown
-              control={form.control}
-              name="Affiliates"
+              control={methods.control}
+              name="category"
               label="Brand niche"
-              options={Affiliates}
+              options={Category}
               placeholder="Travel affiliate program"
             />
           </div>
-          <div className="flex gap-10  flex-col lg:flex-row">
+          <div className="flex gap-10 flex-col lg:flex-row">
             <div className="w-full">
-              <FormLabel className="text-cream-50 regular-16">
-                Commision Rate
-              </FormLabel>
-              <div className="flex items-center overflow-hidden mt-2 ">
-                <select className="px-3 py-2 bg-gray-20 text-cream-50 outline-none">
+              <label className="text-cream-50 regular-16">
+                Commission Rate
+              </label>
+              <div className="flex items-center overflow-hidden mt-2">
+                <select
+                  className="px-3 py-2 bg-gray-20 text-cream-50 outline-none"
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                >
                   <option value="%">%</option>
                   <option value="$">$</option>
                   <option value="€">€</option>
@@ -224,32 +204,45 @@ const SubmitProgramForm = () => {
                   className="w-full px-3 py-2 bg-transparent border border-gray-20 rounded-md text-cream-50 placeholder-gray-10 outline-none"
                   placeholder="eg. 25"
                   value={rate}
-                  onChange={(e) => setRate(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (!isNaN(value) && value > 0) {
+                      setRate(value);
+                      const combinedRate =
+                        currency === "%"
+                          ? `${value}${currency}`
+                          : `${currency}${value}`;
+                      methods.setValue("commission_rate", combinedRate); // Update the form value with combined rate and currency
+                    } else {
+                      setRate("");
+                      methods.setValue("commission_rate", ""); // Clear the form value
+                    }
+                  }}
                 />
               </div>
-              {form.formState.errors.commission_rate && (
-                <p className="text-red-500 mt-2 text-sm">{form.formState.errors.commission_rate.message}</p>
+              {methods.formState.errors.commission_rate && (
+                <p className="text-red-500 mt-2 text-sm">
+                  {methods.formState.errors.commission_rate.message}
+                </p>
               )}
             </div>
-
             <Dropdown
-              control={form.control}
+              control={methods.control}
               name="commissions"
               label="Commission Type"
               options={Commissions}
               placeholder="Commission Type"
             />
           </div>
-          <div className="flex gap-10  flex-col lg:flex-row">
+          <div className="flex gap-10 flex-col lg:flex-row">
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="payout_fee"
               label="Payout fee"
               placeholder="eg $50"
-              type="text"
             />
             <Dropdown
-              control={form.control}
+              control={methods.control}
               name="payments"
               label="Payment Method"
               options={Payments}
@@ -258,84 +251,77 @@ const SubmitProgramForm = () => {
           </div>
           <div>
             <RadioGroupForm
-              control={form.control}
+              control={methods.control}
               label="Cookie expired?"
-              name="Cookie_expired"
+              name="cookie_expired"
             />
           </div>
-          <div className="lg:w-[40%]  flex-col lg:flex-row">
+          <div className="lg:w-[40%] flex-col lg:flex-row">
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="cookie_duration"
               label="Cookie duration"
               placeholder="eg. 60 days"
-              type="text"
             />
           </div>
-          <div className="flex gap-10  flex-col lg:flex-row">
+          <div className="flex gap-10 flex-col lg:flex-row">
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="program_url"
               label="Affiliate program URL"
               placeholder="eg. jasper-ai/affiliate-program"
-              type="text"
             />
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="description"
               label="Short product description"
               placeholder="eg. Content writing tool"
-              type="text"
             />
           </div>
           <div>
             <TextareaInput
-              control={form.control}
+              control={methods.control}
               name="program_description"
               label="Program description"
               placeholder="eg. With jasper user can start creating massive blog, ebook, music , etc contents with AI."
               className="h-40 text-cream-20"
             />
           </div>
-          <div className="flex gap-10  flex-col lg:flex-row">
+          <div className="flex gap-10 flex-col lg:flex-row">
             <Dropdown
-              control={form.control}
-              name="Affiliates"
-              label="Affiliates Type"
+              control={methods.control}
+              name="affiliates"
+              label="Affiliate Type"
               options={Affiliates}
-              placeholder="All Affiliates Type"
+              placeholder="Affiliate Type"
             />
             <Dropdown
-              control={form.control}
+              control={methods.control}
               name="levels"
               label="Affiliates Levels"
               options={Levels}
-              placeholder="All levels"
+              placeholder="Affiliate Levels"
             />
           </div>
-          <div className="flex gap-10  flex-col lg:flex-row">
+          <div className="flex gap-10 flex-col lg:flex-row">
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="publisher_name"
-              label="Publisher name"
+              label="Publisher Name"
               placeholder="eg. John Don"
-              type="text"
             />
             <TextInput
-              control={form.control}
+              control={methods.control}
               name="publisher_email"
-              label="Publisher email"
+              label="Publisher Email"
               placeholder="eg. yourname@gmail.com"
-              type="email"
             />
           </div>
-          <div className="w-full ">
-            <Button type="submit" className="w-full" >
-              Proceed
-            </Button>
-          </div>
+          <Button type="submit" className="w-full">
+            Proceed
+          </Button>
         </form>
-      </Form>
+      </FormProvider>
     </div>
   );
 };

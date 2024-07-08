@@ -180,6 +180,24 @@ export const AFFLIATE_TYPE= [
  name: string;
 }[];
 
+//AFFLIATE CATEGORY DROPDOWN MENU
+export const AFFILIATE_CATEGORY= [
+    {
+     name: 'Other affiliate program'
+    },
+    {
+     name: 'Travel affiliate program'
+    },
+    {
+     name: 'Health affiliate program'
+    },
+    {
+     name: 'Betting affiliate program'
+    },
+] as {
+ name: string;
+}[];
+
 
 //COMMISSION_YPE DROPDOWN MENU
 export const COMMISSION_TYPE= [

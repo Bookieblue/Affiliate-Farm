@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import LoadMoreComponent from './LoadMoreComponent'
+import api from '@/services/fetchService'
 
 const Tickets = TICKET_TYPE.map((ticket) => ({
   label: ticket.name,
@@ -48,7 +49,15 @@ const SubmitProgramSchema = z.object({
   password: z.string().min(8, 'Password is required'),
 })
 
-const AffliatePrograms = () => {
+interface AffiliateProgramProps {
+  affiliatesPrograms: ProgramApiResponse[]
+  ads: ProgramApiResponse[]
+}
+
+const AffliatePrograms: React.FC<AffiliateProgramProps> = ({
+  affiliatesPrograms,
+  ads,
+}) => {
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -127,10 +136,30 @@ const AffliatePrograms = () => {
         </Form>
       </div>
       <div className=''>
-        <LoadMoreComponent searchQuery={searchQuery} />
+        <LoadMoreComponent
+          searchQuery={searchQuery}
+          affiliatesPrograms={affiliatesPrograms}
+          ads={ads}
+        />
       </div>
     </section>
   )
 }
 
 export default AffliatePrograms
+
+export async function getStaticProps() {
+  try {
+    const response = await api.get(`affiliate/?page=1&limit=0`)
+    const affiliatesPrograms = response.data.results
+
+    const adsResponse = await api.get(`affiliate/get-ads/`)
+    const ads = adsResponse.data
+
+    return { props: { affiliatesPrograms, ads }, revalidate: 60 }
+  } catch (error) {
+    console.error('Error occured while fetching data', error)
+
+    return { props: { affiliatesPrograms: [], ads: [] } }
+  }
+}

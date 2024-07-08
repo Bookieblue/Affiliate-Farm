@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import Programs from '../components/Programs'
 import { ArrowDown } from 'lucide-react'
 import Image from 'next/image'
-import api from '@/services/fetchService'
 
 interface LoadMoreProgramsProps {
-  searchQuery: string
+  searchQuery: string | null
   ads: ProgramApiResponse[]
   affiliatesPrograms: ProgramApiResponse[]
 }
@@ -15,10 +14,7 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   affiliatesPrograms,
   searchQuery,
 }) => {
-  const [programs, setPrograms] = useState<ProgramApiResponse[]>([
-    ...affiliatesPrograms,
-    ...ads,
-  ])
+  const [programs, setPrograms] = useState<ProgramApiResponse[]>([])
   console.log(programs)
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -45,6 +41,10 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   useEffect(() => {
     loadPrograms(true) // Load initial programs
   }, [searchQuery])
+
+  if (!ads && !affiliatesPrograms) return null
+
+  setPrograms([...affiliatesPrograms, ...ads])
 
   if (programs.length === 0) {
     return (
@@ -85,19 +85,3 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
 }
 
 export default LoadMorePrograms
-
-export async function getStaticProps() {
-  try {
-    const response = await api.get(`affiliate/?page=1&limit=0`)
-    const affiliatesPrograms = response.data.results
-
-    const adsResponse = await api.get(`affiliate/get-ads/`)
-    const ads = adsResponse.data
-
-    return { props: { affiliatesPrograms, ads }, revalidate: 60 }
-  } catch (error) {
-    console.error('Error occured while fetching data', error)
-
-    return { props: { affiliatesPrograms: [], ads: [] } }
-  }
-}

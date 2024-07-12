@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
+import { useState } from 'react'
+import { ColumnDef } from '@tanstack/react-table'
+import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,74 +10,71 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { EyeIcon, MoreHorizontal } from "lucide-react";
-import MainDialog from "../../../components/ui/FormField/MainDialog";
-import CategoryForm from "@/components/forms/CategoryForm";
-
- 
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { EyeIcon, MoreHorizontal } from 'lucide-react'
+import MainDialog from '../../../components/ui/FormField/MainDialog'
+import CategoryForm from '@/components/forms/CategoryForm'
+import { CategoryResponse } from '@/services/models/hooks/category/type'
+import { convertDate } from '@/lib/helpers/formatDate'
+import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
 
 export interface Category {
-  no: string;
-  category: string;
-  programNo: string;
-  publishedDate: string;
-
+  no: string
+  category: string
+  programNo: string
+  publishedDate: string
 }
 
-
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<CategoryResponse>[] = [
+  //TODO come back to change this later
   {
-    accessorKey: 'no',
-    header: 'NO',
+    accessorKey: 'code',
+    header: 'CODE',
   },
   {
-    accessorKey: 'category',
+    accessorKey: 'name',
     header: 'CATEGORY',
     cell: ({ getValue }) => (
-      <span
-        className={cn(
-          'text-cream-50 font-bold'
-        )}
-      >
-        {getValue<string>()}
+      <span className={cn('text-cream-50 font-bold')}>
+        {capitalizeFirstLetter(getValue<string>())}
       </span>
     ),
   },
   {
-    accessorKey: 'programNo',
+    accessorKey: 'program_no',
     header: 'PROGRAM NO',
   },
   {
-    accessorKey: 'publishedDate',
+    accessorKey: 'created_at',
     header: 'PUBLISHED DATE',
+    cell: ({ getValue }) => <span>{convertDate(getValue<string>())}</span>,
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const [isModalOpen, setModalOpen] = useState(false);
-      const details = row.original;
+      const [isModalOpen, setModalOpen] = useState(false)
+      const details = row.original
 
       const handleViewDetails = () => {
-        setModalOpen(true);
-      };
+        setModalOpen(true)
+      }
 
       return (
         <>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+              <Button variant='ghost' className='h-8 w-8 p-0'>
+                <span className='sr-only'>Open menu</span>
+                <MoreHorizontal className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align='end'>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleViewDetails}>
-                <EyeIcon className="size-4 mr-2" /> View Category
+                <EyeIcon className='size-4 mr-2' /> View Category
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -85,21 +82,14 @@ export const columns: ColumnDef<Category>[] = [
             <MainDialog
               isOpen={isModalOpen}
               onOpenChange={() => setModalOpen(false)}
-              title="Affliate Program"
-              description=""
+              title='Affliate Program'
+              description=''
             >
-              <div>
-                 
-              </div>
+              <div></div>
             </MainDialog>
           )}
         </>
-      );
+      )
     },
   },
-
-
 ]
-   
-  
-  

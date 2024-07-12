@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import React from 'react';
+import React from 'react'
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table';
+} from '@tanstack/react-table'
 import {
   Table,
   TableBody,
@@ -15,11 +15,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@/components/ui/table'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
 }
 
 export function DataTable<TData, TValue>({
@@ -31,44 +31,47 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  });
+  })
 
   const renderPageButtons = () => {
-    const pageCount = table.getPageCount();
-    const currentPage = table.getState().pagination.pageIndex;
-    const pageButtons = [];
+    const pageCount = table.getPageCount()
+    const currentPage = table.getState().pagination.pageIndex
+    const pageButtons = []
 
     for (let i = 0; i < pageCount; i++) {
       if (
-        i === 0 || 
-        i === pageCount - 1 || 
+        i === 0 ||
+        i === pageCount - 1 ||
         (i >= currentPage - 1 && i <= currentPage + 1)
       ) {
         pageButtons.push(
           <button
             key={i}
             className={`px-3 py-1 border rounded ${
-              currentPage === i ? 'bg-yellow-50 border border-yellow-50 text-black-50' : 'bg-transparent border border-gray-10 text-gray-10'
+              currentPage === i
+                ? 'bg-yellow-50 border border-yellow-50 text-black-50'
+                : 'bg-transparent border border-gray-10 text-gray-10'
             }`}
             onClick={() => table.setPageIndex(i)}
           >
             {i + 1}
           </button>
-        );
-      } else if (
-        i === currentPage - 2 || 
-        i === currentPage + 2
-      ) {
-        pageButtons.push(<span key={i} className='border rounded px-2 py-2'>...</span>);
+        )
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        pageButtons.push(
+          <span key={i} className='border rounded px-2 py-2'>
+            ...
+          </span>
+        )
       }
     }
 
-    return pageButtons;
-  };
+    return pageButtons
+  }
 
   return (
     <div>
-      <div className="rounded-md border border-[#32312C]">
+      <div className='rounded-md border border-[#32312C]'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -95,14 +98,20 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-24 text-center'
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -110,11 +119,9 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-start mt-4">
-        <ul className="flex space-x-2">
-          {renderPageButtons()}
-        </ul>
+      <div className='flex justify-start mt-4'>
+        <ul className='flex space-x-2'>{renderPageButtons()}</ul>
       </div>
     </div>
-  );
+  )
 }

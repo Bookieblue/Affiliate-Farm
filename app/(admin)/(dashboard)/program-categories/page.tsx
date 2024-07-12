@@ -1,20 +1,20 @@
-"use client";
-import Categories from "@/components/tables/program-categories/page";
-import MainDialog from "@/components/ui/FormField/MainDialog";
-import { Button } from "@/components/ui/button";
+'use client'
+import Categories from '@/components/tables/program-categories/page'
+import MainDialog from '@/components/ui/FormField/MainDialog'
+import { Button } from '@/components/ui/button'
 
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-const page = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
+const Page = () => {
+  const [isModalOpen, setModalOpen] = useState(false)
   const handleViewDetails = () => {
-    setModalOpen(true);
-  };
+    setModalOpen(true)
+  }
   return (
-    <section className="mt-32 padding-container">
+    <section className='mt-32 padding-container'>
       <Categories />
     </section>
-  );
-};
+  )
+}
 
-export default page;
+export default Page

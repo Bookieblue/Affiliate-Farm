@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
+import React, { useState } from 'react'
+import { ColumnDef } from '@tanstack/react-table'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,143 +9,169 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { DeleteIcon, Edit2Icon, EyeIcon, MoreHorizontal } from "lucide-react";
-import MainDialog from "../../../components/ui/FormField/MainDialog";
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { DeleteIcon, Edit2Icon, EyeIcon, MoreHorizontal } from 'lucide-react'
+import MainDialog from '../../../components/ui/FormField/MainDialog'
+import { ProgramResponse } from '@/services/models/hooks/program/type'
+import { convertDate } from '@/lib/helpers/formatDate'
+import {
+  capitalizeFirstLetter,
+  formatCommission,
+} from '@/lib/helpers/formatWord'
 
 export interface Ad {
-  program: string;
-  commission: string;
-  category: string;
-  publishedDate: string;
-  publisher: string;
-  publisherEmail: string;
+  program: string
+  commission: string
+  category: string
+  publishedDate: string
+  publisher: string
+  publisherEmail: string
 }
 
 interface ColumnsProps {
-  onDeleteRow: (row: Ad) => void;
-  onEditCategory: (row: Ad, newCategory: string) => void;
+  onDeleteRow: (row: ProgramResponse) => void
+  onEditCategory: (row: ProgramResponse, newCategory: string) => void
 }
 
 export const createColumns = ({
   onDeleteRow,
   onEditCategory,
-}: ColumnsProps): ColumnDef<Ad>[] => [
+}: ColumnsProps): ColumnDef<ProgramResponse>[] => [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <input
-        type="checkbox"
-        className="custom-checkbox"
+        type='checkbox'
+        className='custom-checkbox'
         checked={table.getIsAllPageRowsSelected()}
         onChange={table.getToggleAllPageRowsSelectedHandler()}
       />
     ),
     cell: ({ row }) => (
       <input
-        type="checkbox"
-        className="custom-checkbox"
+        type='checkbox'
+        className='custom-checkbox'
         checked={row.getIsSelected()}
         onChange={row.getToggleSelectedHandler()}
       />
     ),
   },
   {
-    accessorKey: "program",
-    header: "PROGRAM",
+    accessorKey: 'name',
+    header: 'PROGRAM',
+    cell: ({ getValue }) => (
+      <div>
+        <div>{capitalizeFirstLetter(getValue<string>())}</div>
+      </div>
+    ),
   },
   {
-    accessorKey: "commission",
-    header: "COMMISSION",
+    accessorKey: 'commission',
+    header: 'COMMISSION',
+    cell: ({ row }) => {
+      const { commissionRate, commissionType, currency } = row.original
+      return (
+        <div>{formatCommission(currency, commissionRate, commissionType)}</div>
+      )
+    },
   },
   {
-    accessorKey: "category",
-    header: "CATEGORY",
+    accessorKey: 'niche_details',
+    header: 'CATEGORY',
+    cell: ({ row }) => (
+      <div>
+        <div>{capitalizeFirstLetter(row.original.niche_details.name)}</div>
+      </div>
+    ),
   },
   {
-    accessorKey: "publishedDate",
-    header: "PUBLISHED DATE",
+    accessorKey: 'created_at',
+    header: 'PUBLISHED DATE',
+    cell: ({ getValue }) => <div>{convertDate(getValue<string>())}</div>,
   },
   {
-    accessorKey: "publisher",
-    header: "PUBLISHER",
+    accessorKey: 'publisher',
+    header: 'PUBLISHER',
     cell: ({ getValue, row }) => (
       <div>
         <div>{getValue<string>()}</div>
-        <div className="text-xs text-cream-20">
-          {row.original.publisherEmail}
+        <div className='text-xs text-cream-20'>
+          <p>{row.original.publisherName}</p>
+          <p>{row.original.publisherEmail}</p>
         </div>
       </div>
     ),
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const [isModalOpen, setModalOpen] = useState(false);
-      const [modalAction, setModalAction] = useState(""); // State to track which action triggered the modal
-      const details = row.original;
-      const [selectedRow, setSelectedRow] = useState<Ad | null>(null); // Track the selected row
-      const [newCategory, setNewCategory] = useState(details.category); // Track the new category
+      const [isModalOpen, setModalOpen] = useState(false)
+      const [modalAction, setModalAction] = useState('') // State to track which action triggered the modal
+      const details = row.original
+      const [selectedRow, setSelectedRow] = useState<ProgramResponse | null>(
+        null
+      ) // Track the selected row
+      const [newCategory, setNewCategory] = useState(details.niche_details.name) // Track the new category
 
       const handleViewDetails = (action: string) => {
-        setModalOpen(true);
-        setModalAction(action);
-        setSelectedRow(details); // Set the selected row for editing
-      };
+        setModalOpen(true)
+        setModalAction(action)
+        setSelectedRow(details) // Set the selected row for editing
+      }
 
       const handleCloseModal = () => {
-        setModalOpen(false);
-        setModalAction("");
-        setSelectedRow(null);
-      };
+        setModalOpen(false)
+        setModalAction('')
+        setSelectedRow(null)
+      }
 
       const handleEditCategory = () => {
         if (selectedRow) {
-          onEditCategory(selectedRow, newCategory);
+          onEditCategory(selectedRow, newCategory)
         }
-        handleCloseModal();
-      };
+        handleCloseModal()
+      }
 
       const handleEditProgram = () => {
         // Logic for editing program
-        handleCloseModal();
-      };
+        handleCloseModal()
+      }
 
       const handleDeleteProgram = () => {
         if (selectedRow) {
-          onDeleteRow(selectedRow);
+          onDeleteRow(selectedRow)
         }
-        handleCloseModal();
-      };
+        handleCloseModal()
+      }
 
       return (
         <>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+              <Button variant='ghost' className='h-8 w-8 p-0'>
+                <span className='sr-only'>Open menu</span>
+                <MoreHorizontal className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align='end'>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => handleViewDetails("editCategory")}
+                onClick={() => handleViewDetails('editCategory')}
               >
-                <EyeIcon className="size-4 mr-2" /> Edit Category
+                <EyeIcon className='size-4 mr-2' /> Edit Category
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleViewDetails("editProgram")}
+                onClick={() => handleViewDetails('editProgram')}
               >
-                <Edit2Icon className="size-4 mr-2" /> Edit Program
+                <Edit2Icon className='size-4 mr-2' /> Edit Program
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleViewDetails("deleteProgram")}
+                onClick={() => handleViewDetails('deleteProgram')}
               >
-                <DeleteIcon className="size-4 mr-2" /> Delete Program
+                <DeleteIcon className='size-4 mr-2' /> Delete Program
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -154,47 +180,51 @@ export const createColumns = ({
               isOpen={isModalOpen}
               onOpenChange={handleCloseModal}
               title={
-                modalAction === "editCategory"
-                  ? "Edit Program Category"
-                  : modalAction === "editProgram"
-                  ? "Edit Program"
-                  : "Delete Program"
+                modalAction === 'editCategory'
+                  ? 'Edit Program Category'
+                  : modalAction === 'editProgram'
+                  ? 'Edit Program'
+                  : 'Delete Program'
               }
               description={
-                modalAction === "editCategory"
-                  ? "Set a new category for the selected program."
-                  : modalAction === "editProgram"
-                  ? "Edit program details here."
-                  : "Are you sure you want to delete the selected program? This action cannot be undone."
+                modalAction === 'editCategory'
+                  ? 'Set a new category for the selected program.'
+                  : modalAction === 'editProgram'
+                  ? 'Edit program details here.'
+                  : 'Are you sure you want to delete the selected program? This action cannot be undone.'
               }
             >
-              {modalAction === "editCategory" && (
+              {modalAction === 'editCategory' && (
                 <div>
                   <select
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
-                    className="py-2 px-4 text-sm w-full bg-transparent text-gray-10 border border-[#32312C] rounded-md"
+                    className='py-2 px-4 text-sm w-full bg-transparent text-gray-10 border border-[#32312C] rounded-md'
                   >
-                    <option value="Travel Affiliate Program">Travel Affiliate Program</option>
-                    <option value="Business Affiliate Program">Business Affiliate Program</option>
+                    <option value='Travel Affiliate Program'>
+                      Travel Affiliate Program
+                    </option>
+                    <option value='Business Affiliate Program'>
+                      Business Affiliate Program
+                    </option>
                     {/* Add more categories as needed */}
                   </select>
-                  <Button onClick={handleEditCategory} className="w-full mt-4">
+                  <Button onClick={handleEditCategory} className='w-full mt-4'>
                     Update Category
                   </Button>
                 </div>
               )}
-              {modalAction === "editProgram" && (
+              {modalAction === 'editProgram' && (
                 <div>
                   {/* Edit program form or content */}
-                  <Button onClick={handleEditProgram} className="w-full">
+                  <Button onClick={handleEditProgram} className='w-full'>
                     Save Changes
                   </Button>
                 </div>
               )}
-              {modalAction === "deleteProgram" && (
+              {modalAction === 'deleteProgram' && (
                 <div>
-                  <Button onClick={handleDeleteProgram} className="w-full">
+                  <Button onClick={handleDeleteProgram} className='w-full'>
                     Yes, delete program
                   </Button>
                 </div>
@@ -202,7 +232,7 @@ export const createColumns = ({
             </MainDialog>
           )}
         </>
-      );
+      )
     },
   },
-];
+]

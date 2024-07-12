@@ -39,9 +39,9 @@ const Programs: React.FC<ProgramsProps> = ({
   verified = false,
 }) => {
   return (
-    <div className='flex flex-col w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  '>
-      <div className='flexBetween relative self-stretch w-full flex-[0_0_auto] '>
-        <div className='relative w-[60px] h-[60px] rounded-[7.2px]'>
+    <div className="flex flex-col max-w-[400px] w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  ">
+      <div className="flexBetween relative self-stretch w-full flex-[0_0_auto] ">
+        <div className="relative w-[60px] h-[60px] rounded-[7.2px]">
           <Image
             src={src}
             width={60}

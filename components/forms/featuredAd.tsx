@@ -9,9 +9,11 @@ import TextInput from "@/components/ui/FormField/TextInput";
 import Link from "next/link";
 import TextareaInput from "../ui/FormField/TextareaInput";
 import { FEATURED_AD_PLAN } from "@/constant";
-import SelectInput from "../ui/FormField/SelectInput";
 import NestedDialog from "../ui/FormField/NestedDialog";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
+import Dropdown from "../ui/FormField/Dropdown";
+
 
 const Plans = FEATURED_AD_PLAN.map((plan) => ({
   label: plan.name,
@@ -52,6 +54,7 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
 
   return (
     <section>
+       <Loader />
       <div className="p-3 bg-gray-20 rounded-xl">
         <p className="regular-16 text-cream-20">
           <span className="medium-16 text-cream-50">Note:</span> You need to
@@ -71,7 +74,7 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
               placeholder="eg. 0153"
               label="Affiliate program ID"
             />
-            <SelectInput
+            <Dropdown
               control={form.control}
               name="plans"
               label="Feature ad plan"

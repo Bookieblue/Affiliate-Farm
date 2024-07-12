@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -67,6 +67,12 @@ const SubmitProgramForm = () => {
   })
 
   const { data, isSuccess } = useGetCategories()
+  useEffect(() => {
+    const storedFormData = localStorage.getItem('formData')
+    if (storedFormData) {
+      methods.reset(JSON.parse(storedFormData))
+    }
+  }, [methods])
 
   const Affiliates = AFFLIATE_TYPE.map((affiliate) => {
     return {
@@ -121,7 +127,12 @@ const SubmitProgramForm = () => {
 
     const combinedRate =
       currency === '%' ? `${rate}${currency}` : `${currency}${rate}`
-    console.log('Form Values:', { ...values, commission_rate: combinedRate })
+    const formData = { ...values, commission_rate: combinedRate }
+
+    // Store formData in local storage
+    localStorage.setItem('formData', JSON.stringify(formData))
+
+    // Redirect to preview-submission page
     router.push('/preview-submission')
   }
 

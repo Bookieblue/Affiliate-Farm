@@ -4,8 +4,12 @@ import Hero from "@/components/Hero";
 import AffiliatePageLayout from "@/components/layout/homepage";
 import React from "react";
 
+
+
+
 const Home: React.FC = () => {
   return (
+
     <AffiliatePageLayout>
        <Hero
         title="200+ Best Affiliate programs as at Jan, 2024"

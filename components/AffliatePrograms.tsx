@@ -83,7 +83,7 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
       <div className='hidden lg:block'>
         <form onSubmit={onSubmit} className='mt-5 flexBetween gap-4 min-w-fit'>
           <SelectInput
-            name='Affiliates'
+            name='affiliateType'
             label=''
             options={Affiliates}
             placeholder='All Affiliates Type'
@@ -91,7 +91,7 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             onChange={setSelectedAffiliate}
           />
           <SelectInput
-            name='commissions'
+            name='commissionType'
             label=''
             options={Commissions}
             placeholder='Commission Type'
@@ -99,7 +99,15 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             onChange={setSelectedCommission}
           />
           <SelectInput
-            name='Tickets'
+            name='Levels'
+            label=''
+            options={Levels}
+            placeholder='Commission Type'
+            value={selectedLevel}
+            onChange={setSelectedLevel}
+          />
+          <SelectInput
+            name='ticketType'
             label=''
             options={Tickets}
             placeholder='Ticket Type'
@@ -107,7 +115,7 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             onChange={setSelectedTicket}
           />
           <SelectInput
-            name='Payments'
+            name='paymentMethod'
             label=''
             options={Payments}
             placeholder='Payment Method'

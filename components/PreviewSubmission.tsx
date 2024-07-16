@@ -44,16 +44,16 @@ const PreviewSubmission = () => {
       <div className='flexCenter w-full'>
         <div className=' rounded-xl mt-7'>
           <Programs
-            src={formData.logo || ''}
-            commission={formData.commission_rate || ''}
-            name={formData.brand_name || ''}
-            productDescription={formData.description || ''}
-            payout={formData.payout_fee || ''}
-            cookie={formData.cookie_duration || ''}
-            programDescription={formData.program_description || ''}
-            url={formData.program_url || ''}
-            programID=''
-            verifiedIconSrc=''
+            logo={formData.logo || ''}
+            commissionRate={formData.commissionRate || 0}
+            name={formData.name || ''}
+            description={formData.description || ''}
+            payoutAmount={formData.payoutAmount || 0}
+            cookieDuration={formData.cookieDuration || 0}
+            shortDescription={formData.shortDescription || ''}
+            programUrl={formData.programUrl || ''}
+            id={formData.id || 0} // Assuming you have an id field in formData
+            currency={formData.currency || ''}
             linkName='View Program'
             verified={false}
           />
@@ -61,28 +61,28 @@ const PreviewSubmission = () => {
       </div>
       <div className='regular-14 break-all w-full lg:regular-16 grid grid-cols-2 lg:grid-cols-3 mt-10 gap-5'>
         <div>
-          <p className='text-cream-50'>Affiliate niche</p>
-          <p className='text-cream-20'>{formData.category}</p>
+          <p className='text-cream-50'>Affiliate Niche</p>
+          <p className='text-cream-20'>{formData.niche}</p>
         </div>
         <div>
-          <p className='text-cream-50'>Affiliate type</p>
-          <p className='text-cream-20'>{formData.affiliates}</p>
+          <p className='text-cream-50'>Affiliate Type</p>
+          <p className='text-cream-20'>{formData.affiliateType}</p>
         </div>
         <div>
-          <p className='text-cream-50'>Payment method</p>
-          <p className='text-cream-20'>{formData.payments}</p>
+          <p className='text-cream-50'>Payment Method</p>
+          <p className='text-cream-20'>{formData.paymentMethod}</p>
         </div>
         <div>
-          <p className='text-cream-50'>Affiliate level</p>
-          <p className='text-cream-20'>{formData.levels}</p>
+          <p className='text-cream-50'>Affiliate Level</p>
+          <p className='text-cream-20'>{formData.affiliateLevel}</p>
         </div>
         <div>
-          <p className='text-cream-50'>Publisher name</p>
-          <p className='text-cream-20'>{formData.publisher_name}</p>
+          <p className='text-cream-50'>Publisher Name</p>
+          <p className='text-cream-20'>{formData.publisherName}</p>
         </div>
         <div>
-          <p className='text-cream-50'>Publisher email</p>
-          <p className='text-cream-20'>{formData.publisher_email}</p>
+          <p className='text-cream-50'>Publisher Email</p>
+          <p className='text-cream-20'>{formData.publisherEmail}</p>
         </div>
       </div>
       <Button className='w-full mt-10' onClick={handleFormSubmit}>

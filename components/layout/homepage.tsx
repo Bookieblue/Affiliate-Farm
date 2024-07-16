@@ -1,10 +1,9 @@
 import Head from "next/head";
-import dynamic from "next/dynamic";
-import SideNav from "../SideBar";
+import SideNav from "@/components/SideBar";
 import type { Metadata } from "next";
-import Footer from "../Footer";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/NavBar";
 
-const Navbar = dynamic(() => import("../NavBar"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,12 +18,12 @@ export default function AffiliatePageLayout({
   return (
     <html lang="en">
       <Head>
-        <title>HI</title>
+        <title></title>
       </Head>
       <body>
         <div className="hide-scrollbar w-full">
           <Navbar />
-
+          
           <div className="min-h-screen max-container w-full lg:grid-cols-[250px,1fr] grid ">
             <div className="row-span-1 col-span-1 hidden lg:block ">
               <SideNav />
@@ -33,6 +32,7 @@ export default function AffiliatePageLayout({
               {children}
             </div>
           </div>
+          <Footer />
         </div>
       </body>
     </html>

@@ -7,35 +7,34 @@ import { formatCommission } from '@/lib/helpers/formatWord'
 import { baseURL } from '@/services/api'
 
 interface ProgramsProps {
-  src: string
-  commission: string
+  logo: string
+  commissionRate: number
   name: string
-  productDescription: string
-  payout: string
-  cookie: string
-  programDescription: string
-  url: string
-  programID: string
+  description: string
+  payoutAmount: number
+  cookieDuration: number
+  shortDescription: string
+  programUrl: string
+  id: number
+  currency: string
   promoted?: boolean
-  adsOn?: boolean
-  verifiedIconSrc: string
-  programIDIcon?: boolean
   linkName: string
-  verified: boolean
+  verified?: boolean
 }
 
-const Programs: React.FC<ProgramResponse> = ({
+const Programs: React.FC<ProgramsProps> = ({
   logo,
-  commissionType,
   commissionRate,
   name,
-  shortDescription,
+  description,
   payoutAmount,
   cookieDuration,
-  description,
+  shortDescription,
   programUrl,
-  code,
+  currency,
+  id,
   promoted = false,
+  linkName,
   verified = false,
 }) => {
   return (
@@ -76,7 +75,7 @@ const Programs: React.FC<ProgramResponse> = ({
                   <Image
                     className='relative w-6 h-6 object-cover'
                     alt='Verified Icon'
-                    src={'/verified.svg'}
+                    src='/verified.svg'
                     width={24}
                     height={24}
                   />
@@ -110,10 +109,7 @@ const Programs: React.FC<ProgramResponse> = ({
         </div>
         <div className='flexBetween px-0 py-2.5 relative self-stretch w-full flex-[0_0_auto]'>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-            <ToolTip content={code} key={code} />
-            {promoted && (
-              <p className='relative w-fit regular-14 text-gray-10'>Ads On</p>
-            )}
+            <ToolTip content={id} key={id} />
           </div>
           <div>
             <Link

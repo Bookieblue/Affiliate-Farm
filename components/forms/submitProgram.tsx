@@ -21,25 +21,25 @@ import { useGetCategories } from '@/services/models/hooks/category/hook'
 import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
 
 const SubmitProgramSchema = z.object({
-  publisher_email: z
+  publisherEmail: z
     .string()
     .min(1, 'Email is required')
     .email('Incorrect email address'),
-  brand_name: z.string().min(1, 'Brand name is required'),
-  payout_fee: z.string().min(1, 'Payout fee is required'),
-  cookie_duration: z.string().min(1, 'Cookie duration is required'),
-  publisher_name: z.string().min(1, 'Publisher name is required'),
-  affiliates: z.string().min(1, 'Affiliate type is required'),
-  category: z.string().min(1, 'Brand niche is required'),
-  commissions: z.string().min(1, 'Commission Type is required'),
-  payments: z.string().min(1, 'Payment Method is required'),
-  cookie_expired: z.string().min(1, 'Cookie expiration is required'),
-  program_url: z.string().url('Invalid URL'),
-  description: z.string().min(1, 'Product description is required'),
-  program_description: z.string().min(1, 'Program description is required'),
-  levels: z.string().min(1, 'Affiliates Levels are required'),
-  commission_rate: z.string().nonempty('Commission rate is required'),
-  logo: z.string().nonempty('Logo is required'),
+  name: z.string().min(1, 'Brand name is required'),
+  payoutAmount: z.string().min(1, 'Payout fee is required'),
+  cookieDuration: z.string().min(1, 'Cookie duration is required'),
+  publisherName: z.string().min(1, 'Publisher name is required'),
+  affiliateType: z.string().min(1, 'Affiliate type is required'),
+  niche: z.string().min(1, 'Brand niche is required'),
+  commissionType: z.string().min(1, 'Commission Type is required'),
+  paymentMethod: z.string().min(1, 'Payment Method is required'),
+  cookieExpires: z.string().min(1, 'Cookie expiration is required'),
+  programUrl: z.string().url('Invalid URL'),
+  shortDescription: z.string().min(1, 'Product description is required'),
+  description: z.string().min(1, 'Program description is required'),
+  affiliateLevel: z.string().min(1, 'Affiliates Levels are required'),
+  commissionRate: z.string().min(1, 'Commission rate is required'),
+  logo: z.string().min(1, 'Logo is required'),
 })
 
 const SubmitProgramForm = () => {
@@ -47,22 +47,22 @@ const SubmitProgramForm = () => {
   const methods = useForm({
     resolver: zodResolver(SubmitProgramSchema),
     defaultValues: {
-      brand_name: '',
-      payout_fee: '',
-      publisher_email: '',
-      cookie_duration: '',
-      publisher_name: '',
-      affiliates: '',
-      commissions: '',
-      payments: '',
-      cookie_expired: '',
-      program_url: '',
+      name: '',
+      payoutAmount: '',
+      publisherEmail: '',
+      cookieDuration: '',
+      publisherName: '',
+      affiliateType: '',
+      commissionType: '',
+      paymentMethod: '',
+      cookieExpires: '',
+      programUrl: '',
+      shortDescription: '',
       description: '',
-      program_description: '',
-      levels: '',
-      commission_rate: '',
+      affiliateLevel: '',
+      commissionRate: '',
       logo: '',
-      category: '',
+      niche: '',
     },
   })
 
@@ -189,16 +189,16 @@ const SubmitProgramForm = () => {
           <div className='flex gap-10 flex-col lg:flex-row'>
             <TextInput
               control={methods.control}
-              name='brand_name'
+              name='name'
               label='Brand Name'
               placeholder='eg. Jasper AI'
             />
             <Dropdown
               control={methods.control}
-              name='category'
-              label='Brand niche'
+              name='niche'
+              label='Brand Niche'
               options={Category}
-              placeholder='Travel affiliate program'
+              placeholder='Select...'
             />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
@@ -230,107 +230,107 @@ const SubmitProgramForm = () => {
                         currency === '%'
                           ? `${value}${currency}`
                           : `${currency}${value}`
-                      methods.setValue('commission_rate', combinedRate) // Update the form value with combined rate and currency
+                      methods.setValue('commissionRate', combinedRate) // Update the form value with combined rate and currency
                     } else {
                       setRate('')
-                      methods.setValue('commission_rate', '') // Clear the form value
+                      methods.setValue('commissionRate', '') // Clear the form value
                     }
                   }}
                 />
               </div>
-              {methods.formState.errors.commission_rate && (
+              {methods.formState.errors.commissionRate && (
                 <p className='text-red-500 mt-2 text-sm'>
-                  {methods.formState.errors.commission_rate.message}
+                  {methods.formState.errors.commissionRate.message}
                 </p>
               )}
             </div>
             <Dropdown
               control={methods.control}
-              name='commissions'
+              name='commissionType'
               label='Commission Type'
               options={Commissions}
-              placeholder='Commission Type'
+              placeholder='Select...'
             />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <TextInput
               control={methods.control}
-              name='payout_fee'
-              label='Payout fee'
+              name='payoutAmount'
+              label='Payout Fee'
               placeholder='eg $50'
             />
             <Dropdown
               control={methods.control}
-              name='payments'
+              name='paymentMethod'
               label='Payment Method'
               options={Payments}
-              placeholder='Payment Method'
+              placeholder='Select...'
             />
           </div>
           <div>
             <RadioGroupForm
               control={methods.control}
               label='Cookie expired?'
-              name='cookie_expired'
+              name='cookieExpires'
             />
           </div>
           <div className='lg:w-[40%] flex-col lg:flex-row'>
             <TextInput
               control={methods.control}
-              name='cookie_duration'
-              label='Cookie duration'
-              placeholder='eg. 60 days'
+              name='cookieDuration'
+              label='Cookie Duration (days)'
+              placeholder='eg. 60'
             />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <TextInput
               control={methods.control}
-              name='program_url'
-              label='Affiliate program URL'
-              placeholder='eg. jasper-ai/affiliate-program'
+              name='programUrl'
+              label='Affiliate Program URL'
+              placeholder='eg. https://jasper-ai/affiliate-program'
             />
             <TextInput
               control={methods.control}
-              name='description'
-              label='Short product description'
+              name='shortDescription'
+              label='Short Product Description'
               placeholder='eg. Content writing tool'
             />
           </div>
           <div>
             <TextareaInput
               control={methods.control}
-              name='program_description'
-              label='Program description'
-              placeholder='eg. With jasper user can start creating massive blog, ebook, music , etc contents with AI.'
+              name='description'
+              label='Program Description'
+              placeholder='eg. With Jasper, users can start creating massive blogs, ebooks, music, etc., contents with AI.'
               className='h-40 text-cream-20'
             />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <Dropdown
               control={methods.control}
-              name='affiliates'
+              name='affiliateType'
               label='Affiliate Type'
               options={Affiliates}
-              placeholder='Affiliate Type'
+              placeholder='Select...'
             />
             <Dropdown
               control={methods.control}
-              name='levels'
+              name='affiliateLevel'
               label='Affiliates Levels'
               options={Levels}
-              placeholder='Affiliate Levels'
+              placeholder='Select...'
             />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <TextInput
               control={methods.control}
-              name='publisher_name'
+              name='publisherName'
               label='Publisher Name'
               placeholder='eg. John Don'
             />
             <TextInput
               control={methods.control}
-              name='publisher_email'
+              name='publisherEmail'
               label='Publisher Email'
               placeholder='eg. yourname@gmail.com'
             />

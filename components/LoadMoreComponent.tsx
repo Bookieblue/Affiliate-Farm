@@ -18,26 +18,26 @@ interface LoadMoreProgramsProps extends CategoryProgramProps {
 const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   searchQuery,
   category,
-  programs: NewPrograms, //TODO will change this
+  programs: programsData, //TODO will change this
 }) => {
-  const [programs, setPrograms] = useState<typeof programData>([])
+  const [programs, setPrograms] = useState<ProgramResponse[]>()
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
-
+  useEffect(() => setPrograms(programsData), [programs, programsData])
   const loadPrograms = async (initialLoad = false) => {
     setLoading(true)
-    const newPrograms = await fetchPrograms(
-      initialLoad ? 0 : offset,
-      9,
-      searchQuery
-    )
-    setPrograms((prevPrograms) =>
-      initialLoad ? newPrograms : [...prevPrograms, ...newPrograms]
-    )
+    // const newPrograms = await fetchPrograms(
+    //   initialLoad ? 0 : offset,
+    //   9,
+    //   searchQuery
+    // )
+    // setPrograms((prevPrograms) =>
+    //   initialLoad ? newPrograms : [...prevPrograms, ...newPrograms]
+    // )
     setOffset((prevOffset) => (initialLoad ? 9 : prevOffset + 9))
     setLoading(false)
-    if (newPrograms.length < 9) {
+    if (programs && programs.length < 9) {
       setHasMore(false) // No more programs to load
     }
   }
@@ -46,7 +46,7 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
     loadPrograms(true) // Load initial programs
   }, [searchQuery])
 
-  if (loading && programs.length === 0) {
+  if (loading && programs && programs.length === 0) {
     return (
       <div className='flexCenter mt-20 flex-col  h-full w-full'>
         <p className='text-gray-10 mt-4'>Loading...</p>
@@ -57,9 +57,13 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   return (
     <div>
       <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-7'>
-        {programs.map((program, index) => (
-          <Programs key={index} {...program} />
-        ))}
+        {programs ? (
+          programs.map((program, index) => (
+            <Programs key={index} {...program} />
+          ))
+        ) : (
+          <p>No data </p>
+        )}
       </div>
       {hasMore && (
         <div className='flex justify-center mt-4'>

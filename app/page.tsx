@@ -8,11 +8,19 @@ import { ProgramResponse } from '@/services/models/hooks/program/type'
 import React from 'react'
 
 export interface CategoryProgramProps {
-  category: CategoryResponse
-  programs: ProgramResponse[]
+  category?: CategoryResponse
+  programs?: ProgramResponse[]
 }
 
-const Home: React.FC<CategoryProgramProps> = ({ category, programs }) => {
+const Home: React.FC<{ params: any }> = async ({ params }) => {
+  // Fetching category data
+  const categoryResponse = await fetch(`${baseURL}category/${params.id}`)
+  const category: CategoryResponse = await categoryResponse.json()
+
+  // Fetching programs data
+  const programsResponse = await fetch(`${baseURL}affiliate/get-no-ads/`)
+  const programs: ProgramResponse[] = await programsResponse.json()
+
   return (
     <AffiliatePageLayout>
       <Hero
@@ -25,28 +33,13 @@ const Home: React.FC<CategoryProgramProps> = ({ category, programs }) => {
   )
 }
 
-export default Home
-
-export async function getStaticPaths() {
+export async function generateStaticParams() {
   const response = await fetch(`${baseURL}category/`)
   const categories: CategoryResponse[] = await response.json()
-  const paths = categories.map((category) => ({
-    params: { id: category.code },
+
+  return categories.map((category) => ({
+    id: category.code.toString(),
   }))
-
-  return { paths, fallback: true }
 }
 
-export async function getStaticProps({ params }: any) {
-  const category = await fetch(`${baseURL}category/`).then(async (resp) => {
-    const categories: CategoryResponse[] = await resp.json()
-    categories.find((category) => category.code === params.id)
-  })
-  const programs: ProgramResponse[] = await fetch(
-    `${baseURL}affiliate/get-no-ads/`
-  ).then(async (resp) => resp.json())
-  return {
-    props: { category, programs },
-    revalidate: 10, // ISR: Revalidate every 10 seconds
-  }
-}
+export default Home

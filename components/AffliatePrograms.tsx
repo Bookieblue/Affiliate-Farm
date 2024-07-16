@@ -10,6 +10,7 @@ import {
 } from '../constant/index'
 import Image from 'next/image'
 import LoadMoreComponent from './LoadMoreComponent'
+import { CategoryProgramProps } from '@/app/page'
 
 interface Option {
   label: string
@@ -41,7 +42,10 @@ const Commissions: Option[] = COMMISSION_TYPE.map((commission) => ({
   value: commission.name,
 }))
 
-const AffliatePrograms: React.FC = ({ category, programs }: any) => {
+const AffliatePrograms: React.FC<CategoryProgramProps> = ({
+  category,
+  programs,
+}) => {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [selectedAffiliate, setSelectedAffiliate] = useState<string>('')
   const [selectedCommission, setSelectedCommission] = useState<string>('')
@@ -113,7 +117,11 @@ const AffliatePrograms: React.FC = ({ category, programs }: any) => {
         </form>
       </div>
       <div className=''>
-        <LoadMoreComponent searchQuery={searchQuery} />
+        <LoadMoreComponent
+          searchQuery={searchQuery}
+          category={category}
+          programs={programs}
+        />
       </div>
     </section>
   )

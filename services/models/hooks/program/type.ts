@@ -19,7 +19,7 @@ enum affiliateLevel {
   NEWEST_OFFER = 'Newest Offer',
 }
 
-enum paymentMethod {
+export enum paymentMethod {
   ALL_PAYMENT_METHODS = 'All payment methods',
   PAYPAL = 'PayPal',
   PAYONEER = 'Payoneer',
@@ -53,7 +53,7 @@ export interface ProgramResponse {
   id: number
   niche?: number
   niche_details?: NicheDetails
-  logo: any
+  logo: string | any
   code: string
   name: string
   publisherName: string
@@ -74,6 +74,7 @@ export interface ProgramResponse {
   ticketType: ticketType
   created_at?: string
   updated_at?: string
+  promoted?: boolean
 }
 
 export interface ProgramApiResponse {

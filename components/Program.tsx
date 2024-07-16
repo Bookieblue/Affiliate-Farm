@@ -2,6 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { ToolTip } from './ui/FormField/ToolTip'
+import { ProgramResponse } from '@/services/models/hooks/program/type'
+import { formatCommission } from '@/lib/helpers/formatWord'
+import { baseURL } from '@/services/api'
 
 interface ProgramsProps {
   src: string
@@ -21,29 +24,26 @@ interface ProgramsProps {
   verified: boolean
 }
 
-const Programs: React.FC<ProgramsProps> = ({
-  src,
-  commission,
+const Programs: React.FC<ProgramResponse> = ({
+  logo,
+  commissionType,
+  commissionRate,
   name,
-  productDescription,
-  payout,
-  cookie,
-  programDescription,
-  url,
-  programID,
+  shortDescription,
+  payoutAmount,
+  cookieDuration,
+  description,
+  programUrl,
+  code,
   promoted = false,
-  adsOn = false,
-  verifiedIconSrc,
-  programIDIcon = true,
-  linkName,
   verified = false,
 }) => {
   return (
-    <div className="flex flex-col max-w-[400px] w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  ">
-      <div className="flexBetween relative self-stretch w-full flex-[0_0_auto] ">
-        <div className="relative w-[60px] h-[60px] rounded-[7.2px]">
+    <div className='flex flex-col max-w-[400px] w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  '>
+      <div className='flexBetween relative self-stretch w-full flex-[0_0_auto] '>
+        <div className='relative w-[60px] h-[60px] rounded-[7.2px]'>
           <Image
-            src={src}
+            src={`${baseURL}${logo.slice(1)}`}
             width={60}
             height={60}
             alt='icon'
@@ -53,11 +53,11 @@ const Programs: React.FC<ProgramsProps> = ({
         <div className='flexCenter gap-[7px] relative flex-[0_0_auto]'>
           <div className='flexCenter h-[30px]  gap-2.5 p-2 relative flex-[0_0_auto] bg-gray-20 rounded-lg'>
             <p className='relative w-fit  text-yellow-50 bold-14'>
-              {commission}
+              {commissionRate}
             </p>
           </div>
           <p className='relative w-[100px] mt-[-1.00px] regular-14 text-gray-10'>
-            One-time sale commission
+            {commissionType}
           </p>
         </div>
       </div>
@@ -76,7 +76,7 @@ const Programs: React.FC<ProgramsProps> = ({
                   <Image
                     className='relative w-6 h-6 object-cover'
                     alt='Verified Icon'
-                    src={verifiedIconSrc}
+                    src={'/verified.svg'}
                     width={24}
                     height={24}
                   />
@@ -85,42 +85,42 @@ const Programs: React.FC<ProgramsProps> = ({
             </div>
           </div>
           <p className='relative self-stretch regular-14 text-gray-10'>
-            {productDescription}
+            {shortDescription}
           </p>
         </div>
         <div className='flexBetween relative self-stretch w-full flex-[0_0_auto]'>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
             <Image src='./payout.svg' width={20} height={5} alt='icon' />
             <p className='relative w-fit mt-[-1.00px]  regular-14 text-gray-10'>
-              {payout}
+              {`$ ${payoutAmount}`}
             </p>
           </div>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
             <Image src='./time.svg' width={20} height={5} alt='icon' />
-            <p className='relative w-fit regular-14 text-gray-10'>{cookie}</p>
+            <p className='relative w-fit regular-14 text-gray-10'>{`${cookieDuration} days cookie`}</p>
           </div>
         </div>
         <div className='flex flex-col items-start gap-0.5 relative self-stretch w-full flex-[0_0_auto]'>
           <div className='flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]'>
             <p className='grow shrink basis-0 text-gray-10 regular-16'>
               <span className='text-cream-20 medium-14'>Program:</span>{' '}
-              {programDescription}
+              {description}
             </p>
           </div>
         </div>
         <div className='flexBetween px-0 py-2.5 relative self-stretch w-full flex-[0_0_auto]'>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-            {programIDIcon && <ToolTip content={programID} key={programID} />}
-            {adsOn && (
+            <ToolTip content={code} key={code} />
+            {promoted && (
               <p className='relative w-fit regular-14 text-gray-10'>Ads On</p>
             )}
           </div>
           <div>
             <Link
-              href={url}
+              href={programUrl}
               className='text-yellow-50 medium-16 underline flex gap-1'
             >
-              {linkName}
+              {name}
               <Image src='/arrow-right.svg' width={5} height={5} alt='icon' />
             </Link>
           </div>

@@ -9,6 +9,7 @@ import { baseURL } from '@/services/api'
 interface ProgramsProps {
   logo: string
   commissionRate: number
+  commissionType?: string
   name: string
   description: string
   payoutAmount: number
@@ -18,13 +19,15 @@ interface ProgramsProps {
   id: number
   currency: string
   promoted?: boolean
-  linkName: string
+  linkName?: string
   verified?: boolean
+  created_at?: string
 }
 
 const Programs: React.FC<ProgramsProps> = ({
   logo,
   commissionRate,
+  commissionType,
   name,
   description,
   payoutAmount,
@@ -34,7 +37,6 @@ const Programs: React.FC<ProgramsProps> = ({
   currency,
   id,
   promoted = false,
-  linkName,
   verified = false,
 }) => {
   return (

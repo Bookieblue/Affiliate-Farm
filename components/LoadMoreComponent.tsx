@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Programs from './Program'
 import { fetchPrograms, programData } from '../lib/data'
 import { ArrowDown } from 'lucide-react'
@@ -25,26 +25,29 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   useEffect(() => setPrograms(programsData), [programs, programsData])
-  const loadPrograms = async (initialLoad = false) => {
-    setLoading(true)
-    // const newPrograms = await fetchPrograms(
-    //   initialLoad ? 0 : offset,
-    //   9,
-    //   searchQuery
-    // )
-    // setPrograms((prevPrograms) =>
-    //   initialLoad ? newPrograms : [...prevPrograms, ...newPrograms]
-    // )
-    setOffset((prevOffset) => (initialLoad ? 9 : prevOffset + 9))
-    setLoading(false)
-    if (programs && programs.length < 9) {
-      setHasMore(false) // No more programs to load
-    }
-  }
+  const loadPrograms = useCallback(
+    async (initialLoad = false) => {
+      setLoading(true)
+      // const newPrograms = await fetchPrograms(
+      //   initialLoad ? 0 : offset,
+      //   9,
+      //   searchQuery
+      // )
+      // setPrograms((prevPrograms) =>
+      //   initialLoad ? newPrograms : [...prevPrograms, ...newPrograms]
+      // )
+      setOffset((prevOffset) => (initialLoad ? 9 : prevOffset + 9))
+      setLoading(false)
+      if (programs && programs.length < 9) {
+        setHasMore(false) // No more programs to load
+      }
+    },
+    [programs]
+  )
 
   useEffect(() => {
     loadPrograms(true) // Load initial programs
-  }, [searchQuery])
+  }, [searchQuery, loadPrograms])
 
   if (loading && programs && programs.length === 0) {
     return (

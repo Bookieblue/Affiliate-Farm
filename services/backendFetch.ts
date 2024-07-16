@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
 
-export const BASE: string = 'https://api.houseofose.com/'
+export const BASE: string = 'http://localhost:8000/'
 
 const defaultHeaders = {
   Accept: 'application/json',

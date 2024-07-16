@@ -9,7 +9,7 @@ import FeaturedAdForm from '@/components/forms/featuredAd'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 
-const page = () => {
+const Page = () => {
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false)
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
 
@@ -37,8 +37,11 @@ const page = () => {
             Get mention everywhere with our featured ad:
           </p>
           <ul>
-            {FEATURED_AD.map((feature) => (
-              <li className='list-disc ml-5 mb-5 text-cream-20 mt-4 '>
+            {FEATURED_AD.map((feature, index) => (
+              <li
+                key={index}
+                className='list-disc ml-5 mb-5 text-cream-20 mt-4 '
+              >
                 <span className='text-cream-20 bold-16'>{feature.name}</span>
                 <span className='text-cream-20 regular-16'>
                   {feature.description}
@@ -47,7 +50,7 @@ const page = () => {
             ))}
           </ul>
           <p className='text-cream-50 medium-16'>
-            Maximize your brand's visibility, credibility, and reach by been
+            Maximize your brand&apos; visibility, credibility, and reach by been
             mentioned everywhere on the internet through our featured ads space.
           </p>
         </div>
@@ -74,8 +77,11 @@ const page = () => {
           </p>
           <p className='text-cream-20 regular-16 mt-4'>This plan include</p>
           <ul>
-            {AD_FEE.map((fee) => (
-              <li className='text-cream-20 flex items-center gap-3 mt-4 regular-16'>
+            {AD_FEE.map((fee, index) => (
+              <li
+                key={index}
+                className='text-cream-20 flex items-center gap-3 mt-4 regular-16'
+              >
                 <ChevronRight className='text-cream-20 size-4' />
                 {fee}
               </li>
@@ -117,4 +123,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

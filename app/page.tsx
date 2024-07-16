@@ -12,34 +12,16 @@ export interface CategoryProgramProps {
   programs?: ProgramResponse[]
 }
 
-const Home: React.FC<{ params: any }> = async ({ params }) => {
-  // Fetching category data
-  const categoryResponse = await fetch(`${baseURL}category/${params.id}`)
-  const category: CategoryResponse = await categoryResponse.json()
-
-  // Fetching programs data
-  const programsResponse = await fetch(`${baseURL}affiliate/get-no-ads/`)
-  const programs: ProgramResponse[] = await programsResponse.json()
-
+const Home: React.FC = () => {
   return (
     <AffiliatePageLayout>
       <Hero
         title='200+ Best Affiliate programs as at Jan, 2024'
         description='Discover 200+ curated highest paying affiliate programs that are perfect for your niche, content to cash out massively in 2024.'
       />
-      <AffliatePrograms category={category} programs={programs} />
-      <Footer />
+      <AffliatePrograms />
     </AffiliatePageLayout>
   )
-}
-
-export async function generateStaticParams() {
-  const response = await fetch(`${baseURL}category/`)
-  const categories: CategoryResponse[] = await response.json()
-
-  return categories.map((category) => ({
-    id: category.code.toString(),
-  }))
 }
 
 export default Home

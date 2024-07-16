@@ -138,8 +138,8 @@ export const columns: ColumnDef<AdsResponse>[] = [
                   programID={details.program_details.code}
                   url={details.program_details.programUrl}
                   linkName={capitalizeFirstLetter(details.program_details.name)}
-                  verified={details.program_details.verified}
-                />
+                  verified={details.program_details.verified} productDescription={''}
+                  />
                 <div className='flex gap-7 mt-2'>
                   <div className='flex gap-3'>
                     <Image src='/date.svg' width={20} height={20} alt='icon' />

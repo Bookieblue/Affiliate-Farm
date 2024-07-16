@@ -1,8 +1,6 @@
 "use client"
 
 import { Control } from "react-hook-form"
-
-
 import {
   FormControl,
   FormField,
@@ -12,12 +10,6 @@ import {
 } from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-
-// const FormSchema = z.object({
-//   type: z.enum(["no", "yes"], {
-//     required_error: "You need to select a notification type.",
-//   }),
-// })
 
 interface radioProps{
     control: Control<any>;

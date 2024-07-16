@@ -8,7 +8,7 @@ import {
 import Image from "next/image";
 
 interface ToolTipProps {
-    content: string;
+    content: number;
   }
 
 export function ToolTip({ content }: ToolTipProps) {
@@ -19,7 +19,7 @@ export function ToolTip({ content }: ToolTipProps) {
         <Image src="./question.svg" width={20} height={5} alt="icon" />
         </TooltipTrigger>
         <TooltipContent>
-          {content}
+         <p>Program ID : {content} </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

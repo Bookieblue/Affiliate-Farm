@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { ChevronLeft } from 'lucide-react'
 import Programs from './Program'
 import { Button } from './ui/button'
@@ -7,18 +7,18 @@ import Link from 'next/link'
 import NestedDialog from './ui/FormField/NestedDialog'
 import { useRouter } from 'next/navigation'
 import { useCreateProgram } from '@/services/models/hooks/program/hook'
+import { AffiliateFormContext } from '@/lib/context/AffiliateFormContext'
 
 const PreviewSubmission = () => {
   const router = useRouter()
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
   const [formData, setFormData] = useState<Record<string, any>>({})
 
+  const context = useContext(AffiliateFormContext)
+
   useEffect(() => {
-    const storedFormData = localStorage.getItem('formData')
-    if (storedFormData) {
-      setFormData(JSON.parse(storedFormData))
-    }
-  }, [])
+    if (context?.formData) setFormData(context.formData)
+  }, [context])
 
   const { data, mutate, isSuccess, isPending } = useCreateProgram(formData)
 

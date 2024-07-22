@@ -21,9 +21,23 @@ export const useGetPrograms = () => {
 }
 
 export const useCreateProgram = (data: any) => {
-  const convertData = convertAffiliatePayload(data)
+  const formData = new FormData()
+
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      if (key === 'logo' && data[key] instanceof File) {
+        formData.append(key, data[key])
+      } else {
+        formData.append(key, data[key])
+      }
+    }
+  }
   const create = async () => {
-    const request = api.post(`affiliate/`, convertData)
+    const request = api.post(`affiliate/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     const response = await request
     return response['data']
   }

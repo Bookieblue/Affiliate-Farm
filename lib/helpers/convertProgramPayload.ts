@@ -4,7 +4,6 @@ const getCurrency = (rate: string): string => {
 }
 
 export function convertAffiliatePayload(payload: any) {
-  console.log(payload)
   return {
     logo: payload.logo,
     name: payload.brand_name,

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,6 +19,15 @@ import {
 import { useRouter } from 'next/navigation'
 import { useGetCategories } from '@/services/models/hooks/category/hook'
 import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
+import { AffiliateFormContext } from '@/lib/context/AffiliateFormContext'
+import {
+  ProgramResponse,
+  affiliateLevel,
+  affiliateType,
+  commissionType,
+  currencyType,
+  paymentMethod,
+} from '@/services/models/hooks/program/type'
 
 const SubmitProgramSchema = z.object({
   publisherEmail: z
@@ -106,10 +115,20 @@ const SubmitProgramForm = () => {
   const [rate, setRate] = useState<number | string>('')
   const [currency, setCurrency] = useState<string>('%') // Default to %
   const [logo, setLogo] = useState<string | ArrayBuffer | null>(null)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [shouldNavigate, setShouldNavigate] = useState<boolean>(false)
+  const context = useContext(AffiliateFormContext)
+
+  if (!context) {
+    throw new Error('HomePage must be used within an AffiliateFormProvider')
+  }
+
+  const { formData, setFormData } = context
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      setLogoFile(file)
       const reader = new FileReader()
       reader.onloadend = () => {
         setLogo(reader.result)
@@ -119,21 +138,64 @@ const SubmitProgramForm = () => {
     }
   }
 
+  useEffect(() => {
+    if (shouldNavigate) router.push('/preview-submission')
+  }, [shouldNavigate, router])
+
   const handleSubmit = (values: z.infer<typeof SubmitProgramSchema>) => {
     if (!logo) {
       methods.setError('logo', { type: 'manual', message: 'Logo is required' })
       return
     }
 
-    const combinedRate =
-      currency === '%' ? `${rate}${currency}` : `${currency}${rate}`
-    const formData = { ...values, commission_rate: combinedRate }
+    const currency_type =
+      Object.values(currencyType).find(
+        (selected_currency) => currency === selected_currency
+      ) || currencyType.PERCENTAGE
 
-    // Store formData in local storage
-    localStorage.setItem('formData', JSON.stringify(formData))
+    const affiliate_type =
+      Object.values(affiliateType).find(
+        (type) => values.affiliateType === type
+      ) || affiliateType.ALL_AFFILIATE_TYPE
 
-    // Redirect to preview-submission page
-    router.push('/preview-submission')
+    const affiliate_level =
+      Object.values(affiliateLevel).find(
+        (type) => values.affiliateLevel === type
+      ) || affiliateLevel.ALL_LEVELS
+
+    const payment_method =
+      Object.values(paymentMethod).find(
+        (type) => values.paymentMethod === type
+      ) || paymentMethod.OTHERS
+
+    const commision_type =
+      Object.values(commissionType).find(
+        (type) => values.commissionType === type
+      ) || commissionType.ALL_COMMISION_TYPE
+
+    const cookieDuration = +values.cookieDuration
+    const cookieExpires = values.cookieExpires === 'yes' ? true : false
+    const commissionRate = +rate
+    const payoutAmount = +values.payoutAmount
+
+    const formData: ProgramResponse = {
+      ...values,
+      currency: currency_type,
+      cookieDuration,
+      cookieExpires,
+      commissionRate,
+      payoutAmount,
+      affiliateType: affiliate_type,
+      affiliateLevel: affiliate_level,
+      paymentMethod: payment_method,
+      commissionType: commision_type,
+      logo: logoFile,
+      logoString: logo,
+    }
+
+    setFormData(formData)
+
+    setShouldNavigate(true)
   }
 
   return (

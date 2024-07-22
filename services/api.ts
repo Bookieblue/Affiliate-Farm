@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const baseURL = 'http://localhost:8000/'
+export const baseURL = process.env.NEXT_PUBLIC_BASR_URL
 
 const api = axios.create({
   baseURL,

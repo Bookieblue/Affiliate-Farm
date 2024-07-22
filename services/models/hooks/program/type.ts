@@ -6,13 +6,13 @@ interface NicheDetails {
   program_no: number
 }
 
-enum affiliateType {
+export enum affiliateType {
   AFFILIATE_PROGRAM = 'Affiliate Program',
   AFFILIATE_NETWORK = 'Affiliate Network',
   ALL_AFFILIATE_TYPE = 'All Affiliate Type',
 }
 
-enum affiliateLevel {
+export enum affiliateLevel {
   ALL_LEVELS = 'All Levels',
   BEGINNER_LEVEL = 'Beginner Level',
   EXPERT_LEVEL = 'Expert Level',
@@ -26,14 +26,14 @@ export enum paymentMethod {
   OTHERS = 'Others',
 }
 
-enum currencyType {
+export enum currencyType {
   PERCENTAGE = '%',
   DOLLAR = '$',
   POUND = '£',
   EURO = '€',
 }
 
-enum commissionType {
+export enum commissionType {
   ALL_COMMISION_TYPE = 'All commission type',
   ONE_TIME_SALE_COMMISSION = 'One-time sale commission',
   RECURRING_SALE_COMMISSION = 'Recurring sale commission',
@@ -43,18 +43,19 @@ enum commissionType {
   PAY_PER_IMPRESSION_COMMISSION = 'Pay per impression commission',
 }
 
-enum ticketType {
+export enum ticketType {
   ALL_TICKETS_TYPE = 'All tickets type',
   HIGH_TICKETS = 'High tickets',
   LOW_TICKETS = 'Low tickets',
   INTERMEDIARY_TICKET = 'Intermediary ticket',
 }
 export interface ProgramResponse {
-  id: number
-  niche?: number
+  id?: number
+  niche?: number | string
   niche_details?: NicheDetails
-  logo: string | any
-  code: string
+  logo: File | any
+  logoString?: string | ArrayBuffer
+  code?: string
   name: string
   publisherName: string
   publisherEmail: string
@@ -71,7 +72,7 @@ export interface ProgramResponse {
   paymentMethod: paymentMethod
   currency: currencyType
   commissionType: commissionType
-  ticketType: ticketType
+  ticketType?: ticketType
   created_at?: string
   updated_at?: string
   promoted?: boolean

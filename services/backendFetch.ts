@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
 
-export const BASE = process.env.NEXT_PUBLIC_BASR_URL
+export const BASE = process.env.NEXT_PUBLIC_BASE_URL
 
 const defaultHeaders = {
   Accept: 'application/json',

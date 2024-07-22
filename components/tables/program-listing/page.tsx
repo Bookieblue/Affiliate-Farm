@@ -5,6 +5,10 @@ import { Ad, createColumns } from './columns'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useGetPrograms } from '@/services/models/hooks/program/hook'
+import {
+  ProgramApiResponse,
+  ProgramResponse,
+} from '@/services/models/hooks/program/type'
 
 const initialAdsData: Ad[] = [
   {
@@ -99,13 +103,13 @@ const initialAdsData: Ad[] = [
 ]
 
 const AdsPage = () => {
-  const [data, setData] = useState<Ad[]>(initialAdsData)
+  const [data, setData] = useState<ProgramResponse[]>()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
 
   const { data: programData, isLoading, isSuccess } = useGetPrograms()
 
-  isSuccess && console.log(programData)
+  isSuccess && setData(programData)
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
@@ -121,16 +125,22 @@ const AdsPage = () => {
     )
   }, [searchQuery, programData])
 
-  const handleDeleteRow = (row: Ad) => {
-    setData((prevData) => prevData.filter((item) => item !== row))
+  const handleDeleteRow = (row: ProgramResponse) => {
+    setData((prevData) => {
+      if (prevData) {
+        return prevData.filter((item) => item !== row)
+      }
+    })
   }
 
-  const handleEditCategory = (row: Ad, newCategory: string) => {
-    setData((prevData) =>
-      prevData.map((item) =>
-        item === row ? { ...item, category: newCategory } : item
-      )
-    )
+  const handleEditCategory = (row: ProgramResponse, newCategory: string) => {
+    setData((prevData) => {
+      if (prevData) {
+        return prevData.map((item) =>
+          item === row ? { ...item, category: newCategory } : item
+        )
+      }
+    })
   }
 
   const handleOptionChange = (e: any) => {

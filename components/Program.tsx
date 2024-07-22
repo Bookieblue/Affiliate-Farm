@@ -2,10 +2,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { ToolTip } from './ui/FormField/ToolTip'
+import { ProgramResponse } from '@/services/models/hooks/program/type'
+import { formatCommission } from '@/lib/helpers/formatWord'
+import { baseURL } from '@/services/api'
 
 interface ProgramsProps {
   logo: string
   commissionRate: number
+  commissionType?: string
   name: string
   description: string
   payoutAmount: number
@@ -15,15 +19,15 @@ interface ProgramsProps {
   id: number
   currency: string
   promoted?: boolean
-  linkName: string
+  linkName?: string
   verified?: boolean
+  created_at?: string
 }
-
-
 
 const Programs: React.FC<ProgramsProps> = ({
   logo,
   commissionRate,
+  commissionType,
   name,
   description,
   payoutAmount,
@@ -33,15 +37,14 @@ const Programs: React.FC<ProgramsProps> = ({
   currency,
   id,
   promoted = false,
-  linkName,
   verified = false,
 }) => {
   return (
-    <div className="flex flex-col max-w-[400px] w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  ">
-      <div className="flexBetween relative self-stretch w-full flex-[0_0_auto] ">
-        <div className="relative w-[60px] h-[60px] rounded-[7.2px]">
+    <div className='flex flex-col max-w-[400px] w-fit h-fit items-center gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  '>
+      <div className='flexBetween relative self-stretch w-full flex-[0_0_auto] '>
+        <div className='relative w-[60px] h-[60px] rounded-[7.2px]'>
           <Image
-            src={logo}
+            src={`${baseURL}${logo.slice(1)}`}
             width={60}
             height={60}
             alt='icon'
@@ -51,11 +54,11 @@ const Programs: React.FC<ProgramsProps> = ({
         <div className='flexCenter gap-[7px] relative flex-[0_0_auto]'>
           <div className='flexCenter h-[30px]  gap-2.5 p-2 relative flex-[0_0_auto] bg-gray-20 rounded-lg'>
             <p className='relative w-fit  text-yellow-50 bold-14'>
-             {currency} {commissionRate}
+              {commissionRate}
             </p>
           </div>
           <p className='relative w-[100px] mt-[-1.00px] regular-14 text-gray-10'>
-            One-time sale commission
+            {commissionType}
           </p>
         </div>
       </div>
@@ -90,12 +93,12 @@ const Programs: React.FC<ProgramsProps> = ({
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
             <Image src='./payout.svg' width={20} height={5} alt='icon' />
             <p className='relative w-fit mt-[-1.00px]  regular-14 text-gray-10'>
-              {payoutAmount} payout
+              {`$ ${payoutAmount}`}
             </p>
           </div>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
             <Image src='./time.svg' width={20} height={5} alt='icon' />
-            <p className='relative w-fit regular-14 text-gray-10'>{cookieDuration} days Cookie</p>
+            <p className='relative w-fit regular-14 text-gray-10'>{`${cookieDuration} days cookie`}</p>
           </div>
         </div>
         <div className='flex flex-col items-start gap-0.5 relative self-stretch w-full flex-[0_0_auto]'>
@@ -115,7 +118,7 @@ const Programs: React.FC<ProgramsProps> = ({
               href={programUrl}
               className='text-yellow-50 medium-16 underline flex gap-1'
             >
-              {linkName}
+              {name}
               <Image src='/arrow-right.svg' width={5} height={5} alt='icon' />
             </Link>
           </div>

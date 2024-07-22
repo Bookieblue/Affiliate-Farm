@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+export const baseURL = process.env.NEXT_PUBLIC_BASR_URL
+
 const api = axios.create({
-  baseURL: 'https://api.houseofose.com/',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

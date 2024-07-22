@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
 
-export const BASE: string = 'https://api.houseofose.com/'
+export const BASE = process.env.NEXT_PUBLIC_BASR_URL
 
 const defaultHeaders = {
   Accept: 'application/json',

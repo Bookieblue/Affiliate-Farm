@@ -19,9 +19,9 @@ export const useGetAds = () => {
   })
 }
 
-export const useCreateAds = (name: string) => {
+export const useCreateAds = (data: any) => {
   const create = async () => {
-    const request = api.post(`ads/`, { name })
+    const request = api.post(`ads/`, data)
     const response = await request
     return response['data']
   }

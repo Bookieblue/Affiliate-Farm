@@ -1,106 +1,11 @@
 'use client'
-import React, { ChangeEvent, useMemo, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { DataTable } from './data-table'
-import { Ad, createColumns } from './columns'
+import { createColumns } from './columns'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useGetPrograms } from '@/services/models/hooks/program/hook'
-import {
-  ProgramApiResponse,
-  ProgramResponse,
-} from '@/services/models/hooks/program/type'
-
-const initialAdsData: Ad[] = [
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Bookie AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Bussiness Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Vicky AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  {
-    program: 'Jasper AI',
-    commission: '25% One-Time commission',
-    category: 'Travel Affiliate Program',
-    publishedDate: 'Aug. 4, 2024',
-    publisher: 'Johnson Petel',
-    publisherEmail: 'johnsongreat123@gmail.com',
-  },
-  // Add more rows as needed
-]
+import { ProgramResponse } from '@/services/models/hooks/program/type'
 
 const AdsPage = () => {
   const [data, setData] = useState<ProgramResponse[]>()
@@ -109,21 +14,23 @@ const AdsPage = () => {
 
   const { data: programData, isLoading, isSuccess } = useGetPrograms()
 
-  isSuccess && setData(programData)
+  useEffect(() => {
+    isSuccess && setData(programData)
+  }, [isSuccess, programData])
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
 
   const filteredData = useMemo(() => {
-    const results = programData || []
+    const results = data || []
     if (!searchQuery) return results
     return results.filter((item) =>
       Object.values(item).some((value) =>
         String(value).toLowerCase().includes(searchQuery.toLowerCase())
       )
     )
-  }, [searchQuery, programData])
+  }, [searchQuery, data])
 
   const handleDeleteRow = (row: ProgramResponse) => {
     setData((prevData) => {
@@ -165,6 +72,8 @@ const AdsPage = () => {
       }),
     []
   )
+
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className='container mx-auto p-4'>

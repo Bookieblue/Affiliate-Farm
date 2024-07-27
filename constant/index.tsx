@@ -198,15 +198,19 @@ export const COMMISSION_TYPE = Object.values(commissionType).map((name) => ({
 export const FEATURED_AD_PLAN = [
   {
     name: '1 month - $24',
+    value: '1 month plan',
   },
   {
     name: '2 Month - $36',
+    value: '2 months plan',
   },
   {
     name: '6 Month - $72',
+    value: '6 months plan',
   },
 ] as {
   name: string
+  value: string
 }[]
 
 //AFFLIATE PROGRAM LINKS

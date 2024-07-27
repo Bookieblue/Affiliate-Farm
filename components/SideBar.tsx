@@ -3,7 +3,6 @@ import React, { useState, useEffect, MouseEvent } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { AFFLIATE_PROGRAMS_LINKS } from '@/constant'
 import { ChevronRight } from 'lucide-react'
 import { useGetCategories } from '@/services/models/hooks/category/hook'
 import { CategoryResponse } from '@/services/models/hooks/category/type'
@@ -18,7 +17,7 @@ const SideBar = () => {
   ])
   const [activeLink, setActiveLink] = useState('')
 
-  const { data, isLoading, isSuccess, isError } = useGetCategories()
+  const { data, isLoading, isSuccess } = useGetCategories()
 
   useEffect(() => {
     if (isSuccess) {
@@ -39,7 +38,7 @@ const SideBar = () => {
     router.push(href)
   }
 
-  isSuccess && console.log(data)
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <section className='gap-10 pl-8 z-20 fixed bg-black-30 h-full'>

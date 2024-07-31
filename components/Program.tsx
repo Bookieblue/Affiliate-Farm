@@ -17,6 +17,7 @@ interface ProgramsProps {
   shortDescription: string
   programUrl: string
   id: number
+  code: string
   currency: string
   promoted?: boolean
   linkName?: string
@@ -24,7 +25,7 @@ interface ProgramsProps {
   created_at?: string
 }
 
-const Programs: React.FC<ProgramsProps> = ({
+const Programs: React.FC<ProgramResponse> = ({
   logo,
   commissionRate,
   commissionType,
@@ -36,6 +37,7 @@ const Programs: React.FC<ProgramsProps> = ({
   programUrl,
   currency,
   id,
+  code,
   promoted = false,
   verified = false,
 }) => {
@@ -111,14 +113,14 @@ const Programs: React.FC<ProgramsProps> = ({
         </div>
         <div className='flexBetween px-0 py-2.5 relative self-stretch w-full flex-[0_0_auto]'>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-            <ToolTip content={id} key={id} />
+            <ToolTip content={code || 'no ID'} key={id} />
           </div>
           <div>
             <Link
               href={programUrl}
               className='text-yellow-50 medium-16 underline flex gap-1'
             >
-              {name}
+              View Program
               <Image src='/arrow-right.svg' width={5} height={5} alt='icon' />
             </Link>
           </div>

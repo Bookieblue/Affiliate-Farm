@@ -54,7 +54,6 @@ const PreviewSubmission = () => {
             programUrl={formData.programUrl || ''}
             id={formData.id || 0} // Assuming you have an id field in formData
             currency={formData.currency || ''}
-            linkName='View Program'
             verified={false}
           />
         </div>

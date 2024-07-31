@@ -57,21 +57,21 @@ export interface ProgramResponse {
   logoString?: string | ArrayBuffer
   code?: string
   name: string
-  publisherName: string
-  publisherEmail: string
+  publisherName?: string
+  publisherEmail?: string
   programUrl: string
   shortDescription: string
   description: string
   cookieDuration: number
-  cookieExpires: boolean
+  cookieExpires?: boolean
   commissionRate: number
   payoutAmount: number
   verified?: boolean
-  affiliateType: affiliateType
-  affiliateLevel: affiliateLevel
-  paymentMethod: paymentMethod
+  affiliateType?: affiliateType
+  affiliateLevel?: affiliateLevel
+  paymentMethod?: paymentMethod
   currency: currencyType
-  commissionType: commissionType
+  commissionType?: commissionType
   ticketType?: ticketType
   created_at?: string
   updated_at?: string

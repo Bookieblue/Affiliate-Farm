@@ -1,19 +1,18 @@
 import DemoPage from '@/components/tables/ad-listing/page'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 
-
-
-
-const page = () => {
+const Page = () => {
   return (
-    <section  className='mt-32 padding-container'>
+    <Suspense fallback={<p>Loading...</p>}>
+      <section className='mt-32 padding-container'>
         <div className='flexBetween '>
           <p className=' text-cream-50 bold-20'>All Ads listing</p>
         </div>
         <DemoPage />
-    </section>
+      </section>
+    </Suspense>
   )
 }
 
-export default page;
+export default Page

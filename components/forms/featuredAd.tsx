@@ -81,7 +81,7 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
                   {...field}
                   label='Feature ad plan'
                   options={Plans}
-                  placeholder='1 month plan - $24'
+                  placeholder='Select...'
                 />
               )}
             />

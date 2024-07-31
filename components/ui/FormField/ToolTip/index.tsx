@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import Image from "next/image";
+} from '@/components/ui/tooltip'
+import Image from 'next/image'
 
 interface ToolTipProps {
-    content: number;
-  }
+  content: string
+}
 
 export function ToolTip({ content }: ToolTipProps) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-        <Image src="./question.svg" width={20} height={5} alt="icon" />
+          <Image src='./question.svg' width={20} height={5} alt='icon' />
         </TooltipTrigger>
         <TooltipContent>
-         <p>Program ID : {content} </p>
+          <p>Program ID : {content} </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

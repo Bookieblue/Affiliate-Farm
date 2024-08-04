@@ -4,7 +4,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import api from '@/services/api'
 import { PROGRAM_QUERY_KEY } from '.'
 import { ProgramResponse } from './type'
-import { convertAffiliatePayload } from '@/lib/helpers/convertProgramPayload'
+
+export interface updateProgram {
+  programCode: string
+  niche: any
+}
 
 export const useGetPrograms = () => {
   const fetch = async (): Promise<ProgramResponse[]> =>
@@ -44,6 +48,35 @@ export const useCreateProgram = (data: any) => {
 
   const mutation = useMutation({
     mutationFn: () => create(),
+  })
+
+  return mutation
+}
+export const useUpdateProgram = ({ programCode, niche }: updateProgram) => {
+  const update = async () => {
+    const request = api.patch(`affiliate/${programCode}/`, { niche })
+    const response = await request
+    return response['data']
+  }
+
+  const mutation = useMutation({
+    mutationFn: () => update(),
+  })
+
+  return mutation
+}
+
+export const useDeleteProgram = (codes: string[]) => {
+  const doDelete = async () => {
+    const request = api.delete(`affiliate/delete-programs/`, {
+      data: { codes },
+    })
+    const response = await request
+    return response['data']
+  }
+
+  const mutation = useMutation({
+    mutationFn: () => doDelete(),
   })
 
   return mutation

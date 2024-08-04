@@ -17,6 +17,7 @@ interface ProgramsProps {
   shortDescription: string
   programUrl: string
   id: number
+  code: string
   currency: string
   promoted?: boolean
   linkName?: string
@@ -24,7 +25,7 @@ interface ProgramsProps {
   created_at?: string
 }
 
-const Programs: React.FC<ProgramsProps> = ({
+const Programs: React.FC<ProgramResponse> = ({
   logo,
   commissionRate,
   commissionType,
@@ -36,6 +37,7 @@ const Programs: React.FC<ProgramsProps> = ({
   programUrl,
   currency,
   id,
+  code,
   promoted = false,
   verified = false,
 }) => {
@@ -54,7 +56,7 @@ const Programs: React.FC<ProgramsProps> = ({
         <div className='flexCenter gap-[7px] relative flex-[0_0_auto]'>
           <div className='flexCenter h-[30px]  gap-2.5 p-2 relative flex-[0_0_auto] bg-gray-20 rounded-lg'>
             <p className='relative w-fit  text-yellow-50 bold-14'>
-              {commissionRate}
+              {formatCommission(currency, commissionRate)}
             </p>
           </div>
           <p className='relative w-[100px] mt-[-1.00px] regular-14 text-gray-10'>
@@ -93,12 +95,12 @@ const Programs: React.FC<ProgramsProps> = ({
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
             <Image src='./payout.svg' width={20} height={5} alt='icon' />
             <p className='relative w-fit mt-[-1.00px]  regular-14 text-gray-10'>
-              {`$ ${payoutAmount}`}
+              {`$ ${payoutAmount} Payout`}
             </p>
           </div>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
             <Image src='./time.svg' width={20} height={5} alt='icon' />
-            <p className='relative w-fit regular-14 text-gray-10'>{`${cookieDuration} days cookie`}</p>
+            <p className='relative w-fit regular-14 text-gray-10'>{`${cookieDuration} days Cookie`}</p>
           </div>
         </div>
         <div className='flex flex-col items-start gap-0.5 relative self-stretch w-full flex-[0_0_auto]'>
@@ -111,14 +113,14 @@ const Programs: React.FC<ProgramsProps> = ({
         </div>
         <div className='flexBetween px-0 py-2.5 relative self-stretch w-full flex-[0_0_auto]'>
           <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-            <ToolTip content={id} key={id} />
+            <ToolTip content={code || 'no ID'} key={id} />
           </div>
           <div>
             <Link
               href={programUrl}
               className='text-yellow-50 medium-16 underline flex gap-1'
             >
-              {name}
+              View Program
               <Image src='/arrow-right.svg' width={5} height={5} alt='icon' />
             </Link>
           </div>

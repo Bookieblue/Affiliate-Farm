@@ -29,3 +29,12 @@ export function convertDate(dateString: string): string {
 
   return `${month} ${day}${ordinalSuffix(day)}, ${year}`
 }
+
+export function getCurrentMonthAndYear(): string {
+  const date = new Date()
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    year: 'numeric',
+  }
+  return date.toLocaleString('en-US', options)
+}

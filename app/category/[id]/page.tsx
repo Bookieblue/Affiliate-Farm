@@ -1,41 +1,55 @@
 import AffliatePrograms from '@/components/AffliatePrograms'
-import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import AffiliatePageLayout from '@/components/layout/homepage'
+import { getCurrentMonthAndYear } from '@/lib/helpers/formatDate'
+import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
 import { baseURL } from '@/services/api'
 import { CategoryResponse } from '@/services/models/hooks/category/type'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
-import React from 'react'
 
-// Define the type for the page's props
 interface CategoryPageProps {
   params: { id: string }
 }
 
-const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
-  // Check if params.id is defined
+export const revalidate = 20 // This will revalidate the page every 20 seconds
+
+async function getCategoryData(id: string) {
+  const categoryResponse = await fetch(`${baseURL}category/${id}/`, {
+    next: { revalidate },
+  })
+  return categoryResponse.json()
+}
+
+async function getProgramsData(code: string) {
+  const programsResponse = await fetch(
+    `${baseURL}affiliate/get-programs/${code}/`,
+    { next: { revalidate } }
+  )
+  return programsResponse.json()
+}
+
+const CategoryPage = async ({ params }: CategoryPageProps) => {
   if (!params.id) {
     console.error('params.id is undefined', params)
     return <div>Error: Category ID is missing</div>
   }
 
   try {
-    // Fetching category data
-    const categoryResponse = await fetch(`${baseURL}category/${params.id}`)
-    const category: CategoryResponse = await categoryResponse.json()
+    const category: CategoryResponse = await getCategoryData(params.id)
+    const programs: ProgramResponse[] = await getProgramsData(category.code)
 
-    // Fetching programs data
-    const programsResponse = await fetch(`${baseURL}affiliate/get-no-ads/`)
-    const programs: ProgramResponse[] = await programsResponse.json()
+    const title = category.name
+    const date = getCurrentMonthAndYear()
 
     return (
       <AffiliatePageLayout>
         <Hero
-          title='200+ Best Affiliate programs as at Jan, 2024'
+          title={`200+ Best ${
+            capitalizeFirstLetter(title) || ''
+          } Affiliate programs as at ${date}`}
           description='Discover 200+ curated highest paying affiliate programs that are perfect for your niche, content to cash out massively in 2024.'
         />
         <AffliatePrograms category={category} programs={programs} />
-        <Footer />
       </AffiliatePageLayout>
     )
   } catch (error) {
@@ -44,7 +58,6 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({ params }) => {
   }
 }
 
-// Fetch data for the static props
 export async function generateStaticParams() {
   const response = await fetch(`${baseURL}category/`)
   const categories: CategoryResponse[] = await response.json()

@@ -1,6 +1,6 @@
 'use client'
 import { AD_FEE, FEATURED_AD } from '@/constant'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import MainDialog from '@/components/ui/FormField/MainDialog'
@@ -8,18 +8,42 @@ import NestedDialog from '@/components/ui/FormField/NestedDialog'
 import FeaturedAdForm from '@/components/forms/featuredAd'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { useCreateAds } from '@/services/models/hooks/ads/hook'
+import { set } from 'zod'
 
 const Page = () => {
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false)
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
+  const [data, setData] = useState()
 
   const router = useRouter()
 
+  const { data: AdsData, isPending, isSuccess, mutate } = useCreateAds(data)
+
+  useEffect(() => {
+    if (data) mutate()
+  }, [data, mutate])
+
+  useEffect(() => {
+    if (isSuccess) {
+      // Close main dialog and open success dialog
+      setIsMainDialogOpen(false)
+      setIsSuccessDialogOpen(true)
+      // You can also perform navigation or other actions here
+    }
+  }, [isSuccess])
+
   const handleFormSubmit = (values: any) => {
     console.log('Form Submitted:', values)
+    const program = values['program_ID']
+    const fullname = values['name']
+    delete values['program_ID']
+    delete values['name']
+    setData({ ...values, program, fullname })
+
     // Close main dialog and open success dialog
-    setIsMainDialogOpen(false)
-    setIsSuccessDialogOpen(true)
+    // setIsMainDialogOpen(false)
+    // setIsSuccessDialogOpen(true)
     // You can also perform navigation or other actions here
   }
   return (

@@ -46,6 +46,7 @@ const PreviewSubmission = () => {
           <Programs
             logo={formData.logo || ''}
             commissionRate={formData.commissionRate || 0}
+            commissionType={formData.commissionType || ''}
             name={formData.name || ''}
             description={formData.description || ''}
             payoutAmount={formData.payoutAmount || 0}

@@ -4,19 +4,41 @@ import { DataTable } from './data-table'
 import { createColumns } from './columns'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { useGetPrograms } from '@/services/models/hooks/program/hook'
+import {
+  updateProgram,
+  useDeleteProgram,
+  useGetPrograms,
+  useUpdateProgram,
+} from '@/services/models/hooks/program/hook'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
 
 const AdsPage = () => {
   const [data, setData] = useState<ProgramResponse[]>()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
+  const [selectedDeletes, setSelectedDeletes] = useState<string[]>([])
+  const [updateCategory, setUpdateCategory] = useState<updateProgram>({
+    programCode: '',
+    niche: '',
+  })
 
-  const { data: programData, isLoading, isSuccess } = useGetPrograms()
+  const { data: programData, isLoading, isSuccess, refetch } = useGetPrograms()
+
+  const { mutate, isSuccess: deleteSuccess } = useDeleteProgram(selectedDeletes)
+
+  const {
+    isPending,
+    isSuccess: categorySuccess,
+    mutate: doUpdateCategory,
+  } = useUpdateProgram(updateCategory)
 
   useEffect(() => {
     isSuccess && setData(programData)
   }, [isSuccess, programData])
+
+  useEffect(() => {
+    if (deleteSuccess || categorySuccess) refetch()
+  }, [deleteSuccess, categorySuccess, refetch])
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
@@ -33,21 +55,17 @@ const AdsPage = () => {
   }, [searchQuery, data])
 
   const handleDeleteRow = (row: ProgramResponse) => {
-    setData((prevData) => {
-      if (prevData) {
-        return prevData.filter((item) => item !== row)
-      }
-    })
+    if (row.code) {
+      setSelectedDeletes([row.code])
+      mutate()
+    }
   }
 
   const handleEditCategory = (row: ProgramResponse, newCategory: string) => {
-    setData((prevData) => {
-      if (prevData) {
-        return prevData.map((item) =>
-          item === row ? { ...item, category: newCategory } : item
-        )
-      }
-    })
+    if (row.code) {
+      setUpdateCategory({ niche: newCategory, programCode: row.code })
+      doUpdateCategory()
+    }
   }
 
   const handleOptionChange = (e: any) => {

@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button'
 import { DeleteIcon, Edit2Icon, EyeIcon, MoreHorizontal } from 'lucide-react'
 import MainDialog from '../../../components/ui/FormField/MainDialog'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
+import { useGetCategories } from '@/services/models/hooks/category/hook'
+import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
 
 interface ColumnsProps {
   onDeleteRow: (row: ProgramResponse) => void
@@ -27,6 +29,8 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
   const details = row.original
   const [selectedRow, setSelectedRow] = useState<ProgramResponse | null>(null) // Track the selected row
   const [newCategory, setNewCategory] = useState(details.niche_details.name) // Track the new category
+
+  const { data, isLoading, isSuccess } = useGetCategories()
 
   const handleViewDetails = (action: string) => {
     setModalOpen(true)
@@ -101,20 +105,22 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
               : 'Are you sure you want to delete the selected program? This action cannot be undone.'
           }
         >
-          {modalAction === 'editCategory' && (
+          {modalAction === 'editCategory' && isSuccess && (
             <div>
               <select
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
                 className='py-2 px-4 text-sm w-full bg-transparent text-gray-10 border border-[#32312C] rounded-md'
               >
-                <option value='Travel Affiliate Program'>
-                  Travel Affiliate Program
-                </option>
-                <option value='Business Affiliate Program'>
-                  Business Affiliate Program
-                </option>
-                {/* Add more categories as needed */}
+                {data.map((category, index) => {
+                  return (
+                    <option value={category.code} key={index}>
+                      {`${capitalizeFirstLetter(
+                        category.name
+                      )} Affiliate Program`}
+                    </option>
+                  )
+                })}
               </select>
               <Button onClick={handleEditCategory} className='w-full mt-4'>
                 Update Category

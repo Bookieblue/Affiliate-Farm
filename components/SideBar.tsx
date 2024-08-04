@@ -7,6 +7,7 @@ import { ChevronRight } from 'lucide-react'
 import { useGetCategories } from '@/services/models/hooks/category/hook'
 import { CategoryResponse } from '@/services/models/hooks/category/type'
 import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
+import { getRoute } from '@/lib/helpers/routes'
 
 const SideBar = () => {
   const pathname = usePathname()
@@ -38,10 +39,6 @@ const SideBar = () => {
     router.push(href)
   }
 
-  const getRoute = (code: string): string => {
-    if (code.length > 1) return `/category/${code}`
-    return '/'
-  }
   if (isLoading) return <p>Loading...</p>
 
   return (

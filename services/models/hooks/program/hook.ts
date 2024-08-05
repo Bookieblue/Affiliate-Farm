@@ -67,9 +67,11 @@ export const useUpdateProgram = ({ programCode, niche }: updateProgram) => {
 }
 
 export const useDeleteProgram = (codes: string[]) => {
+  const token = sessionStorage.getItem('token')
   const doDelete = async () => {
     const request = api.delete(`affiliate/delete-programs/`, {
       data: { codes },
+      headers: { Authorization: `Bearer ${token + '132'}` },
     })
     const response = await request
     return response['data']

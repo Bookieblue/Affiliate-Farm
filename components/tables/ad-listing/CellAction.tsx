@@ -57,7 +57,7 @@ const ActionsCell: React.FC<RowInterface> = ({ row }) => {
           title='Affliate Program'
           description=''
         >
-          <div>
+          <div className='mx-10'>
             <Programs {...details.program_details} />
             <div className='flex gap-7 mt-2'>
               <div className='flex gap-3'>

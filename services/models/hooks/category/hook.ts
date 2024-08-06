@@ -18,15 +18,32 @@ export const useGetCategories = () => {
   })
 }
 
-export const useCreateCategory = (name: string) => {
-  const create = async () => {
-    const request = api.post(`category/`, { name })
-    const response = await request
-    return response['data']
+interface CreateCategoryParams {
+  name: string
+  faq: string
+}
+
+export const useCreateCategory = () => {
+  const create = async (data: CreateCategoryParams) => {
+    const response = await api.post(`category/`, data)
+    return response.data
+  }
+
+  return useMutation({
+    mutationFn: (data: CreateCategoryParams) => create(data),
+  })
+}
+
+export const useDeleteCategory = () => {
+  const deleteCategory = async (categoryId: string) => {
+    await backendFetch({
+      endpoint: `category/${categoryId}`,
+      method: 'DELETE',
+    })
   }
 
   const mutation = useMutation({
-    mutationFn: () => create(),
+    mutationFn: (categoryId: string) => deleteCategory(categoryId),
   })
 
   return mutation

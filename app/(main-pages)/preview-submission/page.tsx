@@ -5,7 +5,7 @@ import React, { Suspense } from 'react'
 const Page = () => {
   return (
     <Suspense>
-      <section className=' mt-20 max-container padding-container flexCenter flex-col md:w-[60%]'>
+      <section className=' mt-20 mx-auto max-w-[1700px] padding-container flexCenter flex-col md:w-[60%]'>
         <PreviewSubmission />
         <div className='mt-10'>
           <p className='text-cream-50 meium-20'>Have question?</p>

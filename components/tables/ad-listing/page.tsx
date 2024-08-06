@@ -4,152 +4,7 @@ import { Ad, columns } from './columns'
 import { DataTable } from './data-table'
 import { useGetAds } from '@/services/models/hooks/ads/hook'
 import { AdsResponse } from '@/services/models/hooks/ads/type'
-
-async function getData(): Promise<Ad[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Expired',
-    },
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Expired',
-    },
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Expired',
-    },
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02345',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-    {
-      orderId: '02346',
-      program: 'Jasper AI',
-      duration: '2 Months',
-      paymentDate: 'Jun 4, 2024',
-      expiringDate: 'Aug 4, 2024',
-      customer: 'Johnson Petel',
-      customerEmail: 'johnsonpetel123@gmail.com',
-      status: 'Active',
-    },
-  ]
-}
+import SelectInput from '@/components/ui/FormField/SelectInput' // Import SelectInput
 
 const Listing = [
   { value: 'all', label: 'All' },
@@ -159,18 +14,18 @@ const Listing = [
 
 export default function DemoPage() {
   const [data, setData] = useState<AdsResponse[]>([])
-  const [selectedListing, setselectedListing] = useState('all')
+  const [selectedListing, setSelectedListing] = useState('all')
 
   const { data: adsData, isLoading, isSuccess } = useGetAds()
 
-  isSuccess && console.log(adsData)
-
   useEffect(() => {
-    isSuccess && setData(adsData)
+    if (isSuccess) {
+      setData(adsData)
+    }
   }, [isSuccess, adsData])
 
-  const handleTicketChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setselectedListing(event.target.value)
+  const handleListingChange = (value: string) => {
+    setSelectedListing(value)
   }
 
   const filteredData = useMemo(() => {
@@ -182,25 +37,25 @@ export default function DemoPage() {
     )
   }, [selectedListing, data])
 
+  // Map Listing data to the format required by SelectInput
+  const options = Listing.map(list => ({
+    value: list.value,
+    label: list.label,
+  }))
+
   return (
     <div className='mt-10 mb-20'>
       <div className='flexBetween mb-10 items-center'>
-        <p className='text-cream-50 bold-20'>Program category</p>
-        <select
+        <p className='text-cream-50 bold-20'>All Ads listing</p>
+        <div className='w-[200px]'>
+        <SelectInput
+          name="listing"
+          placeholder="Select status"
+          options={options}
           value={selectedListing}
-          onChange={handleTicketChange}
-          className='py-2 w-40 border placeholder:regular-16 text-cream-50 border-gray-20 bg-transparent placeholder:text-cream-50  rounded-md'
-        >
-          {Listing.map((list) => (
-            <option
-              key={list.value}
-              value={list.value}
-              className='bg-[#32312C] text-cream-20'
-            >
-              {list.label}
-            </option>
-          ))}
-        </select>
+          onChange={handleListingChange}
+        />
+        </div>
       </div>
       {isSuccess && <DataTable columns={columns} data={filteredData} />}
     </div>

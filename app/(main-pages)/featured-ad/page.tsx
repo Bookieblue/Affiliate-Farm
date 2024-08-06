@@ -47,7 +47,7 @@ const Page = () => {
     // You can also perform navigation or other actions here
   }
   return (
-    <section className='max-container padding-container flex flex-col lg:flex-row gap-10 mb-20 w-full mt-28'>
+    <section className='mx-auto max-w-[1700px] padding-container flex flex-col lg:flex-row gap-10 mb-20 w-full mt-28'>
       <div className='w-full lg:w-[65%] lg:padding-container'>
         <h4 className='text-cream-50 bold-32'>Feature Ad</h4>
         <p className='text-cream-20 regular-16 mt-4'>

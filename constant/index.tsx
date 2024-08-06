@@ -134,7 +134,7 @@ export const DASHBOARD_LINKS = [
   },
   {
     name: 'Logout',
-    link: '/logout',
+    link: '',
   },
 ]
 

@@ -11,6 +11,12 @@ import {
   useUpdateProgram,
 } from '@/services/models/hooks/program/hook'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
+import SelectInput from '@/components/ui/FormField/SelectInput' 
+
+const categoryOptions = [
+  { value: 'edit', label: 'Edit Category' },
+  { value: 'delete', label: 'Delete Category' },
+]
 
 const AdsPage = () => {
   const [data, setData] = useState<ProgramResponse[]>()
@@ -33,7 +39,9 @@ const AdsPage = () => {
   } = useUpdateProgram(updateCategory)
 
   useEffect(() => {
-    isSuccess && setData(programData)
+    if (isSuccess) {
+      setData(programData)
+    }
   }, [isSuccess, programData])
 
   useEffect(() => {
@@ -68,8 +76,8 @@ const AdsPage = () => {
     }
   }
 
-  const handleOptionChange = (e: any) => {
-    setSelectedOption(e.target.value)
+  const handleOptionChange = (value: string) => {
+    setSelectedOption(value)
   }
 
   const handleApplyClick = () => {
@@ -95,9 +103,9 @@ const AdsPage = () => {
 
   return (
     <div className='container mx-auto p-4'>
-      <div className='flexBetween items-center mb-10'>
+      <div className='flex-col sm:flex-row flex sm:flexBetween sm:items-center mb-10'>
         <p className='text-cream-50 bold-20'>Program listing</p>
-        <div className='relative'>
+        <div className='relative mt-5 lg:mt-0'>
           <input
             type='text'
             placeholder='Search Program'
@@ -120,17 +128,17 @@ const AdsPage = () => {
         searchQuery={searchQuery}
       />
       <div className='relative rounded-md flex items-center justify-start gap-3'>
-        <select
-          id='categoryAction'
-          name='categoryAction'
+        <div className='w-[200px]'>
+        <SelectInput
+          name="categoryAction"
+          placeholder="Select action"
+          options={categoryOptions}
           value={selectedOption}
           onChange={handleOptionChange}
-          className='py-2 px-4 text-sm w-fit bg-transparent text-gray-10 border border-[#32312C] rounded-md'
-        >
-          <option value='edit'>Edit Category</option>
-          <option value='delete'>Delete Category</option>
-        </select>
-        <Button className='' onClick={handleApplyClick}>
+        />
+        </div>
+      
+        <Button onClick={handleApplyClick}>
           Apply
         </Button>
       </div>

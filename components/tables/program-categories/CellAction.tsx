@@ -20,6 +20,11 @@ const ActionsCell: React.FC<any> = ({ row }) => {
     setModalOpen(true)
   }
 
+  const handleDeleteCategory = () => {
+    // Implement your delete logic here
+    console.log('Delete category logic here')
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -44,7 +49,14 @@ const ActionsCell: React.FC<any> = ({ row }) => {
           title='Affliate Program'
           description=''
         >
-          <div></div>
+          <div>
+              <CategoryForm
+              refetch={() => { /* Implement refetch logic here */ }}
+              category={details} // Pass the current category details
+              isEdit={true} // Set to true for editing mode
+              onDelete={handleDeleteCategory} // Pass delete callback
+            />
+          </div>
         </MainDialog>
       )}
     </>

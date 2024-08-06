@@ -23,8 +23,6 @@ const Navbar = () => {
     router.push(href);
   };
 
-
-
   const [menuOpen, setMenuOpen] = useState(false);
   const showNav = () => {
     setMenuOpen(!menuOpen);
@@ -42,58 +40,59 @@ const Navbar = () => {
 
   return (
     <nav className="flexBetween bg-black-60 w-full py-3 fixed border-b border-[#32312C] top-0 z-10">
-      <div className="max-container padding-container flexBetween w-full 4xl:px-0">
-        <div>
-          <Link href="/">
-            <Image src="/logo.svg" alt="logo" width={150} height={29} />
-          </Link>
-        </div>
-
-        <div className="flexBetween gap-10">
-          <ul className="hidden h-full gap-12  lg:flexBetween">
-            {ADMIN_NAV_LINKS.map((link) => {
-              const IconComponent = link.icon;
-              const linkHref = `${link.href}?${searchParams.toString()}`;
-              return (
-                <div
-                  className="flex items-center justify-center gap-2"
-                  key={link.key}
-                >
-                  <div className="mb-2">
-                    <IconComponent
-                      width={link.iconWidth || 20}
-                      height={link.iconHeight || 20}
-                      color={activeLink === linkHref ? "#FFD700" : "#8D8885"}
-                    />
-                  </div>
-                  <Link
-                    href={link.href}
-                    onClick={(event) => handleLinkClick(event, linkHref)}
-                  >
-                    <span
-                      className={`regular-16 text-gray-10 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold ${
-                        activeLink === linkHref
-                          ? "font-bold text-yellow-50 "
-                          : "text-gray-10"
-                      }`}
-                    >
-                      {link.label}
-                    </span>
-                  </Link>
-                </div>
-              );
-            })}
-          </ul>
-          <div className="hidden lg:block">
-            <Button
-              onClick={() => {
-                router.push("/upload-program");
-              }}
-            >
-              Upload Program <ChevronRight size={18} bg-black-50 />
-            </Button>
+      <div className="mx-auto flexBetween padding-container max-w-[1700px] w-full 4xl:px-0">
+          <div>
+            <Link href="/">
+              <Image src="/logo.svg" alt="logo" width={150} height={29} />
+            </Link>
           </div>
-        </div>
+          <div className="flexBetween gap-10">
+            <ul className="hidden h-full gap-12  lg:flexBetween">
+              {ADMIN_NAV_LINKS.map((link) => {
+                const IconComponent = link.icon;
+                const linkHref = `${link.href}?${searchParams.toString()}`;
+                return (
+                  <div
+                    className="flex items-center justify-center gap-2"
+                    key={link.key}
+                  >
+                    <div className="mb-2">
+                      <IconComponent
+                        width={link.iconWidth || 20}
+                        height={link.iconHeight || 20}
+                        color={activeLink === linkHref ? "#FFD700" : "#8D8885"}
+                      />
+                    </div>
+                    <Link
+                      href={link.href}
+                      onClick={(event) => handleLinkClick(event, linkHref)}
+                    >
+                      <span
+                        className={`regular-16 text-gray-10 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold ${
+                          activeLink === linkHref
+                            ? "font-bold text-yellow-50 "
+                            : "text-gray-10"
+                        }`}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  </div>
+                );
+              })}
+            </ul>
+            <div className="hidden lg:block">
+              <Button
+                onClick={() => {
+                  router.push("/upload-program");
+                }}
+              >
+                Upload Program <ChevronRight size={18} bg-black-50 />
+              </Button>
+            </div>
+          </div>
+
+
         <Image
           src="menu.svg"
           alt="menu"
@@ -109,8 +108,7 @@ const Navbar = () => {
               : "fixed left-[-100%] top-0 px-6 pt-5 ease-in duration-500"
           }
         >
-
-<div className="flex w-full justify-end items-center">
+          <div className="flex w-full justify-end items-center">
             <div onClick={showNav} className="cursor-pointer ">
               <h1 className="bold-32 mb-5  text-cream-20">&times;</h1>
             </div>
@@ -136,23 +134,20 @@ const Navbar = () => {
                       color={activeLink === linkHref ? "#FFD700" : "#8D8885"}
                     />
                   </div>
-                    <Link
-                      href={link.href}
-                      onClick={(event) =>
-                        handleMobileLinkClick(event, linkHref)
-                      }
+                  <Link
+                    href={link.href}
+                    onClick={(event) => handleMobileLinkClick(event, linkHref)}
+                  >
+                    <span
+                      className={`regular-16 text-gray-10 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold ${
+                        activeLink === linkHref
+                          ? "font-bold text-yellow-50 "
+                          : "text-gray-10"
+                      }`}
                     >
-                      <span
-                        className={`regular-16 text-gray-10 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold ${
-                          activeLink === linkHref
-                            ? "font-bold text-yellow-50 "
-                            : "text-gray-10"
-                        }`}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  
+                      {link.label}
+                    </span>
+                  </Link>
                 </div>
               );
             })}

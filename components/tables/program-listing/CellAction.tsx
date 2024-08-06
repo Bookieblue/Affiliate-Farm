@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,17 +6,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { DeleteIcon, Edit2Icon, EyeIcon, MoreHorizontal } from 'lucide-react'
-import MainDialog from '../../../components/ui/FormField/MainDialog'
-import { ProgramResponse } from '@/services/models/hooks/program/type'
-import { useGetCategories } from '@/services/models/hooks/category/hook'
-import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { DeleteIcon, Edit2Icon, EyeIcon, MoreHorizontal } from 'lucide-react';
+import MainDialog from '../../../components/ui/FormField/MainDialog';
+import { ProgramResponse } from '@/services/models/hooks/program/type';
+import { useGetCategories } from '@/services/models/hooks/category/hook';
+import { capitalizeFirstLetter } from '@/lib/helpers/formatWord';
+import SubmitProgramForm from '@/components/forms/submitProgram';
+import SelectInput from '@/components/ui/FormField/SelectInput';
 
 interface ColumnsProps {
-  onDeleteRow: (row: ProgramResponse) => void
-  onEditCategory: (row: ProgramResponse, newCategory: string) => void
+  onDeleteRow: (row: ProgramResponse) => void;
+  onEditCategory: (row: ProgramResponse, newCategory: string) => void;
 }
 
 const CellAction: React.FC<ColumnsProps & { row: any }> = ({
@@ -24,50 +26,65 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
   onEditCategory,
   row,
 }) => {
-  const [isModalOpen, setModalOpen] = useState(false)
-  const [modalAction, setModalAction] = useState('') // State to track which action triggered the modal
-  const details = row.original
-  const [selectedRow, setSelectedRow] = useState<ProgramResponse | null>(null) // Track the selected row
-  const [newCategory, setNewCategory] = useState(details.niche_details.name) // Track the new category
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalAction, setModalAction] = useState(''); // State to track which action triggered the modal
+  const details = row.original;
+  const [selectedRow, setSelectedRow] = useState<ProgramResponse | null>(null); // Track the selected row
+  const [newCategory, setNewCategory] = useState(details.niche_details.name); // Initialize with current category
 
-  const { data, isLoading, isSuccess } = useGetCategories()
+  const { data, isLoading, isSuccess } = useGetCategories();
+
+  useEffect(() => {
+    // Update newCategory when details change
+    setNewCategory(details.niche_details.name);
+  }, [details]);
 
   const handleViewDetails = (action: string) => {
-    setModalOpen(true)
-    setModalAction(action)
-    setSelectedRow(details) // Set the selected row for editing
-  }
+    setModalOpen(true);
+    setModalAction(action);
+    setSelectedRow(details); // Set the selected row for editing
+    // Set newCategory to current category value when opening modal
+    setNewCategory(details.niche_details.name);
+  };
 
   const handleCloseModal = () => {
-    setModalOpen(false)
-    setModalAction('')
-    setSelectedRow(null)
-  }
+    setModalOpen(false);
+    setModalAction('');
+    setSelectedRow(null);
+  };
 
   const handleEditCategory = () => {
     if (selectedRow) {
-      onEditCategory(selectedRow, newCategory)
+      onEditCategory(selectedRow, newCategory);
     }
-    handleCloseModal()
-  }
+    handleCloseModal();
+  };
 
-  const handleEditProgram = () => {
+  const handleEditProgram = async (formData: ProgramResponse) => {
     // Logic for editing program
-    handleCloseModal()
-  }
+    handleCloseModal();
+  };
 
   const handleDeleteProgram = () => {
     if (selectedRow) {
-      onDeleteRow(selectedRow)
+      onDeleteRow(selectedRow);
     }
-    handleCloseModal()
-  }
+    handleCloseModal();
+  };
+
+
+  const options = data
+    ? data.map((category) => ({
+        value: category.code,
+        label: `${capitalizeFirstLetter(category.name)} Affiliate Program`,
+      }))
+    : [];
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='h-8 w-8 p-0'>
+          <Button variant='ghost' className='h-8 w-8 p-0 '>
             <span className='sr-only'>Open menu</span>
             <MoreHorizontal className='h-4 w-4' />
           </Button>
@@ -107,21 +124,13 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
         >
           {modalAction === 'editCategory' && isSuccess && (
             <div>
-              <select
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-                className='py-2 px-4 text-sm w-full bg-transparent text-gray-10 border border-[#32312C] rounded-md'
-              >
-                {data.map((category, index) => {
-                  return (
-                    <option value={category.code} key={index}>
-                      {`${capitalizeFirstLetter(
-                        category.name
-                      )} Affiliate Program`}
-                    </option>
-                  )
-                })}
-              </select>
+              <SelectInput
+                name="category"
+                placeholder=""
+                options={options}
+                value={newCategory} // Ensure this is the current category
+                onChange={(value) => setNewCategory(value)} // Directly pass the selected value
+              />
               <Button onClick={handleEditCategory} className='w-full mt-4'>
                 Update Category
               </Button>
@@ -129,10 +138,7 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
           )}
           {modalAction === 'editProgram' && (
             <div>
-              {/* Edit program form or content */}
-              <Button onClick={handleEditProgram} className='w-full'>
-                Save Changes
-              </Button>
+              <SubmitProgramForm isEdit={true} buttonText='Save Changes' onSubmit={handleEditProgram}/>
             </div>
           )}
           {modalAction === 'deleteProgram' && (
@@ -145,7 +151,7 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
         </MainDialog>
       )}
     </>
-  )
-}
+  );
+};
 
-export default CellAction
+export default CellAction;

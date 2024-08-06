@@ -4,7 +4,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <section className='max-container padding-container mt-20 flexCenter flex-col md:w-[60%]'>
+    <section className='mx-auto max-w-[1700px] padding-container mt-20 flexCenter flex-col md:w-[60%]'>
       <SubmitProgramForm />
       <div className='mt-10'>
         <p className='text-cream-50 medium-20'>Have question?</p>

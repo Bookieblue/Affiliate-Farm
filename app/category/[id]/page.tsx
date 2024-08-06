@@ -6,6 +6,7 @@ import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
 import { baseURL } from '@/services/api'
 import { CategoryResponse } from '@/services/models/hooks/category/type'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
+import Layout from "../layout";
 
 interface CategoryPageProps {
   params: { id: string }
@@ -42,15 +43,16 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     const date = getCurrentMonthAndYear()
 
     return (
-      <AffiliatePageLayout>
-        <Hero
+      <>
+       <Hero
           title={`200+ Best ${
             capitalizeFirstLetter(title) || ''
           } Affiliate programs as at ${date}`}
           description='Discover 200+ curated highest paying affiliate programs that are perfect for your niche, content to cash out massively in 2024.'
         />
         <AffliatePrograms category={category} programs={programs} />
-      </AffiliatePageLayout>
+      </>
+        
     )
   } catch (error) {
     console.error('Error fetching data', error)

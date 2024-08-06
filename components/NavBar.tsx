@@ -67,7 +67,7 @@ const Navbar = () => {
   if (isLoading) return <p>Loading...</p>
   return (
     <nav className=' bg-black-60 w-full py-3 fixed top-0 z-10'>
-      <div className='max-container padding-container flexBetween w-full 4xl:px-0'>
+      <div className='max-w-[1700px] padding-container flexBetween w-full 4xl:px-0'>
         <div>
           <Link href='/'>
             <Image src='/logo.svg' alt='logo' width={150} height={29} />

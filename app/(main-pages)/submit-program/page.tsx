@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 const Page = () => {
   const router = useRouter()
   return (
-    <section className='max-container padding-container mt-28 w-full mb-10 '>
+    <section className='mx-auto max-w-[1700px] padding-container mt-28 w-full mb-10 '>
       <div className='lg:px-5'>
         <div>
           <p className='font-bold text-[34px] text-cream-50 mb-3'>

@@ -3,7 +3,10 @@ import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import 'react-quill/dist/quill.snow.css'
 import { Button } from '../ui/button'
-import { useCreateCategory, useDeleteCategory } from '@/services/models/hooks/category/hook'
+import {
+  useCreateCategory,
+  useDeleteCategory,
+} from '@/services/models/hooks/category/hook'
 import { CategoryResponse } from '@/services/models/hooks/category/type'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -11,15 +14,16 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 interface CategoryFormProps {
   refetch: () => void
   category?: CategoryResponse // Category data for editing
-  isEdit?: boolean 
+  isEdit?: boolean
   onDelete?: () => void // Callback function for deleting
+  onAddCategory?: any
 }
 
 const CategoryForm: React.FC<CategoryFormProps> = ({
   refetch,
   category,
   isEdit = false,
-  onDelete
+  onDelete,
 }) => {
   const [categoryName, setCategoryName] = useState<string>(category?.name || '')
   const [categoryFAQ, setCategoryFAQ] = useState<string>(category?.faq || '')
@@ -32,7 +36,12 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     setCategoryFAQ(value)
   }
 
-  const { mutate: createCategory, isPending: isCreating, isSuccess: isCreatingSuccess, data: createdData } = useCreateCategory()
+  const {
+    mutate: createCategory,
+    isPending: isCreating,
+    isSuccess: isCreatingSuccess,
+    data: createdData,
+  } = useCreateCategory()
   const { mutate: deleteCategory, isPending: isDeleting } = useDeleteCategory()
 
   const handleSubmit = (e: FormEvent) => {
@@ -49,7 +58,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 
   const handleDelete = () => {
     if (category && onDelete) {
-      // deleteCategory(category.id) 
+      // deleteCategory(category.id)
       onDelete()
     }
   }
@@ -96,7 +105,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
           />
         </div>
         <Button className='w-full'>
-          {isCreating ? 'Loading...' : isEdit ? 'Update Category' : 'Add Category'}
+          {isCreating
+            ? 'Loading...'
+            : isEdit
+            ? 'Update Category'
+            : 'Add Category'}
         </Button>
         {isEdit && (
           <Button

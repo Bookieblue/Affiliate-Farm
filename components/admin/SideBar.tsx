@@ -3,7 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import {  DASHBOARD_LINKS } from '@/constant'
+import { DASHBOARD_LINKS } from '@/constant'
 import { ChevronRight } from 'lucide-react'
 
 const SideBar = () => {
@@ -22,9 +22,8 @@ const SideBar = () => {
   }
 
   const handleLogout = () => {
-    // Your logout logic here
-    console.log('Logging out...')
- 
+    document.cookie =
+      'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; secure'
     router.push('/admin-login')
   }
 
@@ -38,7 +37,7 @@ const SideBar = () => {
           <p className='medium-20 text-cream-50 pt-20'>Dashboard</p>
         </div>
         <div className='mt-5 pb-20'>
-        {DASHBOARD_LINKS.map((link) => (
+          {DASHBOARD_LINKS.map((link) => (
             <div className='flex mb-10' key={link.name}>
               {link.name !== 'Logout' ? (
                 <Link

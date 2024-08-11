@@ -33,11 +33,13 @@ export interface Ad {
 interface ColumnsProps {
   onDeleteRow: (row: ProgramResponse) => void
   onEditCategory: (row: ProgramResponse, newCategory: string) => void
+  refetch: any
 }
 
 export const createColumns = ({
   onDeleteRow,
   onEditCategory,
+  refetch,
 }: ColumnsProps): ColumnDef<ProgramResponse>[] => [
   {
     id: 'select',
@@ -116,6 +118,7 @@ export const createColumns = ({
         onDeleteRow={onDeleteRow}
         onEditCategory={onEditCategory}
         row={row}
+        refetch={refetch}
       />
     ),
   },

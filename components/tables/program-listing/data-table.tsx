@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react'
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table';
+} from '@tanstack/react-table'
 import {
   Table,
   TableBody,
@@ -15,13 +15,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Ad, createColumns } from './columns';
+} from '@/components/ui/table'
+import { Ad, createColumns } from './columns'
 
 interface DataTableProps<TData extends { [key: string]: any }, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  searchQuery: string;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  searchQuery: string
 }
 
 export function DataTable<TData extends { [key: string]: any }, TValue>({
@@ -30,25 +30,25 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
   searchQuery,
 }: DataTableProps<TData, TValue>) {
   const filteredData = useMemo(() => {
-    if (!searchQuery) return data;
-    return data.filter(item =>
-      Object.values(item).some(value =>
+    if (!searchQuery) return data
+    return data.filter((item) =>
+      Object.values(item).some((value) =>
         String(value).toLowerCase().includes(searchQuery.toLowerCase())
       )
-    );
-  }, [data, searchQuery]);
+    )
+  }, [data, searchQuery])
 
   const table = useReactTable({
     data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  });
+  })
 
   const renderPageButtons = () => {
-    const pageCount = table.getPageCount();
-    const currentPage = table.getState().pagination.pageIndex;
-    const pageButtons = [];
+    const pageCount = table.getPageCount()
+    const currentPage = table.getState().pagination.pageIndex
+    const pageButtons = []
 
     for (let i = 0; i < pageCount; i++) {
       if (
@@ -68,18 +68,22 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
           >
             {i + 1}
           </button>
-        );
+        )
       } else if (i === currentPage - 2 || i === currentPage + 2) {
-        pageButtons.push(<span key={i} className="border rounded px-2 py-2">...</span>);
+        pageButtons.push(
+          <span key={i} className='border rounded px-2 py-2'>
+            ...
+          </span>
+        )
       }
     }
 
-    return pageButtons;
-  };
+    return pageButtons
+  }
 
   return (
     <div>
-      <div className="rounded-md border border-[#32312C]">
+      <div className='rounded-md border border-[#32312C]'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -107,14 +111,20 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-24 text-center'
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -122,11 +132,9 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-end mt-4">
-        <ul className="flex space-x-2">
-          {renderPageButtons()}
-        </ul>
+      <div className='flex justify-end mt-4'>
+        <ul className='flex space-x-2'>{renderPageButtons()}</ul>
       </div>
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Category, columns } from './columns'
 import { DataTable } from './data-table'
 import { Button } from '@/components/ui/button'
@@ -8,70 +8,12 @@ import CategoryForm from '@/components/forms/CategoryForm'
 import { useToast } from '@/components/ui/use-toast'
 import { useGetCategories } from '@/services/models/hooks/category/hook'
 
-// Mock function to fetch data (replace with real API call)
-async function fetchCategories(): Promise<Category[]> {
-  return [
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-    {
-      no: '1',
-      category: 'Travel affiliate program',
-      programNo: '124 programs',
-      publishedDate: 'Aug 4, 2024',
-    },
-  ]
-}
-
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([])
   const [isFormOpen, setFormOpen] = useState(false)
   const { toast } = useToast()
 
   const { data, isSuccess, refetch } = useGetCategories()
-
-  useEffect(() => {
-    // Fetch data on component mount
-    const getData = async () => {
-      const data = await fetchCategories()
-      setCategories(data)
-    }
-
-    getData()
-  }, [])
 
   const addCategory = (category: Category) => {
     setCategories([...categories, category])

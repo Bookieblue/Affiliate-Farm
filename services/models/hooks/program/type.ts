@@ -54,7 +54,7 @@ export interface ProgramResponse {
   niche?: number | string
   niche_details?: NicheDetails
   logo: File | any
-  logoString?: string | ArrayBuffer
+  logoString?: string | ArrayBuffer | null
   code?: string
   name: string
   publisherName?: string

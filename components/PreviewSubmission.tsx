@@ -20,7 +20,7 @@ const PreviewSubmission = () => {
     if (context?.formData) setFormData(context.formData)
   }, [context])
 
-  const { data, mutate, isSuccess, isPending } = useCreateProgram(formData)
+  const { mutate, isSuccess, isPending } = useCreateProgram(formData)
 
   useEffect(() => {
     if (isSuccess) setIsSuccessDialogOpen(true)

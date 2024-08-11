@@ -14,7 +14,7 @@ export const LoginSchema = z.object({
     .string()
     .min(1, 'Email is required')
     .email('Incorrect email address'),
-  password: z.string().min(0, 'Password is required'), //TODO look into this min later
+  password: z.string().min(3, 'Password is required'), //TODO look into this min later
 })
 
 const LoginForm = () => {
@@ -34,13 +34,13 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      sessionStorage.setItem('token', loginData.access)
+      //   sessionStorage.setItem('token', loginData.access)
+      document.cookie = `token=${loginData.access}; max-age=155520; path=/; secure;`
       router.push('/ads-listing')
     }
   }, [isSuccess, router, loginData])
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    console.log(data)
     const { email, password } = data
 
     if (email && password) {
@@ -56,7 +56,7 @@ const LoginForm = () => {
           control={form.control}
           name='email'
           label='Email'
-          placeholder='admin@affiliatefarm@gmail.com'
+          placeholder='admin@affiliatefarm.com'
           type='email'
         />
         <TextInput

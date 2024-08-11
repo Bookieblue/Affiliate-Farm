@@ -11,7 +11,7 @@ import {
   useUpdateProgram,
 } from '@/services/models/hooks/program/hook'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
-import SelectInput from '@/components/ui/FormField/SelectInput' 
+import SelectInput from '@/components/ui/FormField/SelectInput'
 
 const categoryOptions = [
   { value: 'edit', label: 'Edit Category' },
@@ -25,7 +25,7 @@ const AdsPage = () => {
   const [selectedDeletes, setSelectedDeletes] = useState<string[]>([])
   const [updateCategory, setUpdateCategory] = useState<updateProgram>({
     programCode: '',
-    niche: '',
+    data: '',
   })
 
   const { data: programData, isLoading, isSuccess, refetch } = useGetPrograms()
@@ -36,8 +36,12 @@ const AdsPage = () => {
     isPending,
     isSuccess: categorySuccess,
     mutate: doUpdateCategory,
-  } = useUpdateProgram(updateCategory)
+  } = useUpdateProgram()
 
+  useEffect(() => {
+    if (updateCategory.data && updateCategory.programCode)
+      doUpdateCategory(updateCategory)
+  }, [updateCategory, doUpdateCategory])
   useEffect(() => {
     if (isSuccess) {
       setData(programData)
@@ -71,8 +75,7 @@ const AdsPage = () => {
 
   const handleEditCategory = (row: ProgramResponse, newCategory: string) => {
     if (row.code) {
-      setUpdateCategory({ niche: newCategory, programCode: row.code })
-      doUpdateCategory()
+      setUpdateCategory({ data: { niche: newCategory }, programCode: row.code })
     }
   }
 
@@ -95,6 +98,7 @@ const AdsPage = () => {
       createColumns({
         onDeleteRow: handleDeleteRow,
         onEditCategory: handleEditCategory,
+        refetch: refetch,
       }),
     []
   )
@@ -129,18 +133,16 @@ const AdsPage = () => {
       />
       <div className='relative rounded-md flex items-center justify-start gap-3'>
         <div className='w-[200px]'>
-        <SelectInput
-          name="categoryAction"
-          placeholder="Select action"
-          options={categoryOptions}
-          value={selectedOption}
-          onChange={handleOptionChange}
-        />
+          <SelectInput
+            name='categoryAction'
+            placeholder='Select action'
+            options={categoryOptions}
+            value={selectedOption}
+            onChange={handleOptionChange}
+          />
         </div>
-      
-        <Button onClick={handleApplyClick}>
-          Apply
-        </Button>
+
+        <Button onClick={handleApplyClick}>Apply</Button>
       </div>
     </div>
   )

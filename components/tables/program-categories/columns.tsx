@@ -27,7 +27,7 @@ export interface Category {
   publishedDate: string
 }
 
-export const columns: ColumnDef<CategoryResponse>[] = [
+export const columns = (refetch: () => void): ColumnDef<CategoryResponse>[] => [
   //TODO come back to change this later
   {
     accessorKey: 'code',
@@ -54,6 +54,6 @@ export const columns: ColumnDef<CategoryResponse>[] = [
   {
     id: 'actions',
     enableHiding: false,
-    cell: ActionsCell,
+    cell: ({ row }) => <ActionsCell row={row} refetch={refetch} />,
   },
 ]

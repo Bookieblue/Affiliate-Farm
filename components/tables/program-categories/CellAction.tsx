@@ -12,7 +12,12 @@ import MainDialog from '../../../components/ui/FormField/MainDialog'
 import CategoryForm from '@/components/forms/CategoryForm'
 import React, { useState } from 'react'
 
-const ActionsCell: React.FC<any> = ({ row }) => {
+interface ActionsCellProps {
+  row: any
+  refetch: () => void
+}
+
+const ActionsCell: React.FC<ActionsCellProps> = ({ row, refetch }) => {
   const [isModalOpen, setModalOpen] = useState(false)
   const details = row.original
 
@@ -50,11 +55,10 @@ const ActionsCell: React.FC<any> = ({ row }) => {
           description=''
         >
           <div>
-              <CategoryForm
-              refetch={() => { /* Implement refetch logic here */ }}
+            <CategoryForm
+              refetch={refetch}
               category={details} // Pass the current category details
               isEdit={true} // Set to true for editing mode
-              onDelete={handleDeleteCategory} // Pass delete callback
             />
           </div>
         </MainDialog>

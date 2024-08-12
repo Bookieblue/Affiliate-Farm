@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Toaster } from '@/components/ui/toaster'
 import Provider from '@/services/models/Provider'
 import { Suspense } from 'react'
+
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const metadata: Metadata = {
   title: 'Affiliate Farm',
@@ -19,7 +21,15 @@ export default function RootLayout({
       <head />
       <body>
         <Suspense fallback={<p>Loading...</p>}>
-          <Provider>{children}</Provider>
+          <Provider>
+            <ToastContainer
+              position='top-right'
+              pauseOnFocusLoss={false}
+              pauseOnHover={false}
+              theme='dark'
+            />
+            {children}
+          </Provider>
         </Suspense>
       </body>
     </html>

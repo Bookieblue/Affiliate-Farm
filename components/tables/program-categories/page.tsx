@@ -45,7 +45,7 @@ const Categories = () => {
         </MainDialog>
       )}
 
-      {isSuccess && <DataTable columns={columns} data={data} />}
+      {isSuccess && <DataTable columns={columns(refetch)} data={data} />}
     </div>
   )
 }

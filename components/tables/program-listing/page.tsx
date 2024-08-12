@@ -12,6 +12,7 @@ import {
 } from '@/services/models/hooks/program/hook'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
 import SelectInput from '@/components/ui/FormField/SelectInput'
+import { toast } from 'react-toastify'
 
 const categoryOptions = [
   { value: 'edit', label: 'Edit Category' },
@@ -32,16 +33,14 @@ const AdsPage = () => {
 
   const { mutate, isSuccess: deleteSuccess } = useDeleteProgram(selectedDeletes)
 
-  const {
-    isPending,
-    isSuccess: categorySuccess,
-    mutate: doUpdateCategory,
-  } = useUpdateProgram()
+  const { isSuccess: categorySuccess, mutate: doUpdateCategory } =
+    useUpdateProgram()
 
   useEffect(() => {
     if (updateCategory.data && updateCategory.programCode)
       doUpdateCategory(updateCategory)
   }, [updateCategory, doUpdateCategory])
+
   useEffect(() => {
     if (isSuccess) {
       setData(programData)
@@ -49,7 +48,10 @@ const AdsPage = () => {
   }, [isSuccess, programData])
 
   useEffect(() => {
-    if (deleteSuccess || categorySuccess) refetch()
+    if (deleteSuccess || categorySuccess) {
+      refetch()
+      toast.success('Action completed successfully')
+    }
   }, [deleteSuccess, categorySuccess, refetch])
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {

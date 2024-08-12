@@ -6,8 +6,11 @@ import { Button } from '../ui/button'
 import {
   useCreateCategory,
   useDeleteCategory,
+  useUpdateCategory,
 } from '@/services/models/hooks/category/hook'
 import { CategoryResponse } from '@/services/models/hooks/category/type'
+
+import { toast } from 'react-toastify'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
@@ -15,7 +18,6 @@ interface CategoryFormProps {
   refetch: () => void
   category?: CategoryResponse // Category data for editing
   isEdit?: boolean
-  onDelete?: () => void // Callback function for deleting
   onAddCategory?: any
 }
 
@@ -23,7 +25,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   refetch,
   category,
   isEdit = false,
-  onDelete,
 }) => {
   const [categoryName, setCategoryName] = useState<string>(category?.name || '')
   const [categoryFAQ, setCategoryFAQ] = useState<string>(category?.faq || '')
@@ -42,14 +43,24 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     isSuccess: isCreatingSuccess,
     data: createdData,
   } = useCreateCategory()
-  const { mutate: deleteCategory, isPending: isDeleting } = useDeleteCategory()
+
+  const {
+    mutate: deleteCategory,
+    isPending: isDeleting,
+    isSuccess: isDeleteSuccess,
+  } = useDeleteCategory()
+
+  const {
+    mutate: updateCategory,
+    isSuccess: updateSuccess,
+    isPending: updatePending,
+  } = useUpdateCategory()
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (isEdit && category) {
-      // Logic for updating the category
-      // Call an API or function to update category
-      createCategory({ name: categoryName, faq: categoryFAQ }) // Adjust to the actual update logic
+      const data = { name: categoryName, faq: categoryFAQ }
+      updateCategory({ categoryCode: category.code, data })
     } else {
       // Logic for creating a new category
       createCategory({ name: categoryName, faq: categoryFAQ })
@@ -57,21 +68,17 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   }
 
   const handleDelete = () => {
-    if (category && onDelete) {
-      // deleteCategory(category.id)
-      onDelete()
+    if (category) {
+      deleteCategory([category.code])
     }
   }
 
   useEffect(() => {
-    if (isCreatingSuccess) {
+    if (isCreatingSuccess || updateSuccess || isDeleteSuccess) {
       refetch()
+      toast.success('Action completed successfully!')
     }
-  }, [isCreatingSuccess, refetch])
-
-  useEffect(() => {
-    if (isCreatingSuccess) console.log(createdData)
-  }, [isCreatingSuccess, createdData])
+  }, [isCreatingSuccess, isDeleteSuccess, refetch, updateSuccess])
 
   return (
     <div className='mt-5'>
@@ -105,7 +112,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
           />
         </div>
         <Button className='w-full'>
-          {isCreating
+          {isCreating || updatePending
             ? 'Loading...'
             : isEdit
             ? 'Update Category'
@@ -117,6 +124,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
             variant='transparent'
             onClick={handleDelete}
             disabled={isDeleting}
+            type='button'
           >
             {isDeleting ? 'Deleting...' : 'Delete Category'}
           </Button>

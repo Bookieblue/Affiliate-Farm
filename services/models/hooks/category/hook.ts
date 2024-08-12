@@ -3,6 +3,12 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { CATEGORY_QUERY_KEY } from '.'
 import { CategoryResponse } from './type'
 import api from '@/services/api'
+import { getCookieValue } from '@/services/cookie'
+
+interface updateCategory {
+  categoryCode: string
+  data: any
+}
 
 export const useGetCategories = () => {
   const fetch = async (): Promise<CategoryResponse[]> =>
@@ -24,8 +30,13 @@ interface CreateCategoryParams {
 }
 
 export const useCreateCategory = () => {
+  const token = getCookieValue('token')
   const create = async (data: CreateCategoryParams) => {
-    const response = await api.post(`category/`, data)
+    const response = await api.post(`category/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return response.data
   }
 
@@ -34,16 +45,40 @@ export const useCreateCategory = () => {
   })
 }
 
-export const useDeleteCategory = () => {
-  const deleteCategory = async (categoryId: string) => {
-    await backendFetch({
-      endpoint: `category/${categoryId}`,
-      method: 'DELETE',
+export const useUpdateCategory = () => {
+  const token = getCookieValue('token')
+
+  const update = async ({ categoryCode, data }: updateCategory) => {
+    const request = api.patch(`category/${categoryCode}/`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
+    const response = await request
+    return response['data']
   }
 
   const mutation = useMutation({
-    mutationFn: (categoryId: string) => deleteCategory(categoryId),
+    mutationFn: ({ categoryCode, data }: updateCategory) =>
+      update({ categoryCode, data }),
+  })
+
+  return mutation
+}
+
+export const useDeleteCategory = () => {
+  const token = getCookieValue('token')
+  const doDelete = async (codes: string[]) => {
+    const request = api.delete(`category/delete-category/`, {
+      data: { codes },
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const response = await request
+    return response['data']
+  }
+
+  const mutation = useMutation({
+    mutationFn: (codes: string[]) => doDelete(codes),
   })
 
   return mutation

@@ -11,6 +11,7 @@ import {
 import { CategoryResponse } from '@/services/models/hooks/category/type'
 
 import { toast } from 'react-toastify'
+import { AxiosError } from 'axios'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
@@ -29,6 +30,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   const [categoryName, setCategoryName] = useState<string>(category?.name || '')
   const [categoryFAQ, setCategoryFAQ] = useState<string>(category?.faq || '')
 
+  const [formError, setFormError] = useState<string>()
+
   const handleCategoryNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCategoryName(e.target.value)
   }
@@ -41,7 +44,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     mutate: createCategory,
     isPending: isCreating,
     isSuccess: isCreatingSuccess,
-    data: createdData,
   } = useCreateCategory()
 
   const {
@@ -54,6 +56,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     mutate: updateCategory,
     isSuccess: updateSuccess,
     isPending: updatePending,
+    isError: isUpdateError,
+    error: updateError,
   } = useUpdateCategory()
 
   const handleSubmit = (e: FormEvent) => {
@@ -78,7 +82,21 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
       refetch()
       toast.success('Action completed successfully!')
     }
-  }, [isCreatingSuccess, isDeleteSuccess, refetch, updateSuccess])
+
+    if (isUpdateError) {
+      const respError = updateError as AxiosError
+      const errMsg = respError?.response?.data as string
+
+      if (errMsg) toast.error(errMsg)
+    }
+  }, [
+    isCreatingSuccess,
+    isDeleteSuccess,
+    refetch,
+    updateSuccess,
+    isUpdateError,
+    updateError,
+  ])
 
   return (
     <div className='mt-5'>
@@ -97,6 +115,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
             onChange={handleCategoryNameChange}
             className='w-full px-3 py-2 text-gray-10 bg-transparent border border-gray-20 rounded-md focus:outline-none'
           />
+          {formError && <p>{formError}</p>}
         </div>
         <div className='mb-4'>
           <label

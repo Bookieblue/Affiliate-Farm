@@ -16,6 +16,7 @@ import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
 import SubmitProgramForm from '@/components/forms/submitProgram'
 import SelectInput from '@/components/ui/FormField/SelectInput'
 import { useUpdateProgram } from '@/services/models/hooks/program/hook'
+import { toast } from 'react-toastify'
 
 interface ColumnsProps {
   onDeleteRow: (row: ProgramResponse) => void
@@ -45,7 +46,10 @@ const CellAction: React.FC<ColumnsProps & { row: any }> = ({
   }, [details])
 
   useEffect(() => {
-    if (updateSuccess) refetch()
+    if (updateSuccess) {
+      refetch()
+      toast.success('Program updated successfully.')
+    }
   }, [updateSuccess, refetch])
 
   const handleViewDetails = (action: string) => {

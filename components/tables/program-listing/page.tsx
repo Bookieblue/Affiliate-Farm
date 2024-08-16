@@ -16,7 +16,7 @@ import { toast } from 'react-toastify'
 
 const categoryOptions = [
   { value: 'edit', label: 'Edit Category' },
-  { value: 'delete', label: 'Delete Category' },
+  { value: 'delete', label: 'Delete Programs' },
 ]
 
 const AdsPage = () => {
@@ -28,6 +28,8 @@ const AdsPage = () => {
     programCode: '',
     data: '',
   })
+
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const { data: programData, isLoading, isSuccess, refetch } = useGetPrograms()
 
@@ -51,7 +53,10 @@ const AdsPage = () => {
     if (deleteSuccess || categorySuccess) {
       refetch()
       toast.success('Action completed successfully')
+      setSelectedRows([])
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteSuccess, categorySuccess, refetch])
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -68,30 +73,58 @@ const AdsPage = () => {
     )
   }, [searchQuery, data])
 
-  const handleDeleteRow = (row: ProgramResponse) => {
-    if (row.code) {
-      setSelectedDeletes([row.code])
-      mutate()
+  const handleDeleteRow = useMemo(() => {
+    return (row: ProgramResponse) => {
+      if (row.code) {
+        setSelectedDeletes([row.code])
+        mutate()
+      }
     }
-  }
+  }, [])
 
-  const handleEditCategory = (row: ProgramResponse, newCategory: string) => {
-    if (row.code) {
-      setUpdateCategory({ data: { niche: newCategory }, programCode: row.code })
+  const handleEditCategory = useMemo(() => {
+    return (row: ProgramResponse, newCategory: string) => {
+      if (row.code) {
+        setUpdateCategory({
+          data: { niche: newCategory },
+          programCode: row.code,
+        })
+      }
     }
-  }
+  }, [])
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value)
   }
 
+  const handleSelectedRows = useMemo(() => {
+    return async ({ code }: { code: string }): Promise<void> => {
+      setSelectedRows((prevSelectedRows) => {
+        if (prevSelectedRows.includes(code)) {
+          console.log(selectedRows)
+          return prevSelectedRows.filter((row) => row !== code)
+        } else {
+          console.log(selectedRows)
+          return [...prevSelectedRows, code]
+        }
+      })
+    }
+  }, [])
+
   const handleApplyClick = () => {
     // Handle apply button click logic based on selectedOption
+    console.log(selectedRows)
+    console.log(selectedOption)
     if (selectedOption === 'edit') {
       // setIsEditModalOpen(true); // Open modal for edit
     } else if (selectedOption === 'delete') {
       // Implement delete logic
-      console.log('Delete category')
+      console.log('Delete Program')
+
+      if (selectedRows.length >= 1) {
+        setSelectedDeletes(selectedRows)
+        mutate()
+      }
     }
   }
 
@@ -101,8 +134,16 @@ const AdsPage = () => {
         onDeleteRow: handleDeleteRow,
         onEditCategory: handleEditCategory,
         refetch: refetch,
+        handleSelectedRows,
+        selectedRows,
       }),
-    []
+    [
+      handleDeleteRow,
+      handleEditCategory,
+      refetch,
+      handleSelectedRows,
+      selectedRows,
+    ]
   )
 
   if (isLoading) return <p>Loading...</p>

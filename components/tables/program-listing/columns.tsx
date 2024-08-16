@@ -34,12 +34,16 @@ interface ColumnsProps {
   onDeleteRow: (row: ProgramResponse) => void
   onEditCategory: (row: ProgramResponse, newCategory: string) => void
   refetch: any
+  handleSelectedRows: ({ code }: { code: string }) => void
+  selectedRows: string[]
 }
 
 export const createColumns = ({
   onDeleteRow,
   onEditCategory,
   refetch,
+  handleSelectedRows,
+  selectedRows,
 }: ColumnsProps): ColumnDef<ProgramResponse>[] => [
   {
     id: 'select',
@@ -55,8 +59,10 @@ export const createColumns = ({
       <input
         type='checkbox'
         className='custom-checkbox'
-        checked={row.getIsSelected()}
-        onChange={row.getToggleSelectedHandler()}
+        checked={selectedRows.includes(row.original.code || '')}
+        onChange={() => {
+          if (row.original.code) handleSelectedRows({ code: row.original.code })
+        }}
       />
     ),
   },

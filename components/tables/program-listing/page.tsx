@@ -109,21 +109,39 @@ const AdsPage = () => {
         }
       })
     }
+  }, [selectedRows])
+
+  const handleSelectAllRows = useMemo(() => {
+    return (isSelected: boolean, rows: ProgramResponse[]) => {
+      if (isSelected) {
+        const visibleRowCodes = rows
+          .map((row) => row.code)
+          .filter(Boolean) as string[]
+        setSelectedRows((prevSelected) => {
+          const newSelected = new Set([...prevSelected, ...visibleRowCodes])
+          return Array.from(newSelected)
+        })
+        console.log('All selected rows on this page:', rows)
+      } else {
+        const visibleRowCodes: any = new Set(
+          rows.map((row) => row.code).filter(Boolean) as string[]
+        )
+        setSelectedRows((prevSelected) =>
+          prevSelected.filter((code) => !visibleRowCodes.has(code))
+        )
+      }
+    }
   }, [])
 
   const handleApplyClick = () => {
-    // Handle apply button click logic based on selectedOption
     console.log(selectedRows)
     console.log(selectedOption)
     if (selectedOption === 'edit') {
       // setIsEditModalOpen(true); // Open modal for edit
     } else if (selectedOption === 'delete') {
-      // Implement delete logic
-      console.log('Delete Program')
-
       if (selectedRows.length >= 1) {
         setSelectedDeletes(selectedRows)
-        mutate()
+        mutate() //make a modal come up when delete is selected and then the button on the modal should be the one to execute this mutate function
       }
     }
   }
@@ -136,6 +154,7 @@ const AdsPage = () => {
         refetch: refetch,
         handleSelectedRows,
         selectedRows,
+        handleSelectAllRows,
       }),
     [
       handleDeleteRow,
@@ -143,6 +162,7 @@ const AdsPage = () => {
       refetch,
       handleSelectedRows,
       selectedRows,
+      handleSelectAllRows,
     ]
   )
 

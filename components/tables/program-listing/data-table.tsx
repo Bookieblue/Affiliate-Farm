@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Ad, createColumns } from './columns'
 
 interface DataTableProps<TData extends { [key: string]: any }, TValue> {
   columns: ColumnDef<TData, TValue>[]

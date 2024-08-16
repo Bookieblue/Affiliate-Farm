@@ -36,6 +36,7 @@ interface ColumnsProps {
   refetch: any
   handleSelectedRows: ({ code }: { code: string }) => void
   selectedRows: string[]
+  handleSelectAllRows: (isSelected: boolean, rows: ProgramResponse[]) => void
 }
 
 export const createColumns = ({
@@ -44,6 +45,7 @@ export const createColumns = ({
   refetch,
   handleSelectedRows,
   selectedRows,
+  handleSelectAllRows,
 }: ColumnsProps): ColumnDef<ProgramResponse>[] => [
   {
     id: 'select',
@@ -52,7 +54,13 @@ export const createColumns = ({
         type='checkbox'
         className='custom-checkbox'
         checked={table.getIsAllPageRowsSelected()}
-        onChange={table.getToggleAllPageRowsSelectedHandler()}
+        onChange={(e) => {
+          table.toggleAllPageRowsSelected(e.target.checked)
+          handleSelectAllRows(
+            e.target.checked,
+            table.getRowModel().rows.map((row) => row.original)
+          )
+        }}
       />
     ),
     cell: ({ row }) => (

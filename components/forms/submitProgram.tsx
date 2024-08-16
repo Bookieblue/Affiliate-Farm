@@ -14,7 +14,6 @@ import {
   COMMISSION_TYPE,
   PAYMENT_METHOD,
   ALL_LEVELS,
-  AFFILIATE_CATEGORY,
 } from '@/constant'
 import { useRouter } from 'next/navigation'
 import { useGetCategories } from '@/services/models/hooks/category/hook'
@@ -194,7 +193,11 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
     const commissionRate = +rate
     const payoutAmount = +values.payoutAmount
 
-    const formData: ProgramResponse = {
+    const getNicheName = Category.find((category) => {
+      return category.value === values.niche
+    })
+
+    const formData: ProgramResponse & { nicheName: string } = {
       ...values,
       currency: currency_type,
       cookieDuration,
@@ -207,6 +210,7 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
       commissionType: commision_type,
       logo: logoFile,
       logoString: logo,
+      nicheName: getNicheName?.label || values.niche,
     }
 
     setFormData(formData)

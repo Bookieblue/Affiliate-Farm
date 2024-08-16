@@ -17,6 +17,7 @@ const PreviewSubmission = () => {
   const context = useContext(AffiliateFormContext)
 
   useEffect(() => {
+    console.log(context?.formData)
     if (context?.formData) setFormData(context.formData)
   }, [context])
 
@@ -45,6 +46,7 @@ const PreviewSubmission = () => {
         <div className=' rounded-xl mt-7'>
           <Programs
             logo={formData.logo || ''}
+            logoString={formData.logoString || ''}
             commissionRate={formData.commissionRate || 0}
             commissionType={formData.commissionType || ''}
             name={formData.name || ''}
@@ -62,7 +64,7 @@ const PreviewSubmission = () => {
       <div className='regular-14 break-all w-full lg:regular-16 grid grid-cols-2 lg:grid-cols-3 mt-10 gap-5'>
         <div>
           <p className='text-cream-50'>Affiliate Niche</p>
-          <p className='text-cream-20'>{formData.niche}</p>
+          <p className='text-cream-20 text-ellipsis'>{formData.nicheName}</p>
         </div>
         <div>
           <p className='text-cream-50'>Affiliate Type</p>

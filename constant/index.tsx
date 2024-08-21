@@ -31,7 +31,7 @@ export const NAV_LINKS: NavLink[] = [
     iconHeight: 20,
   },
   {
-    href: '/newsletters',
+    href: 'https://affiliatebase.beehiiv.com/subscribe',
     key: 'newsletters',
     label: 'Newsletters',
     icon: NewsletterIcon,

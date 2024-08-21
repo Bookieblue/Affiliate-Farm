@@ -59,7 +59,7 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
           <span className='medium-16 text-cream-50'>Note:</span> You need to
           first get your brand affiliate program ID by clicking on the question
           mark icon on your brand box. Brand program not listed yet?{' '}
-          <Link href='/' className='underline text-yellow-50'>
+          <Link href='/submit-program-form' className='underline text-yellow-50'>
             Get started here.
           </Link>
         </p>

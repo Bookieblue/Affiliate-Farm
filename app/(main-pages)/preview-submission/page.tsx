@@ -12,7 +12,7 @@ const Page = () => {
           <p className='mt-5 text-cream-20 regular-16'>
             Contact us to ask us any question concerning our sponsor program, or
             feedback for us, You can mail us{' '}
-            <Link href='/' className='text-yellow-50 underline'>
+            <Link href='mailto:support@affilatebase.xyz' className='text-yellow-50 underline'>
               support@affiliatefarm.xyz
             </Link>
           </p>

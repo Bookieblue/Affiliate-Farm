@@ -28,7 +28,7 @@ const Programs: React.FC<ProgramResponse> = ({
     <div className='flex flex-col min-w-[300px] justify-between  gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  '>
       <div className=''>
         <div className='flexBetween relative self-stretch w-full flex-[0_0_auto] '>
-          <div className='relative w-[60px] h-[60px] rounded-[7.2px]'>
+          <div className='relative w-[60px] h-[60px] rounded-[8px]'>
             <Image
               src={(logoString as string) || `${baseURL}${logo.slice(1)}`}
               width={60}
@@ -108,6 +108,7 @@ const Programs: React.FC<ProgramResponse> = ({
         <div>
           <Link
             href={programUrl}
+            target='_blank'
             className='text-yellow-50 medium-16 underline flex gap-1'
           >
             View Program

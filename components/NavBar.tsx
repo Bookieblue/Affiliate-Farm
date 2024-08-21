@@ -94,6 +94,7 @@ const Navbar = () => {
                   {link.key !== 'more-resources' ? (
                     <Link
                       href={link.href}
+                      target="_blank"
                       onClick={(event) => handleLinkClick(event, linkHref)}
                     >
                       <span
@@ -170,6 +171,7 @@ const Navbar = () => {
                   {link.key !== 'more-resources' ? (
                     <Link
                       href={link.href}
+                      target="_blank"
                       onClick={(event) =>
                         handleMobileLinkClick(event, linkHref)
                       }

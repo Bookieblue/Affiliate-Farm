@@ -12,18 +12,18 @@ const MoreResources = () => {
         {
             icon: '/feedback.svg',
             title: 'Feedback/Suggestion',
-            link:  'support@affiliatefram.xyz',
+            link:  'mailto:support@affilatebase.xyz',
         },
         {
             icon: '/support.svg',
             title: 'Support',
-            link:  'support@affiliatefram.xyz',
+            link:  'mailto:support@affilatebase.xyz',
         },
     ]
   return (
     <div>
         {MoreResources.map((resource) =>(
-            <Link href={resource.link} key={resource.title} className='flex gap-4 mb-4 '>
+            <Link href={resource.link} key={resource.title} target='_blank' className='flex gap-4 mb-4 '>
                   <Image src={resource.icon} width={20} height={20} alt='icon' />
                    <p className='text-cream-20 text-medium-16 hover:text-yellow-50'>{resource.title}</p>
             </Link>

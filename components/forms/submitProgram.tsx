@@ -35,7 +35,10 @@ const SubmitProgramSchema = z.object({
     .string()
     .min(1, 'Email is required')
     .email('Incorrect email address'),
-  name: z.string().min(1, 'Brand name is required'),
+  name: z
+    .string()
+    .min(1, 'Brand name is required')
+    .max(18, 'Program name/title must be 18 characters or less'),
   payoutAmount: z.string().min(1, 'Payout fee is required'),
   cookieDuration: z.string().min(1, 'Cookie duration is required'),
   publisherName: z.string().min(1, 'Publisher name is required'),
@@ -45,12 +48,19 @@ const SubmitProgramSchema = z.object({
   paymentMethod: z.string().min(1, 'Payment Method is required'),
   cookieExpires: z.string().min(1, 'Cookie expiration is required'),
   programUrl: z.string().url('Invalid URL'),
-  shortDescription: z.string().min(1, 'Product description is required'),
-  description: z.string().min(1, 'Program description is required'),
+  shortDescription: z
+    .string()
+    .min(1, 'Product description is required')
+    .max(25, 'Short Product Description must be 25 characters or less'),
+  description: z
+    .string()
+    .min(1, 'Program description is required')
+    .max(100, 'Program Description must be 100 characters or less'),
   affiliateLevel: z.string().min(1, 'Affiliates Levels are required'),
   commissionRate: z.string().min(1, 'Commission rate is required'),
   logo: z.string().optional(),
-})
+});
+
 
 interface SubmitProgramFormProps {
   isEdit?: boolean
@@ -353,20 +363,22 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
               placeholder='Select...'
             />
           </div>
-          <div>
+          <div className='flex gap-10 flex-col lg:flex-row'>
+            <div className='lg:w-1/2'>
             <RadioGroupForm
               control={methods.control}
               label='Cookie expired?'
               name='cookieExpires'
             />
-          </div>
-          <div className='lg:w-[40%] flex-col lg:flex-row'>
+            </div>
+            <div className='lg:w-1/2'>
             <TextInput
               control={methods.control}
               name='cookieDuration'
               label='Cookie Duration (days)'
               placeholder='eg. 60'
             />
+            </div>
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <TextInput

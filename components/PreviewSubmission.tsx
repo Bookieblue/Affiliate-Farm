@@ -40,7 +40,7 @@ const PreviewSubmission = () => {
         <p className='bold-24 text-cream-50'>Preview submission</p>
       </div>
       <p className='text-cream-20 regular-16 ml-1'>
-        Get your brand exposed to massive traffic from Affiliate Farm.
+        Get your brand exposed to massive traffic from Affiliate Base.
       </p>
       <div className='flexCenter w-full'>
         <div className=' rounded-xl mt-7'>

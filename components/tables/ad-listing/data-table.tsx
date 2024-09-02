@@ -20,11 +20,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isLoading: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -32,39 +34,6 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-
-  const renderPageButtons = () => {
-    const pageCount = table.getPageCount();
-    const currentPage = table.getState().pagination.pageIndex;
-    const pageButtons = [];
-
-    for (let i = 0; i < pageCount; i++) {
-      if (
-        i === 0 || 
-        i === pageCount - 1 || 
-        (i >= currentPage - 1 && i <= currentPage + 1)
-      ) {
-        pageButtons.push(
-          <button
-            key={i}
-            className={`px-3 py-1 border rounded ${
-              currentPage === i ? 'bg-yellow-50 border border-yellow-50 text-black-50' : 'bg-transparent border border-gray-10 text-gray-10'
-            }`}
-            onClick={() => table.setPageIndex(i)}
-          >
-            {i + 1}
-          </button>
-        );
-      } else if (
-        i === currentPage - 2 || 
-        i === currentPage + 2
-      ) {
-        pageButtons.push(<span key={i} className='border rounded px-2 py-2'>...</span>);
-      }
-    }
-
-    return pageButtons;
-  };
 
   return (
     <div>
@@ -87,7 +56,13 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -112,7 +87,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex justify-start mt-4">
         <ul className="flex space-x-2">
-          {renderPageButtons()}
+          {/* Render pagination buttons if needed */}
         </ul>
       </div>
     </div>

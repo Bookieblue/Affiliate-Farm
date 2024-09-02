@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Programs from './Program'
-import { fetchPrograms, programData } from '../lib/data'
 import { ArrowDown } from 'lucide-react'
-import Image from 'next/image'
-import { useGetCategories } from '@/services/models/hooks/category/hook'
-import { baseURL } from '@/services/api'
-import { CategoryResponse } from '@/services/models/hooks/category/type'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
 import { CategoryProgramProps } from '@/app/page'
 
@@ -17,42 +12,52 @@ interface LoadMoreProgramsProps extends CategoryProgramProps {
 
 const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   searchQuery,
-  category,
-  programs: programsData, //TODO will change this
+  programs: programsData = [], // Set a default empty array as fallback
 }) => {
-  const [programs, setPrograms] = useState<ProgramResponse[]>()
+  const [programs, setPrograms] = useState<ProgramResponse[]>([])
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
-  useEffect(() => setPrograms(programsData), [programs, programsData])
-  const loadPrograms = useCallback(
-    async (initialLoad = false) => {
-      setLoading(true)
-      // const newPrograms = await fetchPrograms(
-      //   initialLoad ? 0 : offset,
-      //   9,
-      //   searchQuery
-      // )
-      // setPrograms((prevPrograms) =>
-      //   initialLoad ? newPrograms : [...prevPrograms, ...newPrograms]
-      // )
-      setOffset((prevOffset) => (initialLoad ? 9 : prevOffset + 9))
-      setLoading(false)
-      if (programs && programs.length < 9) {
-        setHasMore(false) // No more programs to load
-      }
-    },
-    [programs]
-  )
 
   useEffect(() => {
-    loadPrograms(true) // Load initial programs
-  }, [searchQuery, loadPrograms])
+    const initialPrograms = programsData.slice(0, 9)
+    setPrograms(initialPrograms)
+    setOffset(initialPrograms.length)
 
-  if (loading && programs && programs.length === 0) {
+    // If the total number of programs is less than 9, there are no more programs to load
+    if (programsData.length <= 9) {
+      setHasMore(false)
+    }
+  }, [programsData])
+
+  const loadPrograms = useCallback(() => {
+    if (loading) return
+
+    setLoading(true)
+
+    const newPrograms = programsData.slice(offset, offset + 9)
+
+    setPrograms((prevPrograms) => [...prevPrograms, ...newPrograms])
+    setOffset((prevOffset) => prevOffset + newPrograms.length)
+
+    if (newPrograms.length < 9) {
+      setHasMore(false) // No more programs to load
+    }
+
+    setLoading(false)
+  }, [offset, programsData, loading])
+
+  useEffect(() => {
+    const initialPrograms = programsData.slice(0, 9)
+    setPrograms(initialPrograms)
+    setOffset(initialPrograms.length)
+    setHasMore(programsData.length > 9)
+  }, [searchQuery, programsData])
+
+  if (loading && programs.length === 0) {
     return (
-      <div className='flexCenter mt-20 flex-col  h-full w-full'>
-        <p className='text-gray-10 mt-4'>Loading...</p>
+      <div className='flexCenter mt-20 flex-col h-full w-full'>
+        <p className='text-cream-50 mt-4'>Loading...</p>
       </div>
     )
   }
@@ -60,18 +65,18 @@ const LoadMorePrograms: React.FC<LoadMoreProgramsProps> = ({
   return (
     <div>
       <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-7'>
-        {programs ? (
+        {programs.length > 0 ? (
           programs.map((program, index) => (
             <Programs key={index} {...program} />
           ))
         ) : (
-          <p>No data </p>
+          <p>No data</p>
         )}
       </div>
       {hasMore && (
         <div className='flex justify-center mt-4'>
           <button
-            onClick={() => loadPrograms()}
+            onClick={loadPrograms}
             className='px-2 py-2 bg-[#8D8885] text-[#14181A] font-medium text-sm rounded hover:bg-yellow-50 mt-5 flexCenter gap-2'
             disabled={loading}
           >

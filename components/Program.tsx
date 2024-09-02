@@ -5,6 +5,8 @@ import { ToolTip } from './ui/FormField/ToolTip'
 import { ProgramResponse } from '@/services/models/hooks/program/type'
 import { formatCommission } from '@/lib/helpers/formatWord'
 import { baseURL } from '@/services/api'
+import PayoutIcon from './assets-nav-icons/payout'
+import ClockIcon from './assets-nav-icons/clock'
 
 const Programs: React.FC<ProgramResponse> = ({
   logo,
@@ -77,13 +79,13 @@ const Programs: React.FC<ProgramResponse> = ({
           </div>
           <div className='flexBetween relative self-stretch w-full flex-[0_0_auto]'>
             <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-              <Image src='./payout.svg' width={20} height={5} alt='icon' />
-              <p className='relative w-fit mt-[-1.00px]  regular-14 text-gray-10'>
+              <PayoutIcon />
+              <p className='relative w-fit mt-1  regular-14 text-gray-10'>
                 {`$ ${payoutAmount} Payout`}
               </p>
             </div>
             <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-              <Image src='./time.svg' width={20} height={5} alt='icon' />
+               <ClockIcon />
               <p className='relative w-fit regular-14 text-gray-10'>
                 {cookieExpires
                   ? `${cookieDuration} days Cookie`
@@ -105,11 +107,11 @@ const Programs: React.FC<ProgramResponse> = ({
         <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
           <ToolTip content={code || 'no ID'} key={id} />
         </div>
-        <div>
+        <div className='border-b border-yellow-50'>
           <Link
             href={programUrl}
             target='_blank'
-            className='text-yellow-50 medium-16 underline flex gap-1'
+            className='text-yellow-50 medium-16 flex gap-1'
           >
             View Program
             <Image src='/arrow-right.svg' width={5} height={5} alt='icon' />

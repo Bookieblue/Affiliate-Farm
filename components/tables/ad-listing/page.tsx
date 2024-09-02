@@ -1,5 +1,5 @@
 'use client'
-import React, { ChangeEvent, useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Ad, columns } from './columns'
 import { DataTable } from './data-table'
 import { useGetAds } from '@/services/models/hooks/ads/hook'
@@ -57,7 +57,7 @@ export default function DemoPage() {
         />
         </div>
       </div>
-      {isSuccess && <DataTable columns={columns} data={filteredData} />}
+      <DataTable columns={columns} data={filteredData} isLoading={isLoading} />
     </div>
   )
 }

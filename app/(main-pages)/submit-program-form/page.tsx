@@ -12,7 +12,7 @@ const Page = () => {
           Contact us to ask us any question concerning our sponsor program, or
           feedback for us, You can mail us{' '}
           <Link href='mailto:support@affilatebase.xyz' className='text-yellow-50 underline'>
-            support@affiliatefarm.xyz
+            support@affiliatebase.xyz
           </Link>
         </p>
       </div>

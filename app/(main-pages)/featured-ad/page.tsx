@@ -51,7 +51,7 @@ const Page = () => {
       <div className='w-full lg:w-[65%] lg:padding-container'>
         <h4 className='text-cream-50 bold-32'>Feature Ad</h4>
         <p className='text-cream-20 regular-16 mt-4'>
-          Promote your brand affiliate program on Affiliate farm and attract
+          Promote your brand affiliate program on Affiliate Base and attract
           attention of bloggers, content creator, and YouTubers shopping for new
           offers to promote and drive significant credibility and traffic to
           your brand product massively.
@@ -84,7 +84,7 @@ const Page = () => {
             Contact us to ask us any question concerning our sponsor program, or
             feedback for us, You can mail us{' '}
             <Link href='mailto:support@affilatebase.xyz' className='text-yellow-50 underline'>
-              support@affiliatefarm.xyz
+              support@affiliatebase.xyz
             </Link>
           </p>
         </div>

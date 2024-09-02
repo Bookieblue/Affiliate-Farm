@@ -46,7 +46,7 @@ const Page = () => {
             Submit brand program
           </p>
           <p className="regular-16 text-cream-20 w-full lg:w-[68%]">
-            Get your brand affiliate program on Affiliate farm and attract
+            Get your brand affiliate program on Affiliate Base and attract
             attention of bloggers, content creator, and YouTubers shopping for
             new offers to promote and drive significant credibility and traffic
             to your brand product massively.
@@ -137,7 +137,7 @@ const Page = () => {
                 target="_blank"
                 className="text-yellow-50 underline"
               >
-                support@affiliatefarm.xyz
+                support@affiliatebase.xyz
               </Link>
             </p>
           </div>

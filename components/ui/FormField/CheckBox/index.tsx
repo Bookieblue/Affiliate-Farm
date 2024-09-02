@@ -12,53 +12,37 @@ import {
   FormLabel,
 } from "@/components/ui/form"
 
-
 const FormSchema = z.object({
   mobile: z.boolean().default(false).optional(),
 })
 
-interface checkboxProps{
-    control: Control<any>;
-    name: string;
-    label: string;
-    id?: string;
-  }
+interface CheckboxProps {
+  control: Control<any>;
+  name: string;
+  label: string;
+  id?: string;
+}
 
-export function CheckBox({name, label, control, id} : checkboxProps) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      mobile: true,
-    },
-  })
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-
-  }
-
+export function CheckBox({ name, label, control, id }: CheckboxProps) {
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={control}
-          name={name}
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel htmlFor={id || name} className='text-cream-50'>
-                  {label}
-                </FormLabel>
-              </div>
-            </FormItem>
-          )}
-        />
-      </form>
-    </Form>
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+          <FormControl>
+            <Checkbox
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          </FormControl>
+          <div className="space-y-1 leading-none">
+            <FormLabel htmlFor={id || name} className="text-cream-50">
+              {label}
+            </FormLabel>
+          </div>
+        </FormItem>
+      )}
+    />
   )
 }

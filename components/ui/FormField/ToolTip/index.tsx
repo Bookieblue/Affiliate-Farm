@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Image from 'next/image';
+import QuestionIcon from '@/components/assets-nav-icons/question';
 
 import { CopyIcon, CheckIcon } from 'lucide-react';
 
@@ -31,7 +32,9 @@ export function ToolTip({ content }: ToolTipProps) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Image src='./question.svg' width={20} height={20} alt='icon' />
+          <div className='cursor-pointer size-2'>
+          <QuestionIcon  />
+          </div>
         </TooltipTrigger>
         <TooltipContent onClick={handleCopy} className='cursor-pointer flex items-center'>
           <p className='mr-2'>Program ID: {content}</p>

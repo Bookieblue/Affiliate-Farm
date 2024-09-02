@@ -28,6 +28,7 @@ import {
   paymentMethod,
 } from '@/services/models/hooks/program/type'
 import { baseURL } from '@/services/api'
+import SelectMutipleInput from '../ui/FormField/SelectMultiple'
 
 const SubmitProgramSchema = z.object({
   publisherEmail: z
@@ -143,6 +144,10 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [shouldNavigate, setShouldNavigate] = useState<boolean>(false)
   const context = useContext(AffiliateFormContext)
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+ 
+
+
 
   if (!context) {
     throw new Error('HomePage must be used within an AffiliateFormProvider')
@@ -359,13 +364,15 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
               label='Payout Fee'
               placeholder='eg $50'
             />
-            <Dropdown
+            <SelectMutipleInput
               control={methods.control}
               name='paymentMethod'
               label='Payment Method'
               options={Payments}
-              placeholder='Select...'
-            />
+              placeholder='Select...' 
+              selectedValues={selectedOptions}
+              onChange={setSelectedOptions}
+           />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <div className='lg:w-1/2'>

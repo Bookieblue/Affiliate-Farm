@@ -57,13 +57,51 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
     setSearchQuery(event.target.value)
   }
 
+  const handleDropdownChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (value: string) => {
+    setter(value)
+  }
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // handle submit logic
   }
 
+  // Multi-attribute and dropdown filtering logic
+  const filteredPrograms = programs?.filter((program) => {
+    const matchesSearchQuery = ['name'].some((key) =>
+      (program[key as keyof typeof program] as string)
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    )
+
+    const matchesAffiliate = selectedAffiliate
+      ? program.affiliateType === selectedAffiliate
+      : true
+    const matchesCommission = selectedCommission
+      ? program.commissionType === selectedCommission
+      : true
+    const matchesLevel = selectedLevel
+      ? program.affiliateLevel === selectedLevel
+      : true
+    const matchesTicket = selectedTicket
+      ? program.ticketType === selectedTicket
+      : true
+    const matchesPayment = selectedPayment
+      ? program.paymentMethod === selectedPayment
+      : true
+
+    return (
+      matchesSearchQuery &&
+      matchesAffiliate &&
+      matchesCommission &&
+      matchesLevel &&
+      matchesTicket &&
+      matchesPayment
+    )
+  }) || []
+
   return (
-    <section className='max-container padding-container mt-10  w-full'>
+    <section className='max-container padding-container mt-10 w-full'>
       <div className='relative w-full'>
         <input
           type='text'
@@ -88,7 +126,7 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             options={Affiliates}
             placeholder='All Affiliates Type'
             value={selectedAffiliate}
-            onChange={setSelectedAffiliate}
+            onChange={handleDropdownChange(setSelectedAffiliate)}
           />
           <SelectInput
             name='commissionType'
@@ -96,15 +134,15 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             options={Commissions}
             placeholder='Commission Type'
             value={selectedCommission}
-            onChange={setSelectedCommission}
+            onChange={handleDropdownChange(setSelectedCommission)}
           />
           <SelectInput
             name='Levels'
             label=''
             options={Levels}
-            placeholder='Commission Type'
+            placeholder='Level'
             value={selectedLevel}
-            onChange={setSelectedLevel}
+            onChange={handleDropdownChange(setSelectedLevel)}
           />
           <SelectInput
             name='ticketType'
@@ -112,7 +150,7 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             options={Tickets}
             placeholder='Ticket Type'
             value={selectedTicket}
-            onChange={setSelectedTicket}
+            onChange={handleDropdownChange(setSelectedTicket)}
           />
           <SelectInput
             name='paymentMethod'
@@ -120,17 +158,20 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
             options={Payments}
             placeholder='Payment Method'
             value={selectedPayment}
-            onChange={setSelectedPayment}
+            onChange={handleDropdownChange(setSelectedPayment)}
           />
         </form>
       </div>
-      <div className=''>
-        <LoadMoreComponent
-          searchQuery={searchQuery}
-          category={category}
-          programs={programs}
-        />
-      </div>
+
+      {filteredPrograms.length > 0 ? (
+        <div className=''>
+          <LoadMoreComponent searchQuery={searchQuery} programs={filteredPrograms} />
+        </div>
+      ) : (
+        <div className='flex justify-center mt-10'>
+          <p>No programs found. Please adjust your search or filters.</p>
+        </div>
+      )}
     </section>
   )
 }

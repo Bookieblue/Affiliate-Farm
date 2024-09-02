@@ -118,7 +118,7 @@ const Navbar = () => {
               <Image src="/logo.svg" alt="logo" width={150} height={29} />
             </Link>
           </div>
-          <ul className="lg:hidden h-full pl-2  lg:flexBetween">
+          <ul className="lg:hidden  mt-10 h-full pl-2  lg:flexBetween">
             {ADMIN_NAV_LINKS.map((link) => {
               const IconComponent = link.icon;
               const linkHref = `${link.href}?${searchParams.toString()}`;

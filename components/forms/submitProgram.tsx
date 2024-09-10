@@ -1,24 +1,24 @@
-'use client'
-import React, { useContext, useEffect, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
-import * as z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '../ui/button'
-import TextInput from '../ui/FormField/TextInput'
-import Dropdown from '../ui/FormField/Dropdown'
-import TextareaInput from '../ui/FormField/TextareaInput'
-import { RadioGroupForm } from '../ui/FormField/RadioButton'
-import Image from 'next/image'
+'use client';
+import React, { useContext, useEffect, useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../ui/button';
+import TextInput from '../ui/FormField/TextInput';
+import Dropdown from '../ui/FormField/Dropdown';
+import TextareaInput from '../ui/FormField/TextareaInput';
+import { RadioGroupForm } from '../ui/FormField/RadioButton';
+import Image from 'next/image';
 import {
   AFFLIATE_TYPE,
   COMMISSION_TYPE,
   PAYMENT_METHOD,
   ALL_LEVELS,
-} from '@/constant'
-import { useRouter } from 'next/navigation'
-import { useGetCategories } from '@/services/models/hooks/category/hook'
-import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
-import { AffiliateFormContext } from '@/lib/context/AffiliateFormContext'
+} from '@/constant';
+import { useRouter } from 'next/navigation';
+import { useGetCategories } from '@/services/models/hooks/category/hook';
+import { capitalizeFirstLetter } from '@/lib/helpers/formatWord';
+import { AffiliateFormContext } from '@/lib/context/AffiliateFormContext';
 import {
   ProgramResponse,
   affiliateLevel,
@@ -26,9 +26,9 @@ import {
   commissionType,
   currencyType,
   paymentMethod,
-} from '@/services/models/hooks/program/type'
-import { baseURL } from '@/services/api'
-import SelectMutipleInput from '../ui/FormField/SelectMultiple'
+} from '@/services/models/hooks/program/type';
+import { baseURL } from '@/services/api';
+import SelectMutipleInput from '../ui/FormField/SelectMultiple';
 
 const SubmitProgramSchema = z.object({
   publisherEmail: z
@@ -61,12 +61,11 @@ const SubmitProgramSchema = z.object({
   logo: z.string().optional(),
 });
 
-
 interface SubmitProgramFormProps {
-  isEdit?: boolean
-  buttonText?: string
-  programData?: ProgramResponse
-  onSubmit?: (formData: ProgramResponse) => Promise<void>
+  isEdit?: boolean;
+  buttonText?: string;
+  programData?: ProgramResponse;
+  onSubmit?: (formData: ProgramResponse) => Promise<void>;
 }
 
 const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
@@ -75,14 +74,14 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
   onSubmit,
   programData,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const methods = useForm({
     resolver: zodResolver(SubmitProgramSchema),
     defaultValues: {
       name: programData?.name || '',
-      payoutAmount: String(programData?.payoutAmount) || '',
+      payoutAmount: programData?.payoutAmount.toString() || '',
       publisherEmail: programData?.publisherEmail || '',
-      cookieDuration: String(programData?.cookieDuration) || '',
+      cookieDuration: programData?.cookieDuration.toString() || '',
       publisherName: programData?.publisherName || '',
       affiliateType: programData?.affiliateType || '',
       commissionType: programData?.commissionType || '',
@@ -92,125 +91,122 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
       shortDescription: programData?.shortDescription || '',
       description: programData?.description || '',
       affiliateLevel: programData?.affiliateLevel || '',
-      commissionRate: String(programData?.commissionRate) || '',
+      commissionRate: programData?.commissionRate.toString() || '',
       logo: '',
       niche: programData?.niche_details?.code || '',
     },
-  })
+  });
 
-  const { data, isSuccess } = useGetCategories()
+  const { data, isSuccess } = useGetCategories();
   useEffect(() => {
-    const storedFormData = localStorage.getItem('formData')
+    const storedFormData = localStorage.getItem('formData');
     if (storedFormData) {
-      methods.reset(JSON.parse(storedFormData))
+      methods.reset(JSON.parse(storedFormData));
     }
-  }, [methods])
+  }, [methods]);
 
   const Affiliates = AFFLIATE_TYPE.map((affiliate) => {
     return {
       label: affiliate.name,
       value: affiliate.name,
-    }
-  })
+    };
+  });
 
   const Category = isSuccess
     ? data.map((category) => ({
         label: `${capitalizeFirstLetter(category.name)} affiliate program`,
         value: category.code,
       }))
-    : [{ label: 'Others', value: 'others' }]
+    : [{ label: 'Others', value: 'others' }];
 
   const Commissions = COMMISSION_TYPE.map((commission) => ({
     label: commission.name,
     value: commission.name,
-  }))
+  }));
 
   const Levels = ALL_LEVELS.map((level) => ({
     label: level.name,
     value: level.name,
-  }))
+  }));
 
   const Payments = PAYMENT_METHOD.map((payment) => ({
     label: payment.name,
     value: payment.name,
-  }))
+  }));
 
   const [rate, setRate] = useState<number | string>(
     String(programData?.commissionRate) || ''
-  )
-  const [currency, setCurrency] = useState<string>('%') // Default to %
-  const [logo, setLogo] = useState<string | ArrayBuffer | null>(null)
-  const [logoSrc, setLogoSrc] = useState<string>(programData?.logo)
-  const [logoFile, setLogoFile] = useState<File | null>(null)
-  const [shouldNavigate, setShouldNavigate] = useState<boolean>(false)
-  const context = useContext(AffiliateFormContext)
+  );
+  const [currency, setCurrency] = useState<string>('%'); // Default to %
+  const [logo, setLogo] = useState<string | ArrayBuffer | null>(null);
+  const [logoSrc, setLogoSrc] = useState<string>(programData?.logo);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [shouldNavigate, setShouldNavigate] = useState<boolean>(false);
+  const context = useContext(AffiliateFormContext);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
- 
-
-
 
   if (!context) {
-    throw new Error('HomePage must be used within an AffiliateFormProvider')
+    throw new Error('HomePage must be used within an AffiliateFormProvider');
   }
 
-  const { formData, setFormData } = context
+  const { formData, setFormData } = context;
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setLogoFile(file)
-      const reader = new FileReader()
+      setLogoFile(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setLogo(reader.result)
-        methods.setValue('logo', reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setLogo(reader.result);
+        methods.setValue('logo', reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   useEffect(() => {
-    if (shouldNavigate) router.push('/preview-submission')
-  }, [shouldNavigate, router])
+    if (shouldNavigate) router.push('/preview-submission');
+  }, [shouldNavigate, router]);
 
   const handleSubmit = async (values: z.infer<typeof SubmitProgramSchema>) => {
     if (!logo && !logoSrc) {
-      methods.setError('logo', { type: 'manual', message: 'Logo is required' })
-      return
+      methods.setError('logo', { type: 'manual', message: 'Logo is required' });
+      return;
     }
 
     const currency_type =
       Object.values(currencyType).find(
         (selected_currency) => currency === selected_currency
-      ) || currencyType.PERCENTAGE
+      ) || currencyType.PERCENTAGE;
 
     const affiliate_type =
       Object.values(affiliateType).find(
         (type) => values.affiliateType === type
-      ) || affiliateType.ALL_AFFILIATE_TYPE
+      ) || affiliateType.ALL_AFFILIATE_TYPE;
 
     const affiliate_level =
       Object.values(affiliateLevel).find(
         (type) => values.affiliateLevel === type
-      ) || affiliateLevel.ALL_LEVELS
+      ) || affiliateLevel.ALL_LEVELS;
 
     const payment_method =
       Object.values(paymentMethod).find(
         (type) => values.paymentMethod === type
-      ) || paymentMethod.OTHERS
+      ) || paymentMethod.OTHERS;
 
     const commision_type =
       Object.values(commissionType).find(
         (type) => values.commissionType === type
-      ) || commissionType.ALL_COMMISION_TYPE
+      ) || commissionType.ALL_COMMISION_TYPE;
 
-    const cookieDuration = +values.cookieDuration
-    const cookieExpires = values.cookieExpires === 'yes' ? true : false
-    const commissionRate = +rate
-    const payoutAmount = +values.payoutAmount
+    const cookieDuration = +values.cookieDuration;
+    const cookieExpires = values.cookieExpires === 'yes' ? true : false;
+    const commissionRate = +rate;
+    const payoutAmount = +values.payoutAmount;
 
     const getNicheName = Category.find((category) => {
-      return category.value === values.niche
-    })
+      return category.value === values.niche;
+    });
 
     const formData: ProgramResponse & { nicheName: string } = {
       ...values,
@@ -226,16 +222,16 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
       logo: logoFile,
       logoString: logo,
       nicheName: getNicheName?.label || values.niche,
-    }
+    };
 
-    setFormData(formData)
+    setFormData(formData);
 
     if (onSubmit) {
-      await onSubmit(formData)
+      await onSubmit(formData);
     } else {
-      setShouldNavigate(true)
+      setShouldNavigate(true);
     }
-  }
+  };
 
   return (
     <div className='bg-gray-40 p-6 h-fit rounded-lg'>
@@ -328,17 +324,17 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
                   placeholder='eg. 25'
                   value={rate}
                   onChange={(e) => {
-                    const value = Number(e.target.value)
+                    const value = Number(e.target.value);
                     if (!isNaN(value) && value > 0) {
-                      setRate(value)
+                      setRate(value);
                       const combinedRate =
                         currency === '%'
                           ? `${value}${currency}`
-                          : `${currency}${value}`
-                      methods.setValue('commissionRate', combinedRate) // Update the form value with combined rate and currency
+                          : `${currency}${value}`;
+                      methods.setValue('commissionRate', combinedRate); // Update the form value with combined rate and currency
                     } else {
-                      setRate('')
-                      methods.setValue('commissionRate', '') // Clear the form value
+                      setRate('');
+                      methods.setValue('commissionRate', ''); // Clear the form value
                     }
                   }}
                 />
@@ -369,26 +365,26 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
               name='paymentMethod'
               label='Payment Method'
               options={Payments}
-              placeholder='Select...' 
+              placeholder='Select...'
               selectedValues={selectedOptions}
               onChange={setSelectedOptions}
-           />
+            />
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
             <div className='lg:w-1/2'>
-            <RadioGroupForm
-              control={methods.control}
-              label='Cookie expired?'
-              name='cookieExpires'
-            />
+              <RadioGroupForm
+                control={methods.control}
+                label='Cookie expired?'
+                name='cookieExpires'
+              />
             </div>
             <div className='lg:w-1/2'>
-            <TextInput
-              control={methods.control}
-              name='cookieDuration'
-              label='Cookie Duration (days)'
-              placeholder='eg. 60'
-            />
+              <TextInput
+                control={methods.control}
+                name='cookieDuration'
+                label='Cookie Duration (days)'
+                placeholder='eg. 60'
+              />
             </div>
           </div>
           <div className='flex gap-10 flex-col lg:flex-row'>
@@ -450,7 +446,7 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
         </form>
       </FormProvider>
     </div>
-  )
-}
+  );
+};
 
-export default SubmitProgramForm
+export default SubmitProgramForm;

@@ -1,12 +1,13 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
-import { ToolTip } from './ui/FormField/ToolTip'
-import { ProgramResponse } from '@/services/models/hooks/program/type'
-import { formatCommission } from '@/lib/helpers/formatWord'
-import { baseURL } from '@/services/api'
-import PayoutIcon from './assets-nav-icons/payout'
-import ClockIcon from './assets-nav-icons/clock'
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { ToolTip } from './ui/FormField/ToolTip';
+import { ProgramResponse } from '@/services/models/hooks/program/type';
+import { formatCommission } from '@/lib/helpers/formatWord';
+import { baseURL } from '@/services/api';
+import PayoutIcon from './assets-nav-icons/payout';
+import ClockIcon from './assets-nav-icons/clock';
+import formatUrl from '@/lib/helpers/formatURL';
 
 const Programs: React.FC<ProgramResponse> = ({
   logo,
@@ -26,13 +27,23 @@ const Programs: React.FC<ProgramResponse> = ({
   promoted = false,
   verified = false,
 }) => {
+  console.log(logo);
+
+  let googleFavicon;
+  if (!logo)
+    googleFavicon = `https://www.google.com/s2/favicons?domain=${formatUrl(
+      programUrl
+    )}&sz=256`;
+  else googleFavicon = `${baseURL}${logo?.slice(1)}`;
+
   return (
     <div className='flex flex-col min-w-[300px] justify-between  gap-4 p-4 relative bg-black-60 rounded-xl border border-gray-20  '>
       <div className=''>
         <div className='flexBetween relative self-stretch w-full flex-[0_0_auto] '>
           <div className='relative w-[60px] h-[60px] rounded-[8px]'>
             <Image
-              src={(logoString as string) || `${baseURL}${logo.slice(1)}`}
+              src={(logoString as string) || googleFavicon}
+              unoptimized
               width={60}
               height={60}
               alt='icon'
@@ -85,7 +96,7 @@ const Programs: React.FC<ProgramResponse> = ({
               </p>
             </div>
             <div className='inline-flex items-center gap-1 relative flex-[0_0_auto]'>
-               <ClockIcon />
+              <ClockIcon />
               <p className='relative w-fit regular-14 text-gray-10'>
                 {cookieExpires
                   ? `${cookieDuration} days Cookie`
@@ -119,7 +130,7 @@ const Programs: React.FC<ProgramResponse> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Programs
+export default Programs;

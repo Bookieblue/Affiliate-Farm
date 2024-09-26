@@ -1,47 +1,69 @@
-// pages/page.tsx
-'use client'
-import React, { ChangeEvent, Suspense, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import NestedDialog from '@/components/ui/FormField/NestedDialog'
+'use client';
+import React, {
+  ChangeEvent,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import NestedDialog from '@/components/ui/FormField/NestedDialog';
+import { useCreateBulkProgram } from '@/services/models/hooks/program/hook';
 
 const Page = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const router = useRouter()
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const { data, mutate, isPending, isError, isSuccess } =
+    useCreateBulkProgram();
+
+  useEffect(() => {
+    if (isSuccess && selectedFile) {
+      setSelectedFile(null);
+      setIsSuccessDialogOpen(true);
+    }
+  }, [isSuccess]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file && file.type === 'text/csv') {
-      setSelectedFile(file)
-    } else {
-      setSelectedFile(null)
-      // Optionally, you can show an error message if the file type is not CSV
+    console.log('handleFileChange called'); // Log to check if function is called
+    const file = e.target.files?.[0];
+    if (file) {
+      const fileName = file.name;
+      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+      const acceptedFileExtensions = ['xls', 'xlsx'];
+
+      console.log('Selected file:', file); // Log file details
+      console.log('File extension:', fileExtension);
+
+      if (fileExtension && acceptedFileExtensions.includes(fileExtension)) {
+        setSelectedFile(file);
+      } else {
+        setSelectedFile(null);
+        console.log('Invalid file type selected');
+      }
     }
-  }
+  };
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click()
+      fileInputRef.current.click();
     }
-  }
+  };
 
   const handleFormSubmit = () => {
     // Simulated form submission logic
     if (selectedFile) {
-      // Perform any additional validation or submission logic here
-      // For demonstration, setTimeout is used to simulate form submission delay
-      setTimeout(() => {
-        setIsSuccessDialogOpen(true)
-      }, 1000)
+      mutate(selectedFile);
     }
-  }
+  };
 
   const handleCloseDialog = () => {
-    setIsSuccessDialogOpen(false)
-  }
+    setIsSuccessDialogOpen(false);
+  };
 
   return (
     <Suspense fallback={<p>Loading....</p>}>
@@ -61,7 +83,7 @@ const Page = () => {
           </div>
           <div className='space-y-4'>
             <label
-              htmlFor='csvFile'
+              htmlFor='excelFile'
               className='block regular-16 mt-10 text-cream-50'
             >
               Upload sheet
@@ -69,9 +91,9 @@ const Page = () => {
             <div className='relative rounded-md flex items-center justify-center'>
               <input
                 type='file'
-                id='csvFile'
-                name='csvFile'
-                accept='.csv'
+                id='excelFile'
+                name='excelFile'
+                accept='.xls,.xlsx'
                 ref={fileInputRef}
                 className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
                 onChange={handleFileChange}
@@ -98,18 +120,18 @@ const Page = () => {
           isOpen={isSuccessDialogOpen}
           onClose={handleCloseDialog}
           title='Affiliate program uploaded'
-          description='Brand swill to start benefitting from massive exposure and a quickly growing affiliate program spread though our targeted outreach to our bloggers & content creators'
+          description='Brand swill to start benefitting from massive exposure and a quickly growing affiliate program spread though our targeted outreach to our bloggers & content creators'
         >
           <Button
             className='w-full mt-3'
-            onClick={() => router.push('/upload-program')}
+            onClick={() => router.push('/program-listing')}
           >
             Go back now
           </Button>
         </NestedDialog>
       </section>
     </Suspense>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

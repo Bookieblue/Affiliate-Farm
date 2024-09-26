@@ -14,8 +14,14 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.google.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

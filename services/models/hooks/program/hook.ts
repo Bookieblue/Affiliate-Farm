@@ -60,6 +60,26 @@ export const useCreateProgram = (data: any) => {
   return mutation;
 };
 
+export const useCreateBulkProgram = () => {
+  const create = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const request = api.post(`affiliate/upload-programs/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    const response = await request;
+    return response['data'];
+  };
+
+  const mutation = useMutation({
+    mutationFn: (file: File) => create(file),
+  });
+
+  return mutation;
+};
+
 export const useUpdateProgram = () => {
   const token = getCookieValue('token');
 

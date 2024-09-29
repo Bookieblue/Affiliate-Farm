@@ -1,40 +1,45 @@
 export function convertDate(dateString: string): string {
-  const date = new Date(dateString)
+  const date = new Date(dateString);
 
   const formatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  })
+  });
 
-  const parts = formatter.formatToParts(date)
-  const month = parts.find((part) => part.type === 'month')?.value || ''
-  const day = parts.find((part) => part.type === 'day')?.value || ''
-  const year = parts.find((part) => part.type === 'year')?.value || ''
+  const parts = formatter.formatToParts(date);
+  const month = parts.find((part) => part.type === 'month')?.value || '';
+  const day = parts.find((part) => part.type === 'day')?.value || '';
+  const year = parts.find((part) => part.type === 'year')?.value || '';
 
   const ordinalSuffix = (day: string): string => {
-    const num = parseInt(day, 10)
-    if (num > 3 && num < 21) return 'th'
+    const num = parseInt(day, 10);
+    if (num > 3 && num < 21) return 'th';
     switch (num % 10) {
       case 1:
-        return 'st'
+        return 'st';
       case 2:
-        return 'nd'
+        return 'nd';
       case 3:
-        return 'rd'
+        return 'rd';
       default:
-        return 'th'
+        return 'th';
     }
-  }
+  };
 
-  return `${month} ${day}${ordinalSuffix(day)}, ${year}`
+  return `${month} ${day}${ordinalSuffix(day)}, ${year}`;
 }
 
 export function getCurrentMonthAndYear(): string {
-  const date = new Date()
+  const date = new Date();
   const options: Intl.DateTimeFormatOptions = {
     month: 'short',
     year: 'numeric',
-  }
-  return date.toLocaleString('en-US', options)
+  };
+  return date.toLocaleString('en-US', options);
+}
+
+export function getCurrentYear(): number {
+  const currentDate = new Date();
+  return currentDate.getFullYear();
 }

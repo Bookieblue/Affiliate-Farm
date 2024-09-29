@@ -27,8 +27,6 @@ const Programs: React.FC<ProgramResponse> = ({
   promoted = false,
   verified = false,
 }) => {
-  console.log(logo);
-
   let googleFavicon;
   if (!logo)
     googleFavicon = `https://www.google.com/s2/favicons?domain=${formatUrl(

@@ -1,70 +1,73 @@
-'use client'
-import { NAV_LINKS } from '../constant'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '../components/ui/button'
-import React, { useState, useEffect, MouseEvent } from 'react'
-import { ChevronRight } from 'lucide-react'
+'use client';
+import { NAV_LINKS } from '../constant';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '../components/ui/button';
+import React, { useState, useEffect, MouseEvent } from 'react';
+import { ChevronRight } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import MoreResources from './MoreResources'
-import { AFFLIATE_PROGRAMS_LINKS } from '@/constant'
-import { CategoryResponse } from '@/services/models/hooks/category/type'
-import { useGetCategories } from '@/services/models/hooks/category/hook'
-import { getRoute } from '@/lib/helpers/routes'
-import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
+} from '@/components/ui/popover';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import MoreResources from './MoreResources';
+import { AFFLIATE_PROGRAMS_LINKS } from '@/constant';
+import { CategoryResponse } from '@/services/models/hooks/category/type';
+import { useGetCategories } from '@/services/models/hooks/category/hook';
+import { getRoute } from '@/lib/helpers/routes';
+import {
+  capitalizeFirstLetter,
+  replaceSpaceWithDash,
+} from '@/lib/helpers/formatWord';
 
 const Navbar = () => {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const [activeLink, setActiveLink] = useState('')
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [activeLink, setActiveLink] = useState('');
 
   const [categories, setCategories] = useState<CategoryResponse[]>([
     { name: 'all', code: '' },
-  ])
+  ]);
 
-  const { data, isLoading, isSuccess } = useGetCategories()
+  const { data, isLoading, isSuccess } = useGetCategories();
 
   useEffect(() => {
     if (isSuccess) {
-      setCategories([{ name: 'all', code: '' }, ...data])
+      setCategories([{ name: '', code: '' }, ...data]);
     }
-  }, [isSuccess, data])
+  }, [isSuccess, data]);
 
   useEffect(() => {
-    setActiveLink(`${pathname}?${searchParams.toString()}`)
-  }, [pathname, searchParams])
+    setActiveLink(`${pathname}?${searchParams.toString()}`);
+  }, [pathname, searchParams]);
 
   const handleLinkClick = (
     event: MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
-    event.preventDefault()
-    setActiveLink(href)
-    router.push(href)
-  }
+    event.preventDefault();
+    setActiveLink(href);
+    router.push(href);
+  };
 
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false);
   const showNav = () => {
-    setMenuOpen(!menuOpen)
-  }
+    setMenuOpen(!menuOpen);
+  };
 
   const handleMobileLinkClick = (
     event: MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
-    setMenuOpen(!menuOpen)
-    event.preventDefault()
-    setActiveLink(href)
-    router.push(href)
-  }
+    setMenuOpen(!menuOpen);
+    event.preventDefault();
+    setActiveLink(href);
+    router.push(href);
+  };
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <p>Loading...</p>;
   return (
     <nav className=' bg-black-60 w-full py-3 fixed top-0 z-10'>
       <div className='max-w-[1700px] padding-container flexBetween w-full 4xl:px-0'>
@@ -77,8 +80,8 @@ const Navbar = () => {
         <div className='flexBetween gap-5 xl:gap-10'>
           <ul className='hidden h-full gap-5 xl:gap-12 lg:flexBetween'>
             {NAV_LINKS.map((link) => {
-              const IconComponent = link.icon
-              const linkHref = `${link.href}?${searchParams.toString()}`
+              const IconComponent = link.icon;
+              const linkHref = `${link.href}?${searchParams.toString()}`;
               return (
                 <div
                   className='flex items-center justify-center gap-2'
@@ -94,7 +97,7 @@ const Navbar = () => {
                   {link.key !== 'more-resources' ? (
                     <Link
                       href={link.href}
-                      target="_blank"
+                      target='_blank'
                       onClick={(event) => handleLinkClick(event, linkHref)}
                     >
                       <span
@@ -118,7 +121,7 @@ const Navbar = () => {
                     </Popover>
                   )}
                 </div>
-              )
+              );
             })}
           </ul>
           <div className='hidden lg:block'>
@@ -148,14 +151,14 @@ const Navbar = () => {
             </div>
           </div>
           <div>
-            <Link href='/' >
+            <Link href='/'>
               <Image src='/logo.svg' alt='logo' width={150} height={29} />
             </Link>
           </div>
           <ul className='lg:hidden mt-10 h-full pl-2  lg:flexBetween'>
             {NAV_LINKS.map((link) => {
-              const IconComponent = link.icon
-              const linkHref = `${link.href}?${searchParams.toString()}`
+              const IconComponent = link.icon;
+              const linkHref = `${link.href}?${searchParams.toString()}`;
               return (
                 <div
                   className='flex items-center gap-2 mb-5 mt-4'
@@ -171,7 +174,7 @@ const Navbar = () => {
                   {link.key !== 'more-resources' ? (
                     <Link
                       href={link.href}
-                      target="_blank"
+                      target='_blank'
                       onClick={(event) =>
                         handleMobileLinkClick(event, linkHref)
                       }
@@ -197,7 +200,7 @@ const Navbar = () => {
                     </Popover>
                   )}
                 </div>
-              )
+              );
             })}
 
             <div className='lg:hidden'>
@@ -209,12 +212,12 @@ const Navbar = () => {
               <p className='medium-20 text-cream-50 py-2'>Categories</p>
               {categories.map((link) => {
                 const linkHref = `${getRoute(
-                  link.code
-                )}?${searchParams.toString()}`
+                  replaceSpaceWithDash(link.name)
+                )}?${searchParams.toString()}`;
                 return (
                   <div className='flex mb-10' key={link.name}>
                     <Link
-                      href={getRoute(link.code)}
+                      href={getRoute(replaceSpaceWithDash(link.name))}
                       onClick={(event) =>
                         handleMobileLinkClick(event, linkHref)
                       }
@@ -240,14 +243,14 @@ const Navbar = () => {
                       </p>
                     </Link>
                   </div>
-                )
+                );
               })}
             </div>
           </ul>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

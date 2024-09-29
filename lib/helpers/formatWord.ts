@@ -1,5 +1,5 @@
 export function capitalizeFirstLetter(input: string): string {
-  return input.replace(/\b\w/g, (char) => char.toUpperCase())
+  return input.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export function formatCommission(
@@ -7,6 +7,14 @@ export function formatCommission(
   rate: number,
   type: string = ''
 ): string {
-  if (currency === '%') return `${rate} ${currency} ${type}`
-  return `${currency} ${rate} ${type}`
+  if (currency === '%') return `${rate} ${currency} ${type}`;
+  return `${currency} ${rate} ${type}`;
+}
+
+export function replaceSpaceWithDash(input: string): string {
+  return input.replace(/ /g, '-');
+}
+
+export function replaceDashWithSpace(input: string): string {
+  return input.replace(/-/g, ' ');
 }

@@ -1,45 +1,48 @@
-'use client'
-import React, { useState, useEffect, MouseEvent, Suspense } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { ChevronRight } from 'lucide-react'
-import { useGetCategories } from '@/services/models/hooks/category/hook'
-import { CategoryResponse } from '@/services/models/hooks/category/type'
-import { capitalizeFirstLetter } from '@/lib/helpers/formatWord'
-import { getRoute } from '@/lib/helpers/routes'
+'use client';
+import React, { useState, useEffect, MouseEvent, Suspense } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { ChevronRight } from 'lucide-react';
+import { useGetCategories } from '@/services/models/hooks/category/hook';
+import { CategoryResponse } from '@/services/models/hooks/category/type';
+import {
+  capitalizeFirstLetter,
+  replaceSpaceWithDash,
+} from '@/lib/helpers/formatWord';
+import { getRoute } from '@/lib/helpers/routes';
 
 const SideBar = () => {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [categories, setCategories] = useState<CategoryResponse[]>([
     { name: 'all', code: '' },
-  ])
-  const [activeLink, setActiveLink] = useState('')
+  ]);
+  const [activeLink, setActiveLink] = useState('');
 
-  const { data, isLoading, isSuccess } = useGetCategories()
+  const { data, isLoading, isSuccess } = useGetCategories();
 
   useEffect(() => {
     if (isSuccess) {
-      setCategories([{ name: 'all', code: '' }, ...data])
+      setCategories([{ name: '', code: '' }, ...data]);
     }
-  }, [isSuccess, data])
+  }, [isSuccess, data]);
 
   useEffect(() => {
-    setActiveLink(`${pathname}?${searchParams.toString()}`)
-  }, [pathname, searchParams])
+    setActiveLink(`${pathname}?${searchParams.toString()}`);
+  }, [pathname, searchParams]);
 
   const handleLinkClick = (
     event: MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
-    event.preventDefault()
-    setActiveLink(href)
-    router.push(href)
-  }
+    event.preventDefault();
+    setActiveLink(href);
+    router.push(href);
+  };
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <Suspense>
@@ -52,11 +55,13 @@ const SideBar = () => {
         </div>
         <div className='mt-5 pr-5 h-[calc(100vh-8rem)] overflow-y-scroll scrollbar-visible pb-20'>
           {categories.map((link) => {
-            const linkHref = `${getRoute(link.code)}?${searchParams.toString()}`
+            const linkHref = `${getRoute(
+              replaceSpaceWithDash(link.name)
+            )}?${searchParams.toString()}`;
             return (
               <div className='flex mb-10' key={link.name}>
                 <Link
-                  href={getRoute(link.code)}
+                  href={getRoute(replaceSpaceWithDash(link.name))}
                   onClick={(event) => handleLinkClick(event, linkHref)}
                   className='flex gap-1 w-40'
                 >
@@ -78,12 +83,12 @@ const SideBar = () => {
                   </p>
                 </Link>
               </div>
-            )
+            );
           })}
         </div>
       </section>
     </Suspense>
-  )
-}
+  );
+};
 
-export default SideBar
+export default SideBar;

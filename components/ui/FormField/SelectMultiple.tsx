@@ -1,19 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-} from '@/components/ui/select';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Control } from 'react-hook-form';
-import { CheckBox } from './CheckBox'; // Ensure correct path
+} from "@/components/ui/form";
+import { Select, SelectContent, SelectTrigger } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Control, useController } from "react-hook-form";
+import { CheckBox } from "./CheckBox"; // Ensure correct path
 
 interface OptionType {
   value: any;
@@ -25,7 +21,6 @@ interface SelectInputProps {
   name: string;
   label?: string;
   placeholder: string;
-  error?: string;
   options: OptionType[];
   id?: string;
   selectedValues: any[];
@@ -42,11 +37,23 @@ const SelectMutipleInput: FC<SelectInputProps> = ({
   selectedValues,
   onChange,
 }) => {
+  // Using react-hook-form's useController to manage form validation
+  const {
+    field: { value, onChange: hookFormOnChange },
+    fieldState: { error },
+  } = useController({
+    name,
+    control,
+  });
+
   const handleSelectChange = (value: any) => {
     const updatedValues = selectedValues.includes(value)
       ? selectedValues.filter((item) => item !== value)
       : [...selectedValues, value];
-    onChange(updatedValues);
+
+    // Call both form's onChange and your custom onChange handler
+    hookFormOnChange(updatedValues); // Update react-hook-form state
+    onChange(updatedValues); // Custom onChange handler
   };
 
   return (
@@ -84,7 +91,7 @@ const SelectMutipleInput: FC<SelectInputProps> = ({
             <SelectContent
               position="popper"
               aria-labelledby={name}
-              className="w-fit h-fit"
+              className="w-fit h-30"
             >
               <ScrollArea className="w-full h-fit px-4">
                 {options.map((option) => (

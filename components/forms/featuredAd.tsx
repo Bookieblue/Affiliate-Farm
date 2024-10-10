@@ -106,7 +106,7 @@ const FeaturedAdForm = ({ onSubmit }: any) => {
               name='support'
               label='Notes for support'
               placeholder=' '
-              className='h-36'
+              className='h-36 text-cream-50'
             />
           </div>
           <div className='mt-7 w-full'>

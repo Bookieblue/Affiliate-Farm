@@ -8,6 +8,7 @@ import { baseURL } from '@/services/api';
 import PayoutIcon from './assets-nav-icons/payout';
 import ClockIcon from './assets-nav-icons/clock';
 import formatUrl from '@/lib/helpers/formatURL';
+import VerifiedIcon from './assets-nav-icons/verified';
 
 const Programs: React.FC<ProgramResponse> = ({
   logo,
@@ -71,13 +72,7 @@ const Programs: React.FC<ProgramResponse> = ({
                     </p>
                   )}
                   {verified && (
-                    <Image
-                      className='relative w-6 h-6 object-cover'
-                      alt='Verified Icon'
-                      src='/verified.svg'
-                      width={24}
-                      height={24}
-                    />
+                     <VerifiedIcon />
                   )}
                 </div>
               </div>

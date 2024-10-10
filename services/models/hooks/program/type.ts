@@ -69,7 +69,7 @@ export interface ProgramResponse {
   verified?: boolean
   affiliateType?: affiliateType
   affiliateLevel?: affiliateLevel
-  paymentMethod?: paymentMethod
+  paymentMethod?:  Array<string>
   currency: currencyType
   commissionType?: commissionType
   ticketType?: ticketType

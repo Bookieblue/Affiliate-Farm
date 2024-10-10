@@ -11,6 +11,7 @@ import {
 import Image from 'next/image'
 import LoadMoreComponent from './LoadMoreComponent'
 import { CategoryProgramProps } from '@/app/page'
+import { ListFilter } from 'lucide-react'
 
 interface Option {
   label: string
@@ -73,23 +74,27 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
         ?.toLowerCase()
         .includes(searchQuery.toLowerCase())
     )
-
-    const matchesAffiliate = selectedAffiliate
+  
+    const matchesAffiliate = selectedAffiliate && selectedAffiliate !== 'All Affiliates Type'
       ? program.affiliateType === selectedAffiliate
       : true
-    const matchesCommission = selectedCommission
+  
+    const matchesCommission = selectedCommission && selectedCommission !== 'All Commission Types'
       ? program.commissionType === selectedCommission
       : true
-    const matchesLevel = selectedLevel
+  
+    const matchesLevel = selectedLevel && selectedLevel !== 'All Levels'
       ? program.affiliateLevel === selectedLevel
       : true
-    const matchesTicket = selectedTicket
+  
+    const matchesTicket = selectedTicket && selectedTicket !== 'All Ticket Types'
       ? program.ticketType === selectedTicket
       : true
-    const matchesPayment = selectedPayment
+  
+    const matchesPayment = selectedPayment && selectedPayment !== 'All Payment Types'
       ? program.paymentMethod === selectedPayment
       : true
-
+  
     return (
       matchesSearchQuery &&
       matchesAffiliate &&
@@ -118,8 +123,10 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
           className='absolute left-4 top-0 lg:top-[0.8px] lg:left-3 mt-3'
         />
       </div>
-      <div className='hidden lg:block'>
-        <form onSubmit={onSubmit} className='mt-5 flexBetween gap-4 min-w-fit'>
+      <div className='lg:block'>
+        <form onSubmit={onSubmit} className='mt-5 grid grid-cols-2 lg:flexBetween gap-4 min-w-fit'>
+
+          <div className='flex text-cream-50 gap-5 lg:hidden'><ListFilter /> <p>Filter:</p></div>
           <SelectInput
             name='affiliateType'
             label=''
@@ -168,7 +175,7 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
           <LoadMoreComponent searchQuery={searchQuery} programs={filteredPrograms} />
         </div>
       ) : (
-        <div className='flex justify-center mt-10'>
+        <div className='flex justify-center mt-10 text-cream-50'>
           <p>No programs found. Please adjust your search or filters.</p>
         </div>
       )}

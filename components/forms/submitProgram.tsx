@@ -45,7 +45,7 @@ const SubmitProgramSchema = z.object({
   affiliateType: z.string().min(1, 'Affiliate type is required'),
   niche: z.string().min(1, 'Brand niche is required'),
   commissionType: z.string().min(1, 'Commission Type is required'),
-  paymentMethod: z.string().min(1, 'Payment Method is required'),
+  paymentMethod: z.array(z.string()).min(1, 'At least one payment method is required'),
   cookieExpires: z.string().min(1, 'Cookie expiration is required'),
   programUrl: z.string().url('Invalid URL'),
   shortDescription: z
@@ -85,7 +85,7 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
       publisherName: programData?.publisherName || '',
       affiliateType: programData?.affiliateType || '',
       commissionType: programData?.commissionType || '',
-      paymentMethod: programData?.paymentMethod || '',
+      paymentMethod: programData?.paymentMethod || [],
       cookieExpires: programData?.cookieExpires ? 'yes' : 'no',
       programUrl: programData?.programUrl || '',
       shortDescription: programData?.shortDescription || '',
@@ -189,10 +189,10 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
         (type) => values.affiliateLevel === type
       ) || affiliateLevel.ALL_LEVELS;
 
-    const payment_method =
-      Object.values(paymentMethod).find(
-        (type) => values.paymentMethod === type
-      ) || paymentMethod.OTHERS;
+      const payment_method =
+  Object.values(paymentMethod).find((type) =>
+    values.paymentMethod.includes(type)
+  ) || paymentMethod.OTHERS;
 
     const commision_type =
       Object.values(commissionType).find(
@@ -217,7 +217,7 @@ const SubmitProgramForm: React.FC<SubmitProgramFormProps> = ({
       payoutAmount,
       affiliateType: affiliate_type,
       affiliateLevel: affiliate_level,
-      paymentMethod: payment_method,
+      // paymentMethod: payment_method,
       commissionType: commision_type,
       logo: logoFile,
       logoString: logo,

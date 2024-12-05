@@ -1,169 +1,180 @@
-'use client'
-import React, { useState, FormEvent } from 'react'
-import SelectInput from './ui/FormField/SelectInput'
+'use client';
+import React, { useState, FormEvent } from 'react';
+import SelectInput from './ui/FormField/SelectInput';
 import {
   AFFLIATE_TYPE,
   ALL_LEVELS,
   COMMISSION_TYPE,
   PAYMENT_METHOD,
   TICKET_TYPE,
-} from '../constant/index'
-import Image from 'next/image'
-import LoadMoreComponent from './LoadMoreComponent'
-import { CategoryProgramProps } from '@/app/page'
-import { ListFilter } from 'lucide-react'
+} from '../constant/index';
+import Image from 'next/image';
+import LoadMoreComponent from './LoadMoreComponent';
+import { CategoryProgramProps } from '@/app/page';
+import { ListFilter } from 'lucide-react';
 
 interface Option {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
-const Tickets: Option[] = TICKET_TYPE.map((ticket) => ({
+const Tickets: Option[] = TICKET_TYPE.map(ticket => ({
   label: ticket.name,
   value: ticket.name,
-}))
+}));
 
-const Levels: Option[] = ALL_LEVELS.map((level) => ({
+const Levels: Option[] = ALL_LEVELS.map(level => ({
   label: level.name,
   value: level.name,
-}))
+}));
 
-const Payments: Option[] = PAYMENT_METHOD.map((payment) => ({
+const Payments: Option[] = PAYMENT_METHOD.map(payment => ({
   label: payment.name,
   value: payment.name,
-}))
+}));
 
-const Affiliates: Option[] = AFFLIATE_TYPE.map((affiliate) => ({
+const Affiliates: Option[] = AFFLIATE_TYPE.map(affiliate => ({
   label: affiliate.name,
   value: affiliate.name,
-}))
+}));
 
-const Commissions: Option[] = COMMISSION_TYPE.map((commission) => ({
+const Commissions: Option[] = COMMISSION_TYPE.map(commission => ({
   label: commission.name,
   value: commission.name,
-}))
+}));
 
 const AffliatePrograms: React.FC<CategoryProgramProps> = ({
   category,
   programs,
 }) => {
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  const [selectedAffiliate, setSelectedAffiliate] = useState<string>('')
-  const [selectedCommission, setSelectedCommission] = useState<string>('')
-  const [selectedLevel, setSelectedLevel] = useState<string>('')
-  const [selectedTicket, setSelectedTicket] = useState<string>('')
-  const [selectedPayment, setSelectedPayment] = useState<string>('')
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedAffiliate, setSelectedAffiliate] = useState<string>('');
+  const [selectedCommission, setSelectedCommission] = useState<string>('');
+  const [selectedLevel, setSelectedLevel] = useState<string>('');
+  const [selectedTicket, setSelectedTicket] = useState<string>('');
+  const [selectedPayment, setSelectedPayment] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value)
-  }
+    setSearchQuery(event.target.value);
+  };
 
-  const handleDropdownChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (value: string) => {
-    setter(value)
-  }
+  const handleDropdownChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
+    (value: string) => {
+      setter(value);
+    };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
     // handle submit logic
-  }
+  };
 
   // Multi-attribute and dropdown filtering logic
-  const filteredPrograms = programs?.filter((program) => {
-    const matchesSearchQuery = ['name'].some((key) =>
-      (program[key as keyof typeof program] as string)
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase())
-    )
-  
-    const matchesAffiliate = selectedAffiliate && selectedAffiliate !== 'All Affiliates Type'
-      ? program.affiliateType === selectedAffiliate
-      : true
-  
-    const matchesCommission = selectedCommission && selectedCommission !== 'All Commission Types'
-      ? program.commissionType === selectedCommission
-      : true
-  
-    const matchesLevel = selectedLevel && selectedLevel !== 'All Levels'
-      ? program.affiliateLevel === selectedLevel
-      : true
-  
-    const matchesTicket = selectedTicket && selectedTicket !== 'All Ticket Types'
-      ? program.ticketType === selectedTicket
-      : true
-  
-    const matchesPayment = selectedPayment && selectedPayment !== 'All Payment Types'
-      ? program.paymentMethod === selectedPayment
-      : true
-  
-    return (
-      matchesSearchQuery &&
-      matchesAffiliate &&
-      matchesCommission &&
-      matchesLevel &&
-      matchesTicket &&
-      matchesPayment
-    )
-  }) || []
+  const filteredPrograms =
+    programs?.filter(program => {
+      const matchesSearchQuery = ['name'].some(key =>
+        (program[key as keyof typeof program] as string)
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+
+      const matchesAffiliate =
+        selectedAffiliate && selectedAffiliate !== 'All Affiliates Type'
+          ? program.affiliateType === selectedAffiliate
+          : true;
+
+      const matchesCommission =
+        selectedCommission && selectedCommission !== 'All Commission Types'
+          ? program.commissionType === selectedCommission
+          : true;
+
+      const matchesLevel =
+        selectedLevel && selectedLevel !== 'All Levels'
+          ? program.affiliateLevel === selectedLevel
+          : true;
+
+      const matchesTicket =
+        selectedTicket && selectedTicket !== 'All Ticket Types'
+          ? program.ticketType === selectedTicket
+          : true;
+
+      // const matchesPayment = selectedPayment && selectedPayment !== 'All Payment Types'
+      //   ? program.paymentMethod === selectedPayment
+      //   : true
+
+      return (
+        matchesSearchQuery &&
+        matchesAffiliate &&
+        matchesCommission &&
+        matchesLevel &&
+        matchesTicket
+        // matchesPayment
+      );
+    }) || [];
 
   return (
-    <section className='max-container padding-container mt-10 w-full'>
-      <div className='relative w-full'>
+    <section className="max-container padding-container mt-10 w-full">
+      <div className="relative w-full">
         <input
-          type='text'
-          placeholder='Search Program'
+          type="text"
+          placeholder="Search Program"
           value={searchQuery}
           onChange={handleInputChange}
-          className='w-full xs:w-full lg:px-4 py-2 pl-10 mb-10 lg:pl-10 border placeholder:regular-16 border-gray-20 xl:w-[60%] text-gray-10 bg-transparent placeholder:text-gray-10 rounded-3xl'
+          className="w-full xs:w-full lg:px-4 py-2 pl-10 mb-10 lg:pl-10 border placeholder:regular-16 border-gray-20 xl:w-[60%] text-gray-10 bg-transparent placeholder:text-gray-10 rounded-3xl"
         />
         <Image
-          src='/search.svg'
-          alt='search'
+          src="/search.svg"
+          alt="search"
           width={17}
           height={17}
-          className='absolute left-4 top-0 lg:top-[0.8px] lg:left-3 mt-3'
+          className="absolute left-4 top-0 lg:top-[0.8px] lg:left-3 mt-3"
         />
       </div>
-      <div className='lg:block'>
-        <form onSubmit={onSubmit} className='mt-5 grid grid-cols-2 lg:flexBetween gap-4 min-w-fit'>
-
-          <div className='flex text-cream-50 gap-5 lg:hidden'><ListFilter /> <p>Filter:</p></div>
+      <div className="lg:block">
+        <form
+          onSubmit={onSubmit}
+          className="mt-5 grid grid-cols-2 lg:flexBetween gap-4 min-w-fit"
+        >
+          <div className="flex text-cream-50 gap-5 lg:hidden">
+            <ListFilter /> <p>Filter:</p>
+          </div>
           <SelectInput
-            name='affiliateType'
-            label=''
+            name="affiliateType"
+            label=""
             options={Affiliates}
-            placeholder='All Affiliates Type'
+            placeholder="All Affiliates Type"
             value={selectedAffiliate}
             onChange={handleDropdownChange(setSelectedAffiliate)}
           />
           <SelectInput
-            name='commissionType'
-            label=''
+            name="commissionType"
+            label=""
             options={Commissions}
-            placeholder='Commission Type'
+            placeholder="Commission Type"
             value={selectedCommission}
             onChange={handleDropdownChange(setSelectedCommission)}
           />
           <SelectInput
-            name='Levels'
-            label=''
+            name="Levels"
+            label=""
             options={Levels}
-            placeholder='Level'
+            placeholder="Level"
             value={selectedLevel}
             onChange={handleDropdownChange(setSelectedLevel)}
           />
           <SelectInput
-            name='ticketType'
-            label=''
+            name="ticketType"
+            label=""
             options={Tickets}
-            placeholder='Ticket Type'
+            placeholder="Ticket Type"
             value={selectedTicket}
             onChange={handleDropdownChange(setSelectedTicket)}
           />
           <SelectInput
-            name='paymentMethod'
-            label=''
+            name="paymentMethod"
+            label=""
             options={Payments}
-            placeholder='Payment Method'
+            placeholder="Payment Method"
             value={selectedPayment}
             onChange={handleDropdownChange(setSelectedPayment)}
           />
@@ -171,16 +182,19 @@ const AffliatePrograms: React.FC<CategoryProgramProps> = ({
       </div>
 
       {filteredPrograms.length > 0 ? (
-        <div className=''>
-          <LoadMoreComponent searchQuery={searchQuery} programs={filteredPrograms} />
+        <div className="">
+          <LoadMoreComponent
+            searchQuery={searchQuery}
+            programs={filteredPrograms}
+          />
         </div>
       ) : (
-        <div className='flex justify-center mt-10 text-cream-50'>
+        <div className="flex justify-center mt-10 text-cream-50">
           <p>No programs found. Please adjust your search or filters.</p>
         </div>
       )}
     </section>
-  )
-}
+  );
+};
 
-export default AffliatePrograms
+export default AffliatePrograms;

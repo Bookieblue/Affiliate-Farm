@@ -1,10 +1,17 @@
-import Image from "next/image";
-import React from "react";
-import { Button } from "./ui/button";
-import { AFFLIATE_PROGRAMS_LINKS } from "@/constant";
-import { ChevronRight } from "lucide-react";
+import Image from 'next/image';
+import React from 'react';
+import { Button } from './ui/button';
+import { ChevronRight } from 'lucide-react';
+import { CategoryResponse } from '@/services/models/hooks/category/type';
+import Link from 'next/link';
+import {
+  capitalizeFirstLetter,
+  replaceSpaceWithDash,
+} from '@/lib/helpers/formatWord';
 
-const OtherAffliate = () => {
+const OtherAffliate: React.FC<{ others: CategoryResponse[] }> = ({
+  others,
+}) => {
   return (
     <section className="max-container padding-container flexBetween flex-col lg:flex-row mt-32 w-full">
       <div className="lg:w-[50%]">
@@ -15,11 +22,23 @@ const OtherAffliate = () => {
           Uncover other new affiliate programs across industries.
         </p>
         <div className="mt-5 grid grid-cols-2 grid-rows-4 w-full gap-5">
-          {AFFLIATE_PROGRAMS_LINKS.map((link) => (
-            <div className="flex" key={link.name}>
+          <Link className="flex" href={`/`}>
+            <ChevronRight className="text-gray-10 size-4 mt-1" />
+            <p className="text-gray-10 ">
+              {capitalizeFirstLetter(`all affiliate program`)}
+            </p>
+          </Link>
+          {others.map(link => (
+            <Link
+              className="flex"
+              key={link.name}
+              href={`/category/${replaceSpaceWithDash(link.name)}`}
+            >
               <ChevronRight className="text-gray-10 size-4 mt-1" />
-              <p className="text-gray-10 ">{link.name}</p>
-            </div>
+              <p className="text-gray-10 ">
+                {capitalizeFirstLetter(`${link.name} affiliate program`)}
+              </p>
+            </Link>
           ))}
         </div>
       </div>

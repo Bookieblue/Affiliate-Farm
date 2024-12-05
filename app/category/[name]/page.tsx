@@ -1,11 +1,14 @@
 import AffliatePrograms from '@/components/AffliatePrograms';
+import Faq from '@/components/Faq';
 import Hero from '@/components/Hero';
+import OtherAffliate from '@/components/OtherAffliate';
 import {
   getCurrentMonthAndYear,
   getCurrentYear,
 } from '@/lib/helpers/formatDate';
 import {
   capitalizeFirstLetter,
+  removeAffiliateProgram,
   replaceDashWithSpace,
   replaceSpaceWithDash,
 } from '@/lib/helpers/formatWord';
@@ -34,6 +37,13 @@ async function getProgramsData(code: string) {
   );
   return programsResponse.json();
 }
+async function getOtherCategories(code: string) {
+  const programsResponse = await fetch(
+    `${baseURL}category/other-category/${code}/`,
+    { next: { revalidate } }
+  );
+  return programsResponse.json();
+}
 
 const CategoryPage = async ({ params }: CategoryPageProps) => {
   if (!params.name) {
@@ -42,9 +52,12 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   }
 
   try {
-    const name = replaceDashWithSpace(params.name);
+    const name = removeAffiliateProgram(replaceDashWithSpace(params.name));
     const category: CategoryResponse = await getCategoryData(name);
     const programs: ProgramResponse[] = await getProgramsData(category.code);
+    const otherCategory: CategoryResponse[] = await getOtherCategories(
+      category.code
+    );
 
     const title = category.name;
     const date = getCurrentMonthAndYear();
@@ -58,6 +71,8 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
           description={`Discover 200+ curated highest paying affiliate programs that are perfect for your niche, content to cash out massively in ${getCurrentYear()}.`}
         />
         <AffliatePrograms category={category} programs={programs} />
+        {otherCategory && <OtherAffliate others={otherCategory} />}
+        {category.faq && <Faq faq={category.faq} />}
       </>
     );
   } catch (error) {

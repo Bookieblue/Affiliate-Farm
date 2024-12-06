@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Faq: React.FC<{ faq: string }> = ({ faq }) => {
-  console.log(faq);
   return (
     <section className="padding-container mt-20 lg:w-[80%]">
       <div>

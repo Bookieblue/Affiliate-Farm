@@ -24,8 +24,12 @@ export function replaceDashWithSpace(input: string): string {
 export function removeAffiliateProgram(input: string): string {
   const phraseToRemove = 'affiliate program';
 
-  if (input.trimEnd().toLowerCase().endsWith(phraseToRemove)) {
-    return input.slice(0, -phraseToRemove.length).trimEnd();
+  try {
+    if (input.trimEnd().endsWith(phraseToRemove)) {
+      return input.slice(0, -phraseToRemove.length).trimEnd();
+    }
+  } catch (error) {
+    console.error(error);
   }
 
   return input;

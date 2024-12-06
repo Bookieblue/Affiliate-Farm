@@ -58,7 +58,6 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     const otherCategory: CategoryResponse[] = await getOtherCategories(
       category.code
     );
-
     const title = category.name;
     const date = getCurrentMonthAndYear();
 
